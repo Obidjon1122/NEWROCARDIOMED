@@ -1,0 +1,914 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProtocolChose</class>
+ <widget class="QDialog" name="ProtocolChose">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>993</width>
+    <height>933</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_5">
+   <item alignment="Qt::AlignmentFlag::AlignRight">
+    <widget class="QWidget" name="widget" native="true">
+     <property name="maximumSize">
+      <size>
+       <width>52</width>
+       <height>40</height>
+      </size>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">/* _Button base */
+
+position: absolute;
+left: 65.16%;
+right: 31.83%;
+top: 22.47%;
+bottom: 73.95%;
+
+background: #FF0004;
+/* Shadow/xs */
+box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+border-radius: 8px;
+</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item alignment="Qt::AlignmentFlag::AlignHCenter">
+       <widget class="QPushButton" name="pushButtonQuit1">
+        <property name="minimumSize">
+         <size>
+          <width>52</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>52</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#pushButtonQuit1 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: white;
+    background: transparent; /* fon shaffof */
+    border: none;             /* ramkasiz */
+    transition: color 0.2s ease;
+}
+
+/* Pressed (bosilganda) — yanada to‘q qizil bo‘ladi */
+#pushButtonQuit1:pressed {
+    color: #CC0000;
+}</string>
+        </property>
+        <property name="text">
+         <string>X</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignmentFlag::AlignTop">
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop">
+       <widget class="QLabel" name="label">
+        <property name="styleSheet">
+         <string notr="true">#label {
+
+position: absolute;
+width: 273px;
+height: 32px;
+
+font-family: 'Plus Jakarta Sans';
+font-style: normal;
+font-weight: 600;
+font-size: 30px;
+line-height: 32px;
+color: #000000;
+}</string>
+        </property>
+        <property name="text">
+         <string>Выберите нужный протокол</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_3" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QWidget" name="widget_6" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QPushButton" name="MashonkaButton">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#MashonkaButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#MashonkaButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#MashonkaButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#MashonkaButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="SelezyankiButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#SelezyankiButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#SelezyankiButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#SelezyankiButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#SelezyankiButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="NadpochechnikiButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#NadpochechnikiButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#NadpochechnikiButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#NadpochechnikiButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#NadpochechnikiButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="FollikButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#FollikButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#FollikButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#FollikButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#FollikButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="PochkiBlankButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#PochkiBlankButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#PochkiBlankButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#PochkiBlankButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#PochkiBlankButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="widget_5" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QPushButton" name="ShtavitkaButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#ShtavitkaButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#ShtavitkaButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#ShtavitkaButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#ShtavitkaButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="KolonniSustavButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#KolonniSustavButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#KolonniSustavButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#KolonniSustavButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#KolonniSustavButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="PervomTremeteriBerButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#PervomTremeteriBerButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#PervomTremeteriBerButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#PervomTremeteriBerButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#PervomTremeteriBerButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="maliyTazBlankButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#maliyTazBlankButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#maliyTazBlankButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#maliyTazBlankButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#maliyTazBlankButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="malochniyJelBlankButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#malochniyJelBlankButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#malochniyJelBlankButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#malochniyJelBlankButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#malochniyJelBlankButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="widget_4" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QPushButton" name="PechenBlankButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#PechenBlankButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#PechenBlankButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#PechenBlankButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#PechenBlankButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="podjeludochBlankButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#podjeludochBlankButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#podjeludochBlankButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#podjeludochBlankButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#podjeludochBlankButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="prastataBlankButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#prastataBlankButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#prastataBlankButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#prastataBlankButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#prastataBlankButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="plodBlankButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#plodBlankButton {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#plodBlankButton:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#plodBlankButton:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#plodBlankButton:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_15">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#pushButton_15 {
+	text-align:center;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    width: 105px;
+    height: 35px;
+    border: 1px solid #CCCCCC;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+}
+
+/* Hover holati */
+QPushButton#pushButton_15:hover {
+    background-color: #F2F2F2;
+}
+
+/* Bosilganda (pressed holatida) */
+QPushButton#pushButton_15:pressed {
+    background-color: #69DFD9;
+}
+
+/* Disabled holat (ixtiyoriy, chiroyli ko'rinish uchun) */
+QPushButton#pushButton_15:disabled {
+    background-color: #F8F8F8;
+    color: #A0A0A0;
+    border: 1px solid #E0E0E0;
+}
+</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

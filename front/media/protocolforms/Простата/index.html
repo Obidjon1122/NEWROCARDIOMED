@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Простата</title>
+    <style>
+      body {
+        background: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+      }
+      .a4-page {
+        width: 595px;
+        height: 842px;
+        background: white;
+        margin: 0;
+        border: none;
+        padding: 0;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      .top-rectangle {
+        width: 100%;
+        height: 85px;
+        background-color: #69a2df;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .top-rectangle p {
+        font-weight: 400;
+        font-size: 8px;
+        line-height: 10px;
+        text-align: center;
+      }
+
+      .heder-text-left {
+        width: 34%;
+      }
+
+      .heder-text-right {
+        width: 34%;
+      }
+
+      .header-center-image {
+        width: 12.2%;
+      }
+
+      .header-center-image img {
+        width: 100%;
+        height: 85px;
+      }
+
+      .content-area {
+        font-size: 8px;
+        line-height: 13px;
+        margin-left: 51px;
+        width: 484px;
+      }
+
+      .thyroid-table {
+        display: flex;
+        border: 1px solid #000;
+        width: 530px;
+        height: 220px;
+        font-family: "Inter Regular", Arial, sans-serif;
+        margin-top: 10px;
+        margin-left: -20px;
+        margin-bottom: 10px;
+      }
+
+      .column {
+        width: 50%;
+        padding: 10px 10px;
+        border-right: 1px solid #000;
+      }
+
+      .column:last-child {
+        border-right: none;
+      }
+
+      .column-title {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .field {
+        display: inline-block;
+        width: 150px;
+        position: relative;
+        vertical-align: top;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .size-container2 {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .column2 {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0px;
+      }
+
+      /* Asosiy ma'lumotlar */
+      .field-fio {
+        display: inline-block;
+        min-width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-gender {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-birth-year {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-date {
+        display: inline-block;
+        min-width: 110px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-year {
+        display: inline-block;
+        min-width: 60px;
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-topografiya {
+        display: inline-block;
+        width: 169px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-forma {
+        display: inline-block;
+        width: 167px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+
+      .field-kontur {
+        display: inline-block;
+        width: 357px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-kapsula {
+        display: inline-block;
+        width: 92px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-dlina {
+        display: inline-block;
+        width: 113px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+
+      .field-tolshina {
+        display: inline-block;
+        width: 103px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-shirina {
+        display: inline-block;
+        width: 107px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+
+      .field-obyom {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-index {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ehostruktura {
+        display: inline-block;
+        width: 425px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ehogennost {
+        display: inline-block;
+        width: 425px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-prostata {
+        display: inline-block;
+        width: 160px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-mocha {
+        display: inline-block;
+        width: 118px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-topografiya2 {
+        display: inline-block;
+        width: 150px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-kontur2 {
+        display: inline-block;
+        width: 188px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-do {
+        display: inline-block;
+        width: 105px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-posle {
+        display: inline-block;
+        width: 80px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ehogennost2 {
+        display: inline-block;
+        width: 185px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-danniye {
+        display: inline-block;
+        width: 82px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="a4-page">
+      <div class="top-rectangle">
+
+        <div class="heder-text-left">
+          <p>
+            O'ZBEKISTON RESPUBLIKASI SOG'LIQNI SAQLASH<br>
+            VAZIRLIGI<br>
+            "NEVROCARDIOMED"<br>
+            TIBBIY MARKAZI
+          </p>
+          <p>
+            Manzil: Samarqand sh., M. Qoshg'ariy 89<br>
+            Telefon: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+
+        <div class="header-center-image">
+          <img src="qrc:/icons/media/protocolforms/img.png" alt="png" />
+        </div>
+
+        <div class="heder-text-right">
+          <p>
+            МИНИСТЕРСТВО ЗДРАВООХРАНЕНИЯ<br>
+            РЕСПУБЛИКИ УЗБЕКИСТАН<br>
+            МЕДИЦИНСКИЙ ЦЕНТР<br>
+            "NEVROCARDIOMED"
+          </p>
+          <p>
+            Адрес: г. Самарканд, М. Кошгари 89<br>
+            Телефон: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+
+      </div>
+
+      <div class="content-area">
+        <p>
+          <span>
+            Ф.И.О. пациента 
+            <span class="field-fio">{{ fio }}</span>, пол
+            <span class="field-gender">{{ gender }}</span>,
+            <span class="field-birth-year">{{ birth_year }}</span> г.р.
+          </span>
+          <br>
+          <span>
+            Дата проведения исследования «
+            <span class="field-date">{{ date }}</span> »
+            <span class="field-year">{{ year }}</span> г.
+          </span>
+          <br>
+          <span>
+            Ультразвуковой аппарат SonoScape S22. Тип датчика – конвексный, 3.5 МГц
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>ПРОТОКОЛ<br> 
+          Ультразвукового исследования предстательной железы и семенных пузырьков<br></b>
+        </div>
+
+        <div style="text-align: center">
+          <b>ПРЕДСТАТЕЛЬНАЯ ЖЕЛЕЗА</b>
+        </div>
+
+        <p>
+          <span>
+            <b>Топография</b>
+            <span class="field-topografiya">{{ pj_topografiya }}</span> (в норме между мочевым пузырем и передней стенкой прямой кишки)
+          </span>
+          <br>
+          <span>
+            <b>Форма</b>
+            <span class="field-forma">{{ pj_forma }}</span> (в норме при продольном срезе треугольная, при поперечном – полулунная)
+          </span>
+          <br>
+          <span>
+            <b>Контур</b>
+            <span class="field-kontur">{{ pj_kontur }}</span> (в норме ровный, четкий)
+          </span>
+          <br>       
+          <span>
+            <b>Капсула, толщина</b>
+            <span class="field-kapsula">{{ pj_kapsula }}</span> мм (в норме 1-2 мм)
+          </span>
+          <br>
+          <span>
+                <b>Размеры, линейные:</b><br>
+                <span style="display: block; margin-left: 20px">
+                  длина 
+                  <span class="field-dlina">{{ pj_dlina }}</span> мм (в норме 24-41 мм)
+                  <br>
+                  толщина
+                  <span class="field-tolshina">{{ pj_tolshina }}</span> мм (в норме 16-25 мм)
+                  <br>
+                  ширина
+                  <span class="field-shirina">{{ pj_shirina }}</span> мм (в норме 27-43 мм)
+                  <br>
+                </span>
+              </span>
+          <span>
+            <b>Объем</b>
+            <span class="field-obyom">{{ pj_obyom }}</span> см³. (в норме не более 20 см³)
+          </span>
+          <br>
+          <span>
+            <b>Индекс конфигурации простаты</b>
+            <span class="field-index">{{ pj_index }}</span> (в норме не более 0,829)
+          </span>
+          <br>
+          <span>
+            <b>Эхоструктура</b>
+            <span class="field-ehostruktura">{{ pj_ehostruktura }}</span> (в норме однородная, железистые зоны не дифференцируются, различимы наружная и внутренняя части)
+          </span>
+          <br>
+          <span>
+            <b>Эхогенность</b>
+            <span class="field-ehogennost">{{ pj_ehogennost }}</span> (в норме гипоэхогенная внутренняя, средней эхогенности наружная части)
+          </span>
+          <br>
+          <span>
+            <b>Простатическая часть мочеиспускательного канала</b>
+            <span class="field-prostata">{{ pj_prostata }}</span>  (в норме дифференцируется)
+          </span>
+          <br>
+          <span>
+            <b>Начальный объем мочевого пузыря</b>
+            <span class="field-mocha">{{ pj_mocha1 }}</span> мл. Остаточная моча
+            <span class="field-mocha">{{ pj_mocha2 }}</span> мл.
+          </span>
+          <br>
+        </p>
+
+        <div style="text-align: center">
+          <b>СЕМЕННЫЕ ПУЗЫРЬКИ</b>
+        </div>
+
+        <div class="thyroid-table">
+          <div class="column">
+
+            <div class="column-title">
+              Правый
+            </div>
+
+            <p>
+              <span>
+                <b>Топография</b>
+                <span class="field-topografiya2">{{ sp_topografiya }}</span>     
+              </span>
+              <br>
+              <span>
+                <b>Контур</b>
+                <span class="field-kontur2">{{ sp_kontur }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Размеры, линейные:</b><br>
+                <span style="display: block; margin-left: 20px">
+                  длина 
+                  <span class="field-dlina">{{ sp_dlina }}</span> мм (в норме до 50 мм)
+                  <br>
+                  толщина
+                  <span class="field-tolshina">{{ sp_tolshina }}</span> мм (в норме до 15 мм)
+                  <br>
+                  ширина
+                  <span class="field-shirina">{{ sp_shirina }}</span> мм (в норме до 20 мм)
+                  <br>
+                </span>
+              </span>
+               <span>
+                <b>Эхоструктура:</b><br>
+                <span style="display: block; margin-left: 20px">
+                  до эякуляции  
+                  <span class="field-do">{{ sp_do }}</span> 
+                  <br>
+                  после эякуляции
+                  <span class="field-posle">{{ sp_posle }}</span> 
+                  <br>
+                </span>
+              </span>
+              <span>
+                <b>Эхогенность</b>
+                <span class="field-ehogennost2">{{ sp_ehogennost }}</span> (в норме гипоэхогенная)
+              </span>
+              <br>
+              <span>
+                <b>Дополнительные данные</b>
+                <span class="field-danniye">{{ sp_danniye }}</span> 
+              </span>
+            </p>
+          </div>
+
+          <div class="column">
+
+            <div class="column-title">
+              Левый
+            </div>
+
+            <p>
+              <span>
+                <b>Топография</b>
+                <span class="field-topografiya2">{{ sl_topografiya }}</span>     
+              </span>
+              <br>
+              <span>
+                <b>Контур</b>
+                <span class="field-kontur2">{{ sl_kontur }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Размеры, линейные:</b><br>
+                <span style="display: block; margin-left: 20px">
+                  длина 
+                  <span class="field-dlina">{{ sl_dlina }}</span> мм (в норме до 50 мм)
+                  <br>
+                  толщина
+                  <span class="field-tolshina">{{ sl_tolshina }}</span> мм (в норме до 15 мм)
+                  <br>
+                  ширина
+                  <span class="field-shirina">{{ sl_shirina }}</span> мм (в норме до 20 мм)
+                  <br>
+                </span>
+              </span>
+               <span>
+                <b>Эхоструктура:</b><br>
+                <span style="display: block; margin-left: 20px">
+                  до эякуляции  
+                  <span class="field-do">{{ sl_do }}</span> 
+                  <br>
+                  после эякуляции
+                  <span class="field-posle">{{ sl_posle }}</span> 
+                  <br>
+                </span>
+              </span>
+              <span>
+                <b>Эхогенность</b>
+                <span class="field-ehogennost2">{{ sl_ehogennost }}</span> (в норме гипоэхогенная)
+              </span>
+              <br>
+              <span>
+                <b>Дополнительные данные</b>
+                <span class="field-danniye">{{ sl_danniye }}</span> 
+              </span>
+            </p>
+          </div>
+        </div>
+    
+        <p>
+          <span>
+            <div class="size-container2">
+              <div class="column2">
+                <div>
+                  <b>Заключение</b>
+                  <span class="field">{{ zaklyuchenie_kolenni_sustav }}</span>  
+                </div>
+                <div>
+                  <b>Рекомендации</b>
+                  <span class="field">{{ rekomendatsi_kolenni_sustav }}</span> 
+                </div>
+              </div>
+              <div class="column2">
+                <div>
+                  <b>Врач</b>
+                  <span class="field">{{ vrach }} _____________</span>  
+                </div>
+                <div>
+                  <b>Телефон</b>
+                  <span class="field">{{ telefon }}</span>  
+                </div>
+              </div> 
+            </div>
+          </span>  
+        </p> 
+      </div>
+    </div>
+  </body>
+</html>

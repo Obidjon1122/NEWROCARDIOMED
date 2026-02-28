@@ -1,0 +1,509 @@
+{
+    "dl_ehogennost": [
+    ],
+    "dl_ehostruktura": [
+    ],
+    "dl_elastichnost": [
+    ],
+    "dl_forma": [
+    ],
+    "dl_kontur": [
+    ],
+    "dl_podvijnost": [
+    ],
+    "dl_topografiya": [
+    ],
+    "dp_ehogennost": [
+    ],
+    "dp_ehostruktura": [
+    ],
+    "dp_elastichnost": [
+    ],
+    "dp_forma": [
+    ],
+    "dp_kontur": [
+    ],
+    "dp_podvijnost": [
+    ],
+    "dp_topografiya": [
+    ],
+    "duglasovo_mal_taz": [
+    ],
+    "em_serdtse_tri_ber": [
+    ],
+    "gx_ehogennost": [
+    ],
+    "gx_ehostruktura": [
+    ],
+    "gx_kontur": [
+    ],
+    "il_intrama_malochniy_jel": [
+    ],
+    "ip_intrama_malochniy_jel": [
+    ],
+    "jidkost_follik": [
+    ],
+    "jm_meshochek_tri_ber": [
+    ],
+    "jpr_vnutr_pechen_blank": [
+    ],
+    "jpu_forma_pechen_blank": [
+    ],
+    "jpu_kontur_pechen_blank": [
+    ],
+    "jpu_protok_pechen_blank": [
+    ],
+    "jpu_soderjimoe_pechen_blank": [
+    ],
+    "jpu_topografiya_pechen_blank": [
+    ],
+    "jtl_ehogennost_malochniy_jel": [
+    ],
+    "jtl_ehostruktura_malochniy_jel": [
+    ],
+    "jtl_galaktofori_malochniy_jel": [
+    ],
+    "jtl_kontur_malochniy_jel": [
+    ],
+    "jtl_tolshina_malochniy_jel": [
+    ],
+    "jtp_ehogennost_malochniy_jel": [
+    ],
+    "jtp_ehostruktura_malochniy_jel": [
+    ],
+    "jtp_galaktofori_malochniy_jel": [
+    ],
+    "jtp_kontur_malochniy_jel": [
+    ],
+    "jtp_tolshina_malochniy_jel": [
+    ],
+    "ks_bedrennaya": [
+    ],
+    "ks_bolsheber": [
+    ],
+    "ks_nadkolennik": [
+    ],
+    "lsl_limfa_malochniy_jel": [
+    ],
+    "lsp_limfa_malochniy_jel": [
+    ],
+    "lv_exogennost_nadpochechniki": [
+    ],
+    "lv_forma_nadpochechniki": [
+    ],
+    "lv_struktura_nadpochechniki": [
+    ],
+    "lv_topografiya_nadpochechniki": [
+    ],
+    "m_dlina_mal_taz": [
+    ],
+    "m_ehogennost_mal_taz": [
+    ],
+    "m_ehostruktura_mal_taz": [
+    ],
+    "m_endometriya2_mal_taz": [
+    ],
+    "m_endometriya_mal_taz": [
+    ],
+    "m_forma_mal_taz": [
+    ],
+    "m_kontur_mal_taz": [
+    ],
+    "m_obyom_mal_taz": [
+    ],
+    "m_peredney_mal_taz": [
+    ],
+    "m_polojeniye_mal_taz": [
+    ],
+    "m_polost_mal_taz": [
+    ],
+    "m_pozitsiya_mal_taz": [
+    ],
+    "m_shirina_mal_taz": [
+    ],
+    "m_sootnosheniye_mal_taz": [
+    ],
+    "m_tolshina_mal_taz": [
+    ],
+    "m_zadney_mal_taz": [
+    ],
+    "mlp_ehogennost": [
+    ],
+    "mlp_ehostruktura": [
+    ],
+    "mlp_forma": [
+    ],
+    "mlp_kontur": [
+    ],
+    "mlz_ehogennost": [
+    ],
+    "mlz_ehostruktura": [
+    ],
+    "mlz_forma": [
+    ],
+    "mlz_kontur": [
+    ],
+    "mmp_ehogennost": [
+    ],
+    "mmp_ehostruktura": [
+    ],
+    "mmp_forma": [
+    ],
+    "mmp_kontur": [
+    ],
+    "mmz_ehogennost": [
+    ],
+    "mmz_ehostruktura": [
+    ],
+    "mmz_forma": [
+    ],
+    "mmz_kontur": [
+    ],
+    "mp_chastota_pochki_blank": [
+    ],
+    "mp_dannie_pochki_blank": [
+    ],
+    "mp_forma_pochki_blank": [
+    ],
+    "mp_lokalizatsiya_pochki_blank": [
+    ],
+    "mp_mm1_pochki_blank": [
+    ],
+    "mp_mm2_pochki_blank": [
+    ],
+    "mp_nalichie_pochki_blank": [
+    ],
+    "mp_narujniy_pochki_blank": [
+    ],
+    "mp_obyom2_pochki_blank": [
+    ],
+    "mp_obyom_pochki_blank": [
+    ],
+    "mp_sheyk_pochki_blank": [
+    ],
+    "mp_soderjimoe_pochki_blank": [
+    ],
+    "mp_vnutrenniy_pochki_blank": [
+    ],
+    "mt_ehogennost": [
+    ],
+    "mt_ehostruktura": [
+    ],
+    "mt_ehostruktura_tri_ber": [
+    ],
+    "mt_kontur": [
+    ],
+    "mt_kontur_tri_ber": [
+    ],
+    "mt_lateralnaya": [
+    ],
+    "mt_medilnaya": [
+    ],
+    "mt_mishtsi": [
+    ],
+    "mt_osobennosti_tri_ber": [
+    ],
+    "mt_prostranstvo": [
+    ],
+    "mtl_trubi_mal_taz": [
+    ],
+    "mtp_trubi_mal_taz": [
+    ],
+    "p_dannie_selezenki": [
+    ],
+    "p_data2_mal_taz": [
+    ],
+    "p_data_mal_taz": [
+    ],
+    "p_ehogennost": [
+    ],
+    "p_ehogennost_padjeludoch": [
+    ],
+    "p_ehogennost_pechen_blank": [
+    ],
+    "p_ehogennost_selezenki": [
+    ],
+    "p_ehostruktura": [
+    ],
+    "p_ehostruktura_padjeludoch": [
+    ],
+    "p_ehostruktura_pechen_blank": [
+    ],
+    "p_ehostruktura_selezenki": [
+    ],
+    "p_elastichnost": [
+    ],
+    "p_forma_padjeludoch": [
+    ],
+    "p_forma_selezenki": [
+    ],
+    "p_golovki2_padjeludoch": [
+    ],
+    "p_kontur": [
+    ],
+    "p_kontur_padjeludoch": [
+    ],
+    "p_kontur_pechen_blank": [
+    ],
+    "p_kontur_selezenki": [
+    ],
+    "p_menopauza_mal_taz": [
+    ],
+    "p_podvijnost": [
+    ],
+    "p_tela2_padjeludoch": [
+    ],
+    "p_topografiya": [
+    ],
+    "p_topografiya_padjeludoch": [
+    ],
+    "p_topografiya_pechen_blank": [
+    ],
+    "p_topografiya_selezenki": [
+    ],
+    "p_zvuk_padjeludoch": [
+    ],
+    "p_zvuk_pechen_blank": [
+    ],
+    "p_zvuk_selezenki": [
+    ],
+    "pl_chls_pochki_blank": [
+    ],
+    "pl_ehogennost2_malochniy_jel": [
+    ],
+    "pl_ehogennost_malochniy_jel": [
+    ],
+    "pl_ehogennost_pochki_blank": [
+    ],
+    "pl_ehostruktura2_malochniy_jel": [
+    ],
+    "pl_ehostruktura_malochniy_jel": [
+    ],
+    "pl_ehostruktura_pochki_blank": [
+    ],
+    "pl_fibroznaya_pochki_blank": [
+    ],
+    "pl_jirovaya_pochki_blank": [
+    ],
+    "pl_kontur2_malochniy_jel": [
+    ],
+    "pl_kontur_malochniy_jel": [
+    ],
+    "pl_kontur_pochki_blank": [
+    ],
+    "pl_kortiko_pochki_blank": [
+    ],
+    "pl_mochetochnik_pochki_blank": [
+    ],
+    "pl_obyom_pochki_blank": [
+    ],
+    "pl_podjivnost_pochki_blank": [
+    ],
+    "pl_sostoyanie_pochki_blank": [
+    ],
+    "pl_tkan_malochniy_jel": [
+    ],
+    "pl_tolshina_malochniy_jel": [
+    ],
+    "pl_topografiya_malochniy_jel": [
+    ],
+    "pl_topografiya_pochki_blank": [
+    ],
+    "pp_chls_pochki_blank": [
+    ],
+    "pp_ehogennost2_malochniy_jel": [
+    ],
+    "pp_ehogennost_malochniy_jel": [
+    ],
+    "pp_ehogennost_pochki_blank": [
+    ],
+    "pp_ehostruktura2_malochniy_jel": [
+    ],
+    "pp_ehostruktura_malochniy_jel": [
+    ],
+    "pp_ehostruktura_pochki_blank": [
+    ],
+    "pp_fibroznaya_pochki_blank": [
+    ],
+    "pp_jirovaya_pochki_blank": [
+    ],
+    "pp_kontur2_malochniy_jel": [
+    ],
+    "pp_kontur_malochniy_jel": [
+    ],
+    "pp_kontur_pochki_blank": [
+    ],
+    "pp_kortiko_pochki_blank": [
+    ],
+    "pp_mochetochnik_pochki_blank": [
+    ],
+    "pp_obyom_pochki_blank": [
+    ],
+    "pp_podjivnost_pochki_blank": [
+    ],
+    "pp_sostoyanie_pochki_blank": [
+    ],
+    "pp_tkan_malochniy_jel": [
+    ],
+    "pp_tolshina_malochniy_jel": [
+    ],
+    "pp_topografiya_malochniy_jel": [
+    ],
+    "pp_topografiya_pochki_blank": [
+    ],
+    "pr_datapervogo_tri_ber": [
+    ],
+    "pr_datarodov_tri_ber": [
+    ],
+    "pr_exogennost_nadpochechniki": [
+    ],
+    "pr_forma_nadpochechniki": [
+    ],
+    "pr_struktura_nadpochechniki": [
+    ],
+    "pr_topografiya_nadpochechniki": [
+    ],
+    "pri_le_exogennost": [
+    ],
+    "pri_le_exostruktura": [
+    ],
+    "pri_le_kontur": [
+    ],
+    "pri_le_topografiya": [
+    ],
+    "pri_pr_exogennost": [
+    ],
+    "pri_pr_exostruktura": [
+    ],
+    "pri_pr_kontur": [
+    ],
+    "pri_pr_topografiya": [
+    ],
+    "py_forma_tri_ber": [
+    ],
+    "py_kolichestvo_tri_ber": [
+    ],
+    "py_topografiya_tri_ber": [
+    ],
+    "rekomendatsi": [
+    ],
+    "rekomendatsi_follik": [
+    ],
+    "rekomendatsi_kolenni_sustav": [
+    ],
+    "rekomendatsi_mal_taz": [
+    ],
+    "rekomendatsi_malochniy_jel": [
+    ],
+    "rekomendatsi_nadpochechniki": [
+    ],
+    "rekomendatsi_padjeludoch": [
+    ],
+    "rekomendatsi_pochki_blank": [
+    ],
+    "rekomendatsi_selezenki": [
+    ],
+    "rekomendatsi_tri_ber": [
+    ],
+    "rl_retroma_malochniy_jel": [
+    ],
+    "rp_retroma_malochniy_jel": [
+    ],
+    "shm_dlina_mal_taz": [
+    ],
+    "shm_ehogennost_mal_taz": [
+    ],
+    "shm_ehostruktura_mal_taz": [
+    ],
+    "shm_endotserviks2_mal_taz": [
+    ],
+    "shm_endotserviks_mal_taz": [
+    ],
+    "shm_kontur_mal_taz": [
+    ],
+    "shm_polost_mal_taz": [
+    ],
+    "shm_shirina_mal_taz": [
+    ],
+    "shm_tolshina_mal_taz": [
+    ],
+    "sjl_ehogennost": [
+    ],
+    "sjp_ehogennost": [
+    ],
+    "summarniy": [
+    ],
+    "uh_lokalizatsiya_tri_ber": [
+    ],
+    "uh_osobennosti_tri_ber": [
+    ],
+    "yai_le_exogennost": [
+    ],
+    "yai_le_exostruktura": [
+    ],
+    "yai_le_forma": [
+    ],
+    "yai_le_kapsula": [
+    ],
+    "yai_le_kontur": [
+    ],
+    "yai_le_topografiya": [
+    ],
+    "yai_pr_exogennost": [
+    ],
+    "yai_pr_exostruktura": [
+    ],
+    "yai_pr_forma": [
+    ],
+    "yai_pr_kapsula": [
+    ],
+    "yai_pr_kontur": [
+    ],
+    "yai_pr_topografiya": [
+        "Новый элемент"
+    ],
+    "yl_ehogennost_mal_taz": [
+    ],
+    "yl_ehostruktura_mal_taz": [
+    ],
+    "yl_follikul_mal_taz": [
+    ],
+    "yl_forma_mal_taz": [
+    ],
+    "yl_kontur_mal_taz": [
+    ],
+    "yl_topografiya_mal_taz": [
+    ],
+    "yp_ehogennost_mal_taz": [
+    ],
+    "yp_ehostruktura_mal_taz": [
+    ],
+    "yp_follikul_mal_taz": [
+    ],
+    "yp_forma_mal_taz": [
+    ],
+    "yp_kontur_mal_taz": [
+    ],
+    "yp_topografiya_mal_taz": [
+    ],
+    "zaklyuchenie": [
+    ],
+    "zaklyuchenie_follik": [
+    ],
+    "zaklyuchenie_kolenni_sustav": [
+    ],
+    "zaklyuchenie_mal_taz": [
+    ],
+    "zaklyuchenie_malochniy_jel": [
+    ],
+    "zaklyuchenie_nadpochechniki": [
+    ],
+    "zaklyuchenie_padjeludoch": [
+    ],
+    "zaklyuchenie_pochki_blank": [
+    ],
+    "zaklyuchenie_selezenki": [
+    ],
+    "zaklyuchenie_tri_ber": [
+    ]
+}

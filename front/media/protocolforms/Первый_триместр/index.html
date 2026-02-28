@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Первый триместр</title>
+    <style>
+      body {
+        background: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+      }
+      .a4-page {
+        width: 595px;
+        height: 842px;
+        background: white;
+        margin: 0;
+        border: none;
+        padding: 0;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      .top-rectangle {
+        width: 100%;
+        height: 85px;
+        background-color: #69a2df;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .top-rectangle p {
+        font-weight: 400;
+        font-size: 8px;
+        line-height: 10px;
+        text-align: center;
+      }
+
+      .heder-text-left {
+        width: 34%;
+      }
+
+      .heder-text-right {
+        width: 34%;
+      }
+
+      .header-center-image {
+        width: 12.2%;
+      }
+
+      .header-center-image img {
+        width: 100%;
+        height: 85px;
+      }
+
+      .content-area {
+        font-size: 8px;
+        line-height: 13px;
+        margin-left: 51px;
+        width: 484px;
+      }
+
+      .field {
+        display: inline-block;
+        width: 150px;
+        position: relative;
+        vertical-align: top;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .size-container2 {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .column2 {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0px;
+      }
+
+      /* Asosiy ma'lumotlar */
+      .field-fio {
+        display: inline-block;
+        min-width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-gender {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-birth-year {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-date {
+        display: inline-block;
+        min-width: 110px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-year {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-datapervogo {
+        display: inline-block;
+        width: 102px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ned {
+        display: inline-block;
+        width: 40px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-dnya {
+        display: inline-block;
+        width: 40px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-datarodov {
+        display: inline-block;
+        width: 120px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-razmer {
+        display: inline-block;
+        width: 120px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-kontur {
+        display: inline-block;
+        width: 357px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ehostruktura {
+        display: inline-block;
+        width: 297px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-dlina {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-tolshina {
+        display: inline-block;
+        width: 91px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-shirina {
+        display: inline-block;
+        width: 95px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-osobennosti {
+        display: inline-block;
+        width: 375px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-kolichestvo {
+        display: inline-block;
+        width: 385px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-topografiya {
+        display: inline-block;
+        width: 350px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-forma {
+        display: inline-block;
+        width: 383px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-diametr {
+        display: inline-block;
+        width: 160px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-embrion {
+        display: inline-block;
+        width: 166px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-serdtse {
+        display: inline-block;
+        width: 177px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-udar {
+        display: inline-block;
+        width: 177px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-tolshina2 {
+        display: inline-block;
+        width: 243px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-meshochek {
+        display: inline-block;
+        width: 175px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-lokalizatsiya {
+        display: inline-block;
+        width: 381px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="a4-page">
+      <div class="top-rectangle">
+        <div class="heder-text-left">
+          <p>
+            O'ZBEKISTON RESPUBLIKASI SOG'LIQNI SAQLASH<br>
+            VAZIRLIGI<br>
+            "NEVROCARDIOMED"<br>
+            TIBBIY MARKAZI
+          </p>
+          <p>
+            Manzil: Samarqand sh., M. Qoshg'ariy 89<br>
+            Telefon: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+
+        <div class="header-center-image">
+          <img src="qrc:/icons/media/protocolforms/img.png" alt="png" />
+        </div>
+
+        <div class="heder-text-right">
+          <p>
+            МИНИСТЕРСТВО ЗДРАВООХРАНЕНИЯ<br>
+            РЕСПУБЛИКИ УЗБЕКИСТАН<br>
+            МЕДИЦИНСКИЙ ЦЕНТР<br>
+            "NEVROCARDIOMED"
+          </p>
+          <p>
+            Адрес: г. Самарканд, М. Кошгари 89<br>
+            Телефон: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <p>
+          <span> 
+            Ф.И.О. пациента 
+            <span class="field-fio">{{ fio }}</span>, пол
+            <span class="field-gender">{{ gender }}</span>,
+            <span class="field-birth-year">{{ birth_year }}</span> г.р.
+          </span>
+          <br>
+          <span>
+            Дата проведения исследования «
+            <span class="field-date">{{ date }}</span> »
+            <span class="field-year">{{ year }}</span> г.
+          </span>
+          <br>
+          <span>
+            Ультразвуковой аппарат SonoScape S22. Тип датчика – конвексный, 3.5 МГц
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>ПРОТОКОЛ<br>
+          Ультразвукового исследования в первом триместре беременности</b><br>
+        </div>
+
+        <p>
+          <span>
+            <b>Дата первого дня последней менструации</b>
+            <span class="field-datapervogo">{{ pr_datapervogo_tri_ber }}</span>, соответствует
+            <span class="field-ned">{{ pr_ned_tri_ber }}</span> нед.
+            <span class="field-dnya">{{ pr_dnya_tri_ber }}</span> дням берем.
+          </span>
+          <br>
+          <span>
+            <b>Дата предполагаемых родов: по менструации</b>
+            <span class="field-datarodov">{{ pr_datarodov_tri_ber }}</span>, по размерам
+            <span class="field-razmer">{{ pr_razmer_tri_ber }}</span>
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>МАТКА</b>
+        </div>
+
+        <p>
+          <span>
+            <b>Контур</b>
+            <span class="field-kontur">{{ mt_kontur_tri_ber }}</span> (в норме ровный, четкий)
+          </span>
+          <br>
+          <span>
+            <b>Эхоструктура миометрия</b>
+            <span class="field-ehostruktura">{{ mt_ehostruktura_tri_ber }}</span> (в норме однородная)
+          </span>
+          <br>       
+          <span>
+            <b>Размеры:</b><br>
+            <span style="display: block; margin-left: 20px">
+              длина 
+              <span class="field-dlina">{{ mt_dlina_tri_ber }}</span> мм
+              <br>
+              толщина
+              <span class="field-tolshina">{{ mt_tolshina_tri_ber }}</span> мм
+              <br>
+              ширина
+              <span class="field-shirina">{{ mt_shirina_tri_ber }}</span> мм
+              <br>
+            </span>
+          </span>
+          <span>
+            <b>Особенности</b>
+            <span class="field-osobennosti">{{ mt_osobennosti_tri_ber }}</span>
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>ПЛОДНОЕ ЯЙЦО</b>
+        </div>
+        
+        <p>
+          <span>
+            <b>Количество</b>
+            <span class="field-kolichestvo">{{ py_kolichestvo_tri_ber }}</span>
+          </span>
+          <br>
+          <span>
+            <b>Топография</b>
+            <span class="field-topografiya">{{ py_topografiya_tri_ber }}</span> (в норме – дно матки)
+          </span>
+          <br>
+          <span>
+            <b>Форма</b>
+            <span class="field-forma">{{ py_forma_tri_ber }}</span> (в норме округлая)
+          </span>
+          <br>
+          <span>
+            <b>Средний диаметр</b>
+            <span class="field-diametr">{{ py_diametr_tri_ber }}</span> мм, соответствует
+            <span class="field-ned">{{ py_ned_tri_ber }}</span> нед.
+            <span class="field-dnya">{{ py_dnya_tri_ber }}</span> дням беременности
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>ЭМБРИОН</b>
+        </div>
+
+        <p>
+          <span>
+            <b>Количество</b>
+            <span class="field-kolichestvo">{{ em_kolichestvo_tri_ber }}</span>
+          </span>
+          <br>
+          <span>
+            <b>КТР эмбриона</b>
+            <span class="field-embrion">{{ em_embrion_tri_ber }}</span> мм, соответствует
+            <span class="field-ned">{{ em_ned_tri_ber }}</span> нед.
+            <span class="field-dnya">{{ em_dnya_tri_ber }}</span> дням беременности
+          </span>
+          <br>
+          <span>
+            <b>Сердцебиение</b>
+            <span class="field-serdtse">{{ em_serdtse_tri_ber }}</span>,
+            <span class="field-udar">{{ em_udar_tri_ber }}</span> ударов в минуту (в норме на 6-8 нед. 110-130 уд. в 1 мин., на 9-10 нед.- до 200 уд. в 1 мин.)
+          </span>
+          <br>
+          <span>
+            <b>Толщина воротникового пространства</b>
+            <span class="field-tolshina2">{{ em_tolshina_tri_ber }}</span> мм (в норме до 3 мм)
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>ЖЕЛТОЧНЫЙ МЕШОЧЕК</b>
+        </div>
+
+        <p>
+          <span>
+            <b>Желточный мешочек</b>
+            <span class="field-meshochek">{{ jm_meshochek_tri_ber }}</span> (в норме визуализируется с 5 по 12 неделю беременности)
+          </span>
+          <br>
+          <span>
+            <b>Диаметр</b>
+            <span class="field-diametr">{{ jm_diametr_tri_ber }}</span> мм
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>УТОЛЩЕНИЕ ХОРИОНА</b>
+        </div>
+
+        <p>
+          <span>
+            <b>Локализация</b>
+            <span class="field-lokalizatsiya">{{ uh_lokalizatsiya_tri_ber }}</span> 
+          </span>
+          <br>
+          <span>
+            <b>Толщина</b>
+            <span class="field-tolshina">{{ uh_tolshina_tri_ber }}</span> мм, (в норме соответствует сроку беременности в неделях)
+          </span>
+          <br>
+          <span>
+            <b>Особенности</b>
+            <span class="field-osobennosti">{{ uh_osobennosti_tri_ber }}</span>
+          </span>
+          <br><br>
+        </p>
+
+        <p>
+          <span>
+            <div class="size-container2">
+              <div class="column2">
+                <div>
+                  <b>Заключение</b>
+                  <span class="field">{{ zaklyuchenie_tri_ber }}</span>  
+                </div>
+                <div>
+                  <b>Рекомендации</b>
+                  <span class="field">{{ rekomendatsi_tri_ber }}</span> 
+                </div>
+              </div>
+              <div class="column2">
+                <div>
+                  <b>Врач</b>
+                  <span class="field">{{ vrach }} _____________</span>  
+                </div>
+                <div>
+                  <b>Телефон</b>
+                  <span class="field">{{ telefon }}</span>  
+                </div>
+              </div> 
+            </div>
+          </span>  
+        </p> 
+
+      </div>
+    </div>
+  </body>
+</html>

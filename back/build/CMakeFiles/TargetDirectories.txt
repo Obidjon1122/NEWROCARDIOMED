@@ -1,0 +1,4 @@
+/Users/obidjon007/Desktop/NEVROCARDIOMED/back/build/CMakeFiles/nevrocardiomed.dir
+/Users/obidjon007/Desktop/NEVROCARDIOMED/back/build/CMakeFiles/format.dir
+/Users/obidjon007/Desktop/NEVROCARDIOMED/back/build/CMakeFiles/edit_cache.dir
+/Users/obidjon007/Desktop/NEVROCARDIOMED/back/build/CMakeFiles/rebuild_cache.dir

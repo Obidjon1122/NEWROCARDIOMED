@@ -1,0 +1,4 @@
+C:/Projects/NEVROCARDIOMED/front/CMakeFiles/front.dir
+C:/Projects/NEVROCARDIOMED/front/CMakeFiles/INSTALL.dir
+C:/Projects/NEVROCARDIOMED/front/CMakeFiles/ALL_BUILD.dir
+C:/Projects/NEVROCARDIOMED/front/CMakeFiles/ZERO_CHECK.dir

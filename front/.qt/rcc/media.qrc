@@ -1,0 +1,31 @@
+<RCC>
+  <qresource prefix="/icons">
+    <file alias="media/icons/home_1.png">C:/Projects/NEVROCARDIOMED/front/media/icons/home_1.png</file>
+    <file alias="media/icons/home_2.png">C:/Projects/NEVROCARDIOMED/front/media/icons/home_2.png</file>
+    <file alias="media/icons/male_doctor.png">C:/Projects/NEVROCARDIOMED/front/media/icons/male_doctor.png</file>
+    <file alias="media/icons/female_doctor.png">C:/Projects/NEVROCARDIOMED/front/media/icons/female_doctor.png</file>
+    <file alias="media/icons/pharmacy.png">C:/Projects/NEVROCARDIOMED/front/media/icons/pharmacy.png</file>
+    <file alias="media/icons/clinical-trials_1.png">C:/Projects/NEVROCARDIOMED/front/media/icons/clinical-trials_1.png</file>
+    <file alias="media/icons/clinical-trials_2.png">C:/Projects/NEVROCARDIOMED/front/media/icons/clinical-trials_2.png</file>
+    <file alias="media/icons/outpatient_1.png">C:/Projects/NEVROCARDIOMED/front/media/icons/outpatient_1.png</file>
+    <file alias="media/icons/outpatient_2.png">C:/Projects/NEVROCARDIOMED/front/media/icons/outpatient_2.png</file>
+    <file alias="media/icons/protocol_1.png">C:/Projects/NEVROCARDIOMED/front/media/icons/protocol_1.png</file>
+    <file alias="media/icons/protocol_2.png">C:/Projects/NEVROCARDIOMED/front/media/icons/protocol_2.png</file>
+    <file alias="media/icons/protocol_3.png">C:/Projects/NEVROCARDIOMED/front/media/icons/protocol_3.png</file>
+    <file alias="media/icons/protocol_4.png">C:/Projects/NEVROCARDIOMED/front/media/icons/protocol_4.png</file>
+    <file alias="media/icons/search.png">C:/Projects/NEVROCARDIOMED/front/media/icons/search.png</file>
+    <file alias="media/icons/plus.png">C:/Projects/NEVROCARDIOMED/front/media/icons/plus.png</file>
+    <file alias="media/icons/comboboxdropArrow.jpeg">C:/Projects/NEVROCARDIOMED/front/media/icons/comboboxdropArrow.jpeg</file>
+    <file alias="media/icons/comboboxdropArrowicon2.png">C:/Projects/NEVROCARDIOMED/front/media/icons/comboboxdropArrowicon2.png</file>
+    <file alias="media/icons/comboboxArrowImage.png">C:/Projects/NEVROCARDIOMED/front/media/icons/comboboxArrowImage.png</file>
+    <file alias="media/icons/comboboxArrowImageUp.png">C:/Projects/NEVROCARDIOMED/front/media/icons/comboboxArrowImageUp.png</file>
+    <file alias="media/icons/dropdownIcon.png">C:/Projects/NEVROCARDIOMED/front/media/icons/dropdownIcon.png</file>
+    <file alias="media/icons/dropDownIcon.png">C:/Projects/NEVROCARDIOMED/front/media/icons/dropDownIcon.png</file>
+    <file alias="media/icons/PrevMonth.png">C:/Projects/NEVROCARDIOMED/front/media/icons/PrevMonth.png</file>
+    <file alias="media/icons/NextMonth.png">C:/Projects/NEVROCARDIOMED/front/media/icons/NextMonth.png</file>
+    <file alias="media/icons/SpinBoxDown.png">C:/Projects/NEVROCARDIOMED/front/media/icons/SpinBoxDown.png</file>
+    <file alias="media/icons/SpinBoxUp.png">C:/Projects/NEVROCARDIOMED/front/media/icons/SpinBoxUp.png</file>
+    <file alias="media/icons/moshonka/index.html">C:/Projects/NEVROCARDIOMED/front/media/icons/moshonka/index.html</file>
+  </qresource>
+</RCC>
+
