@@ -1,0 +1,88 @@
+fio
+gender
+birth_year
+date
+year
+
+
+
+* МЯГКИЕ ТКАНЫ *
+
+mt_kontur
+mt_tolshina
+mt_ehostruktura
+mt_ehogennost
+mt_medilnaya
+mt_lateralnaya
+mt_prostranstvo
+mt_mishtsi
+
+
+
+* СУСТАВНАЯ ЖИДКОСТЬ *
+
+sjp_tolshina
+sjp_ehogennost
+sjp_sheli
+
+sjl_tolshina
+sjl_ehogennost
+sjl_sheli
+
+
+
+* ГИАЛИНОВЫЙ ХРЯЩ *
+
+gx_kontur
+gx_tolshina
+gx_ehostruktura
+gx_ehogennost
+
+
+
+* МЕДИАЛЬНЫЙ МЕНИСК *
+
+mmp_forma
+mmp_kontur
+mmp_ehostruktura
+mmp_ehogennost
+
+mmz_forma
+mmz_kontur
+mmz_ehostruktura
+mmz_ehogennost
+
+
+
+* ЛАТЕРАЛЬНЫЙ МЕНИСК *
+
+mlp_forma
+mlp_kontur
+mlp_ehostruktura
+mlp_ehogennost
+
+mlz_forma
+mlz_kontur
+mlz_ehostruktura
+mlz_ehogennost
+
+
+
+* КОСТНЫЕ СТРУКТУРЫ *
+
+ks_bedrennaya
+ks_bolsheber
+ks_nadkolennik
+
+
+
+zaklyuchenie
+rekomendatsi
+vrach
+telefon
+
+
+
+# fault
+
+-- Сустав правый левый

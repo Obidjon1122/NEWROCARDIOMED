@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Поджелудочная</title>
+    <style>
+      body {
+        background: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+      }
+      .a4-page {
+        width: 595px;
+        height: 842px;
+        background: white;
+        margin: 0;
+        border: none;
+        padding: 0;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      .top-rectangle {
+        width: 100%;
+        height: 85px;
+        background-color: #69a2df;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .top-rectangle p {
+        font-weight: 400;
+        font-size: 8px;
+        line-height: 10px;
+        text-align: center;
+      }
+
+      .heder-text-left {
+        width: 34%;
+      }
+
+      .heder-text-right {
+        width: 34%;
+      }
+
+      .header-center-image {
+        width: 12.2%;
+      }
+
+      .header-center-image img {
+        width: 100%;
+        height: 85px;
+      }
+
+      .content-area {
+        font-size: 8px;
+        line-height: 13px;
+        margin-left: 51px;
+        width: 484px;
+      }
+
+      .field {
+        display: inline-block;
+        width: 150px;
+        position: relative;
+        vertical-align: top;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .size-container2 {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .column2 {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0px;
+      }
+
+      /* Asosiy ma'lumotlar */
+      .field-fio {
+        display: inline-block;
+        min-width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-gender {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-birth-year {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-date {
+        display: inline-block;
+        min-width: 110px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-year {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-topografiya {
+        display: inline-block;
+        width: 251px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-forma {
+        display: inline-block;
+        width: 209px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-kontur {
+        display: inline-block;
+        width: 357px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-golovki {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-tela {
+        display: inline-block;
+        width: 117px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-xvost {
+        display: inline-block;
+        width: 109px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-dlina {
+        display: inline-block;
+        width: 136px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ehostruktura {
+        display: inline-block;
+        width: 343px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+
+      .field-ehogennost {
+        display: inline-block;
+        width: 361px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-zvuk {
+        display: inline-block;
+        width: 321px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+
+      .field-golovki2 {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-tela2 {
+        display: inline-block;
+        width: 111px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+ <body>
+    <div class="a4-page">
+      <div class="top-rectangle">
+        <div class="heder-text-left">
+          <p>
+            O'ZBEKISTON RESPUBLIKASI SOG'LIQNI SAQLASH<br>
+            VAZIRLIGI<br>
+            "NEVROCARDIOMED"<br>
+            TIBBIY MARKAZI
+          </p>
+          <p>
+            Manzil: Samarqand sh., M. Qoshg'ariy 89<br>
+            Telefon: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+
+        <div class="header-center-image">
+          <img src="qrc:/icons/media/protocolforms/img.png" alt="png" />
+        </div>
+
+        <div class="heder-text-right">
+          <p>
+            МИНИСТЕРСТВО ЗДРАВООХРАНЕНИЯ<br>
+            РЕСПУБЛИКИ УЗБЕКИСТАН<br>
+            МЕДИЦИНСКИЙ ЦЕНТР<br>
+            "NEVROCARDIOMED"
+          </p>
+          <p>
+            Адрес: г. Самарканд, М. Кошгари 89<br>
+            Телефон: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+      </div>
+
+      <div class="content-area">
+        <p>
+          <span> 
+            Ф.И.О. пациента 
+            <span class="field-fio">{{ fio }}</span>, пол
+            <span class="field-gender">{{ gender }}</span>,
+            <span class="field-birth-year">{{ birth_year }}</span> г.р.
+          </span>
+          <br>
+          <span>
+            Дата проведения исследования «
+            <span class="field-date">{{ date }}</span> »
+            <span class="field-year">{{ year }}</span> г.
+          </span>
+          <br>
+          <span>
+            Ультразвуковой аппарат SonoScape S22. Тип датчика – конвексный, 3.5 МГц
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>ПРОТОКОЛ<br>
+          Ультразвукового исследование поджелудочной железы<br>
+          Основные положения:</b>
+        </div>
+        
+        <p>
+          <span>
+            <b>Топография</b>
+            <span class="field-topografiya">{{ p_topografiya_padjeludoch }}</span> (в норме расположена над селезеночной веной)
+          </span>
+          <br>
+          <span>
+            <b>Форма</b>
+            <span class="field-forma">{{ p_forma_padjeludoch }}</span> (в норме гантелевидная, колбасовидная или в виде головастика)
+          </span>
+          <br>
+          <span>
+            <b>Контур</b>
+            <span class="field-kontur">{{ p_kontur_padjeludoch }}</span> (в норме ровный, четкий)
+          </span>
+          <br>
+          <span>
+            <b>Линейные размеры:</b>
+            <br>
+            <span style="display: block; margin-left: 20px">
+              Толщина головки 
+              <span class="field-golovki">{{ p_golovki_padjeludoch }}</span> мм (в норме 11 – 32 мм)
+              <br>
+              <span style="display: block; margin-left: 35px">
+                тела 
+                <span class="field-tela">{{ p_tela_padjeludoch }}</span> мм (в норме 4 - 21 мм)
+                <br>
+                хвоста
+                <span class="field-xvost">{{ p_xvost_padjeludoch }}</span> мм (в норме 7 - 35 мм)
+                <br>
+              </span>
+              Длина
+              <span class="field-dlina">{{ p_dlina_padjeludoch }}</span> мм (в норме 80 - 125 мм)
+              <br>
+            </span>
+          </span>
+          <span>
+            <b>Эхоструктура</b>
+            <span class="field-ehostruktura">{{ p_ehostruktura_padjeludoch }}</span> (в норме однородная)
+          </span>
+          <br>
+          <span>
+            <b>Эхогенность</b>
+            <span class="field-ehogennost">{{ p_ehogennost_padjeludoch }}</span> (в норме средняя)
+          </span>
+          <br>
+          <span>
+            <b>Звукопроводимость</b>
+            <span class="field-zvuk">{{ p_zvuk_padjeludoch }}</span> (в норме сохранена)
+          </span>
+          <br>
+          <span>
+            <b>Вирсунгов проток, диаметр:</b>
+            <br>
+            <span style="display: block; margin-left: 20px">
+              в области головки
+              <span class="field-golovki2">{{ p_golovki2_padjeludoch }}</span> (в норме 3 – 4 мм)
+              <br>
+              в области тела
+              <span class="field-tela2">{{ p_tela2_padjeludoch }}</span> (в норме 1 – 2 мм) 
+              <br><br>
+            </span>
+          </span>
+        </p>
+
+       <p>
+          <span>
+            <div class="size-container2">
+              <div class="column2">
+                <div>
+                  <b>Заключение</b>
+                  <span class="field">{{ zaklyuchenie_padjeludoch }}</span>  
+                </div>
+                <div>
+                  <b>Рекомендации</b>
+                  <span class="field">{{ rekomendatsi_padjeludoch }}</span> 
+                </div>
+              </div>
+              <div class="column2">
+                <div>
+                  <b>Врач</b>
+                  <span class="field">{{ vrach }} _____________</span>  
+                </div>
+                <div>
+                  <b>Телефон</b>
+                  <span class="field">{{ telefon }}</span>  
+                </div>
+              </div> 
+            </div>
+          </span>  
+        </p> 
+
+      </div>
+    </div>
+  </body>
+</html>

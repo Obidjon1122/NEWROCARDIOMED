@@ -1,0 +1,77 @@
+fio
+gender
+birth_year
+date
+year
+
+
+
+* ПРОТОКОЛ *
+
+pr_datapervogo_tri_ber
+pr_ned_tri_ber
+pr_dnya_tri_ber
+pr_datarodov_tri_ber
+pr_razmer_tri_ber
+
+
+
+* МАТКА *
+
+mt_kontur_tri_ber
+mt_ehostruktura_tri_ber
+mt_dlina_tri_ber
+mt_tolshina_tri_ber
+mt_shirina_tri_ber
+mt_osobennosti_tri_ber
+
+
+
+* ПЛОДНОЕ ЯЙЦО *
+
+py_kolichestvo_tri_ber
+py_topografiya_tri_ber
+py_forma_tri_ber
+py_diametr_tri_ber
+py_ned_tri_ber
+py_dnya_tri_ber
+
+
+
+* ЭМБРИОН *
+
+em_kolichestvo_tri_ber
+em_embrion_tri_ber
+em_ned_tri_ber
+em_dnya_tri_ber
+em_serdtse_tri_ber
+em_udar_tri_ber
+em_tolshina_tri_ber
+
+
+
+* ЖЕЛТОЧНЫЙ МЕШОЧЕК *
+
+jm_meshochek_tri_ber
+jm_diametr_tri_ber
+
+
+
+* УТОЛЩЕНИЕ ХОРИОНА *
+
+uh_lokalizatsiya_tri_ber
+uh_tolshina_tri_ber
+uh_osobennosti_tri_ber
+
+
+
+zaklyuchenie_tri_ber
+rekomendatsi_tri_ber
+vrach
+telefon
+
+
+
+# fault 
+-- Желточный мешочек
+

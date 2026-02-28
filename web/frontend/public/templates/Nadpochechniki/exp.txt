@@ -1,0 +1,43 @@
+fio
+gender
+birth_year
+date
+year
+
+
+
+* ПРОТОКОЛ *
+
+pr_topografiya_nadpochechniki
+pr_forma_nadpochechniki
+pr_prodolniy_nadpochechniki
+pr_poperechniy_nadpochechniki
+pr_tolshina_nadpochechniki
+pr_ploshad_nadpochechniki
+pr_index_nadpochechniki
+pr_struktura_nadpochechniki
+pr_exogennost_nadpochechniki
+
+lv_topografiya_nadpochechniki
+lv_forma_nadpochechniki
+lv_prodolniy_nadpochechniki
+lv_poperechniy_nadpochechniki
+lv_tolshina_nadpochechniki
+lv_ploshad_nadpochechniki
+lv_index_nadpochechniki
+lv_struktura_nadpochechniki
+lv_exogennost_nadpochechniki
+
+
+
+zaklyuchenie_nadpochechniki
+rekomendatsi_nadpochechniki
+vrach
+telefon
+
+
+
+# fault
+
+-- Размеры:
+Индекс гиперплазии

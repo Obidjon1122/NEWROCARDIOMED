@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Почки бланк</title>
+    <style>
+      body {
+        background: white;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+      }
+      .a4-page {
+        width: 595px;
+        height: 842px;
+        background: white;
+        margin: 0;
+        border: none;
+        padding: 0;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      .top-rectangle {
+        width: 100%;
+        height: 85px;
+        background-color: #69a2df;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .top-rectangle p {
+        font-weight: 400;
+        font-size: 8px;
+        line-height: 10px;
+        text-align: center;
+      }
+
+      .heder-text-left {
+        width: 34%;
+      }
+
+      .heder-text-right {
+        width: 34%;
+      }
+
+      .header-center-image {
+        width: 12.2%;
+      }
+
+      .header-center-image img {
+        width: 100%;
+        height: 85px;
+      }
+
+      .content-area {
+        font-size: 8px;
+        line-height: 13px;
+        margin-left: 51px;
+        width: 484px;
+      }
+
+      .thyroid-table {
+        display: flex;
+        /* border: 1px solid #000; */
+        width: 530px;
+        height: 270px;
+        font-family: "Inter Regular", Arial, sans-serif;
+        margin-top: 10px;
+        margin-left: -20px;
+        margin-bottom: 10px;
+      }
+
+      .column {
+        width: 50%;
+        padding: 0px 10px;
+        /* border-right: 1px solid #000; */
+      }
+
+      .column:last-child {
+        border-right: none;
+      }
+
+      .column-title {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .field {
+        display: inline-block;
+        width: 150px;
+        position: relative;
+        vertical-align: top;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .size-container2 {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .column2 {
+        display: flex;
+        flex-direction: column;
+        margin-top: 0px;
+      }
+
+      /* Asosiy ma'lumotlar */
+      .field-fio {
+        display: inline-block;
+        min-width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-gender {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-birth-year {
+        display: inline-block;
+        min-width: 60px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-date {
+        display: inline-block;
+        min-width: 110px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-year {
+        display: inline-block;
+        min-width: 60px;
+        line-height: 9px;
+        text-align: center;
+        vertical-align: middle;
+        position: relative;
+        top: 0px;
+        white-space: nowrap;
+      }
+
+      .field-topografiya {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-podjivnost {
+        display: inline-block;
+        width: 130px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-jirovaya {
+        display: inline-block;
+        width: 110px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-fibroznaya {
+        display: inline-block;
+        width: 160px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-kontur {
+        display: inline-block;
+        width: 110px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-dlina {
+        display: inline-block;
+        width: 108px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-tolshina {
+        display: inline-block;
+        width: 103px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-shirina {
+        display: inline-block;
+        width: 107px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-parenhimi {
+        display: inline-block;
+        width: 64px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ehogennost {
+        display: inline-block;
+        width: 140px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-ehostruktura {
+        display: inline-block;
+        width: 140px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-mm {
+        display: inline-block;
+        width: 30px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-sostoyanie {
+        display: inline-block;
+        width: 120px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-kortiko {
+        display: inline-block;
+        width: 57px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-chls {
+        display: inline-block;
+        width: 120px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-obyom {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-mochetochnik {
+        display: inline-block;
+        width: 82px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-forma {
+        display: inline-block;
+        width: 157px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-narujniy {
+        display: inline-block;
+        width: 343px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-vnutrenniy {
+        display: inline-block;
+        width: 337px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-stenki {
+        display: inline-block;
+        width: 55px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-soderjimoe {
+        display: inline-block;
+        width: 344px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-sheyk {
+        display: inline-block;
+        width: 320px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-lokalizatsiya {
+        display: inline-block;
+        width: 191px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-chastota {
+        display: inline-block;
+        width: 138px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+
+      .field-obyom2 {
+        display: inline-block;
+        width: 100px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        white-space: nowrap;
+      }
+
+      .field-nalichie {
+        display: inline-block;
+        width: 190px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+      .field-dannie {
+        display: inline-block;
+        width: 280px; 
+        line-height: 9px;
+        text-align: center;
+        vertical-align: top;
+        position: relative;
+        top: 0px;
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="a4-page">
+      <div class="top-rectangle">
+
+        <div class="heder-text-left">
+          <p>
+            O'ZBEKISTON RESPUBLIKASI SOG'LIQNI SAQLASH<br>
+            VAZIRLIGI<br>
+            "NEVROCARDIOMED"<br>
+            TIBBIY MARKAZI
+          </p>
+          <p>
+            Manzil: Samarqand sh., M. Qoshg'ariy 89<br>
+            Telefon: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+
+        <div class="header-center-image">
+          <img src="qrc:/icons/media/protocolforms/img.png" alt="png" />
+        </div>
+
+        <div class="heder-text-right">
+          <p>
+            МИНИСТЕРСТВО ЗДРАВООХРАНЕНИЯ<br>
+            РЕСПУБЛИКИ УЗБЕКИСТАН<br>
+            МЕДИЦИНСКИЙ ЦЕНТР<br>
+            "NEVROCARDIOMED"
+          </p>
+          <p>
+            Адрес: г. Самарканд, М. Кошгари 89<br>
+            Телефон: +998(66)231-17-17, +998(88)938-71-70
+          </p>
+        </div>
+
+      </div>
+
+      <div class="content-area">
+        <p>
+          <span>
+            Ф.И.О. пациента 
+            <span class="field-fio">{{ fio }}</span>, пол
+            <span class="field-gender">{{ gender }}</span>,
+            <span class="field-birth-year">{{ birth_year }}</span> г.р.
+          </span>
+          <br>
+          <span>
+            Дата проведения исследования «
+            <span class="field-date">{{ date }}</span> »
+            <span class="field-year">{{ year }}</span> г.
+          </span>
+          <br>
+          <span>
+            Ультразвуковой аппарат SonoScape S22. Тип датчика – конвексный, 3.5 МГц
+          </span>
+        </p>
+
+        <div style="text-align: center">
+          <b>ПРОТОКОЛ<br> 
+          Ультразвукового исследования почек и мочевого пузыря<br></b>
+        </div>
+
+        <div style="text-align: center">
+          <b>ПОЧКИ</b>
+        </div>
+
+        <div class="thyroid-table">
+          <div class="column">
+
+            <div class="column-title">
+              Правая
+            </div>
+
+            <p>
+              <span>
+                <b>Топография при вертикальном положении</b>
+                <span class="field-topografiya">{{ pp_topografiya_pochki_blank }}</span>    
+              </span>
+              <br>
+              <span>
+                <b>Дыхательная подвижность</b>
+                <span class="field-podjivnost">{{ pp_podjivnost_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Жировая капсула, эхоструктура</b>
+                <span class="field-jirovaya">{{ pp_jirovaya_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Фиброзная капсула</b>
+                <span class="field-fibroznaya">{{ pp_fibroznaya_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Контуры</b>
+                <span class="field-kontur">{{ pp_kontur_pochki_blank }}</span> (в норме ровные, четкие)
+              </span>
+              <br>
+              <span>
+                <b>Линейные размеры:</b><br>
+                <span style="display: block; margin-left: 20px">
+                  длина 
+                  <span class="field-dlina">{{ pp_dlina_pochki_blank }}</span> мм (в норме 75-130 мм)
+                  <br>
+                  толщина
+                  <span class="field-tolshina">{{ pp_tolshina_pochki_blank }}</span> мм (в норме 35-50 мм)
+                  <br>
+                  ширина
+                  <span class="field-shirina">{{ pp_shirina_pochki_blank }}</span> мм (в норме 45-65 мм)
+                  <br>
+                  толщина паренхимы
+                  <span class="field-parenhimi">{{ pp_parenhimi_pochki_blank }}</span> мм (в норме 8-25 мм)
+                  <br>
+                </span>
+              </span>
+              <span>
+                <b>Эхогенность паренхимы</b>
+                <span class="field-ehogennost">{{ pp_ehogennost_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Эхоструктура паренхимы</b>
+                <span class="field-ehostruktura">{{ pp_ehostruktura_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Состояние ЧЛС</b>
+                <span class="field-mm">{{ pp_mm_pochki_blank }}</span> мм,
+                <span class="field-sostoyanie">{{ pp_sostoyanie_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Кортико-ренальный индекс</b>
+                <span class="field-kortiko">{{ pp_kortiko_pochki_blank }}</span> (в норме 0,34 – 0,4)
+              </span>
+              <br>
+              <span>
+                <b>Наличие конкрементов в ЧЛС</b>
+                <span class="field-chls">{{ pp_chls_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Объем</b>
+                <span class="field-obyom">{{ pp_obyom_pochki_blank }}</span> см³ (в норме 134 см³)
+              </span>
+              <br>
+              <span>
+                <b>Мочеточник</b>
+                <span class="field-mochetochnik">{{ pp_mochetochnik_pochki_blank }}</span> (в норме не визуализируется)
+              </span>
+            </p>
+          </div>
+
+          <div class="column">
+
+            <div class="column-title">
+              Левая
+            </div>
+
+            <p>
+              <span>
+                <b>Топография при вертикальном положении</b>
+                <span class="field-topografiya">{{ pl_topografiya_pochki_blank }}</span>
+              </span>
+              <br>
+              <span>
+                <b>Дыхательная подвижность</b>
+                <span class="field-podjivnost">{{ pl_podjivnost_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Жировая капсула, эхоструктура</b>
+                <span class="field-jirovaya">{{ pl_jirovaya_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Фиброзная капсула</b>
+                <span class="field-fibroznaya">{{ pl_fibroznaya_pochki_blank }}</span>
+              </span>
+              <br>
+              <span>
+                <b>Контуры</b>
+                <span class="field-kontur">{{ pl_kontur_pochki_blank }}</span> (в норме ровные, четкие)
+              </span>
+              <br>
+              <span>
+                <b>Линейные размеры:</b><br>
+                <span style="display: block; margin-left: 20px">
+                  длина 
+                  <span class="field-dlina">{{ pl_dlina_pochki_blank }}</span> мм (в норме 75-130 мм)
+                  <br>
+                  толщина
+                  <span class="field-tolshina">{{ pl_tolshina_pochki_blank }}</span> мм (в норме 35-50 мм)
+                  <br>
+                  ширина
+                  <span class="field-shirina">{{ pl_shirina_pochki_blank }}</span> мм (в норме 45-65 мм)
+                  <br>
+                  толщина паренхимы
+                  <span class="field-parenhimi">{{ pl_parenhimi_pochki_blank }}</span> мм (в норме 8-25 мм)
+                  <br>
+                </span>
+              </span>
+              <span>
+                <b>Эхогенность паренхимы</b>
+                <span class="field-ehogennost">{{ pl_ehogennost_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Эхоструктура паренхимы</b>
+                <span class="field-ehostruktura">{{ pl_ehostruktura_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Состояние ЧЛС</b>
+                <span class="field-mm">{{ pl_mm_pochki_blank }}</span> мм,
+                <span class="field-sostoyanie">{{ pl_sostoyanie_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Кортико-ренальный индекс</b>
+                <span class="field-kortiko">{{ pl_kortiko_pochki_blank }}</span> (в норме 0,34 – 0,4)
+              </span>
+              <br>
+              <span>
+                <b>Наличие конкрементов в ЧЛС</b>
+                <span class="field-chls">{{ pl_chls_pochki_blank }}</span> 
+              </span>
+              <br>
+              <span>
+                <b>Объем</b>
+                <span class="field-obyom">{{ pl_obyom_pochki_blank }}</span> см³ (в норме 146 см³)
+              </span>
+              <br>
+              <span>
+                <b>Мочеточник</b>
+                <span class="field-mochetochnik">{{ pl_mochetochnik_pochki_blank }}</span> (в норме не визуализируется)
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <br><br><br>
+
+        <div style="text-align: center">
+          <b>МОЧЕВОЙ ПУЗЫРЬ</b>
+        </div>
+
+        <p>
+          <span>
+            <b>Объем</b>
+            <span class="field-obyom">{{ mp_obyom_pochki_blank }}</span> мл (в норме 150 - 200 мл)
+          </span>
+          <br>
+          <span>
+            <b>Форма</b>
+            <span class="field-forma">{{ mp_forma_pochki_blank }}</span> (в норме грушевидна при продольном, бочкообразная при поперечном срезах)
+          </span>
+          <br>
+          <span>
+            <b>Контур:</b>
+          </span>
+          <br>       
+          <span>
+            <b>Наружный</b>
+            <span class="field-narujniy">{{ mp_narujniy_pochki_blank }}</span> (в норме ровный, четкий)
+          </span>
+          <br>
+          <span>
+            <b>Внутренний</b>
+            <span class="field-vnutrenniy">{{ mp_vnutrenniy_pochki_blank }}</span> (в норме ровный, четкий)
+          </span>
+          <br>
+          <span>
+            <b>Толщина стенки</b> до опорожнения
+            <span class="field-stenki">{{ mp_mm1_pochki_blank }}</span> мм (в норме 3 - 6 мм), после опорожнения
+            <span class="field-stenki">{{ mp_mm2_pochki_blank }}</span> мм (в норме до 8 мм)
+          </span>
+          <br>
+          <span>
+            <b>Содержимое</b>
+            <span class="field-soderjimoe">{{ mp_soderjimoe_pochki_blank }}</span> (в норме анэхогенное)
+          </span>
+          <br>
+          <span>
+            <b>Состояние шейки, зева</b>
+            <span class="field-sheyk">{{ mp_sheyk_pochki_blank }}</span> (в норме сомкнут)
+          </span>
+          <br>
+          <span>
+            <b>Локализация устьев мочеточников</b>
+            <span class="field-lokalizatsiya">{{ mp_lokalizatsiya_pochki_blank }}</span> (в норме на 5 и 7 часах по циферблату)
+          </span>
+          <br>
+          <span>
+            <b>Частота поступления мочи из мочеточников через их устья</b>
+            <span class="field-chastota">{{ mp_chastota_pochki_blank }}</span> (в норме 2-4 раза в минуту)
+          </span>
+          <br>
+          <span>
+            <b>Объем остаточной мочи</b>
+            <span class="field-obyom2">{{ mp_obyom2_pochki_blank }}</span> мл (в норме до 20 мл или до 10% от исходного объема)
+          </span>
+          <br>
+          <span>
+            <b>Наличие пузырно-мочеточникового рефлюкса мочи</b>
+            <span class="field-nalichie">{{ mp_nalichie_pochki_blank }}</span> (в норме отсутствует)
+          </span>
+          <br>
+          <span>
+            <b>Дополнительные данные</b>
+            <span class="field-dannie">{{ mp_dannie_pochki_blank }}</span> 
+          </span>
+          <br><br>
+        </p>
+            
+        <p>
+          <span>
+            <div class="size-container2">
+              <div class="column2">
+                <div>
+                  <b>Заключение</b>
+                  <span class="field">{{ zaklyuchenie_pochki_blank }}</span>  
+                </div>
+                <div>
+                  <b>Рекомендации</b>
+                  <span class="field">{{ rekomendatsi_pochki_blank }}</span> 
+                </div>
+              </div>
+              <div class="column2">
+                <div>
+                  <b>Врач</b>
+                  <span class="field">{{ vrach }} _____________</span>  
+                </div>
+                <div>
+                  <b>Телефон</b>
+                  <span class="field">{{ telefon }}</span>  
+                </div>
+              </div> 
+            </div>
+          </span>  
+        </p> 
+      </div>
+    </div>
+  </body>
+</html>
