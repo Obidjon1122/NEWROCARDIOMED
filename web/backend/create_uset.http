@@ -1,0 +1,12 @@
+POST http://127.0.0.1:8000/api/users
+Content-Type: application/json
+
+{
+    "first_name": "Kamolov",
+    "last_name": "Jo'rabek",
+    "patronymic_name": "Soli O'g'li",
+    "gender": "male",
+    "password": "1234567",
+    "phone": "+998997224676",
+    "role": "doctor"
+}

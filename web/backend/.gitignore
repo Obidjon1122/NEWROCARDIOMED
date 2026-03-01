@@ -1,0 +1,12 @@
+# FastAPI
+__pycache__
+venv
+.env
+*.sqlite3
+
+# common
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

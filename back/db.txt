@@ -15,9 +15,9 @@ CREATE TABLE users (
 
 
 
--- INSERT INTO users(first_name, last_name, patronymic, gender, password, phone, role)
--- VALUES
--- ('Jo''rabek', 'Kamolov', 'Solivich', 'male', '1234567', '+998991234567', 'doctor')
+INSERT INTO users(first_name, last_name, patronymic, gender, password, phone, role)
+VALUES
+('Jo''rabek', 'Kamolov', 'Solivich', 'male', '1234567', '+998991234567', 'doctor')
 
 
 
