@@ -122,7 +122,8 @@ async def download_protocol_docx(
     if row["protocol_form"]:
         try:
             parsed = json.loads(row["protocol_form"])
-            form_data = _flatten_json(parsed)
+            if isinstance(parsed, dict):
+                form_data = parsed
         except Exception:
             pass
 

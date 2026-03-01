@@ -112,7 +112,8 @@ class ProtocolRepository:
         if row["protocol_form"]:
             try:
                 parsed = json.loads(row["protocol_form"])
-                data = _flatten_json(parsed)
+                if isinstance(parsed, dict):
+                    data = parsed
             except Exception:
                 pass
         data["date"] = row["created_at"] or ""

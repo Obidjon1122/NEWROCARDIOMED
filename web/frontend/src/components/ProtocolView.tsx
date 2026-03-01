@@ -1,20 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Button, Space, Spin, Alert, notification } from 'antd';
-import { PrinterOutlined, CloseOutlined, FileWordOutlined } from '@ant-design/icons';
+import { PrinterOutlined, CloseOutlined, FileWordOutlined, FilePdfOutlined } from '@ant-design/icons';
 import type { Client, User } from '../types';
 import { getFormData, downloadProtocolDocx } from '../api/protocols';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import html2pdf from 'html2pdf.js';
 
 // DB protokol ID → HTML shablon fayli manzili
 const PROTOCOL_TEMPLATES: Record<number, string> = {
-  1:  '/templates/Mashonka/index.html',
-  2:  '/templates/Shitavitka/index.html',
-  3:  '/templates/Pechen_blank/index.html',
-  4:  '/templates/Pochki_blank/index.html',
-  5:  '/templates/Maliy_taz_blank/index.html',
-  6:  '/templates/Molochnye_zhelezy_blank/index.html',
-  7:  '/templates/Selezjonka/index.html',
-  8:  '/templates/Kolenniy_sustav/index.html',
-  9:  '/templates/Nadpochechniki/index.html',
+  1: '/templates/Mashonka/index.html',
+  2: '/templates/Shitavitka/index.html',
+  3: '/templates/Pechen_blank/index.html',
+  4: '/templates/Pochki_blank/index.html',
+  5: '/templates/Maliy_taz_blank/index.html',
+  6: '/templates/Molochnye_zhelezy_blank/index.html',
+  7: '/templates/Selezjonka/index.html',
+  8: '/templates/Kolenniy_sustav/index.html',
+  9: '/templates/Nadpochechniki/index.html',
   10: '/templates/Perviy_trimestr/index.html',
   11: '/templates/Follikulometriya/index.html',
   12: '/templates/Plod_blank/index.html',
@@ -23,7 +26,7 @@ const PROTOCOL_TEMPLATES: Record<number, string> = {
 };
 
 function fillHtmlTemplate(html: string, data: Record<string, string>): string {
-  return html.replace(/\{\{(\w+)\}\}/g, (_, key) => data[key] ?? '');
+  return html.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, key) => data[key] ?? '');
 }
 
 function formatDateToRussian(dateStr: string): string {
@@ -54,6 +57,7 @@ const ProtocolView: React.FC<Props> = ({
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [loading, setLoading] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [pdfDownloading, setPdfDownloading] = useState(false);
   const [error, setError] = useState('');
   const [filledHtml, setFilledHtml] = useState('');
   const [iframeHeight, setIframeHeight] = useState(600);
@@ -149,13 +153,43 @@ const ProtocolView: React.FC<Props> = ({
     }
   };
 
+  const handleDownloadPdf = async () => {
+    if (!filledHtml) {
+      notification.warning({ message: 'Protokol yuklanmagan' });
+      return;
+    }
+    setPdfDownloading(true);
+    try {
+      const container = document.createElement('div');
+      container.innerHTML = filledHtml;
+      document.body.appendChild(container);
+      const fname = `${client.last_name}_${client.first_name}_protocol_${protocolId}.pdf`;
+      await html2pdf()
+        .set({
+          margin: 0,
+          filename: fname,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        })
+        .from(container)
+        .save();
+      document.body.removeChild(container);
+      notification.success({ message: 'PDF fayl yuklab olindi!' });
+    } catch {
+      notification.error({ message: 'PDF yuklab olishda xato yuz berdi' });
+    } finally {
+      setPdfDownloading(false);
+    }
+  };
+
   const isPreviewMode = localFormData !== undefined;
 
   return (
     <Modal
       open={open}
       onCancel={onClose}
-      width={860}
+      width={700}
       style={{ top: 16 }}
       styles={{
         body: {
@@ -180,6 +214,14 @@ const ProtocolView: React.FC<Props> = ({
               DOCX yuklab olish
             </Button>
           )}
+          <Button
+            icon={<FilePdfOutlined />}
+            loading={pdfDownloading}
+            onClick={handleDownloadPdf}
+            style={{ borderColor: '#c0392b', color: '#c0392b' }}
+          >
+            PDF yuklab olish
+          </Button>
           <Button
             type="primary"
             icon={<PrinterOutlined />}

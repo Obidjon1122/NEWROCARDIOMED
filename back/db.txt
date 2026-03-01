@@ -47,18 +47,18 @@ VALUES
 
 
 
--- CREATE TABLE clients (
---     id BIGSERIAL PRIMARY KEY,
---     first_name VARCHAR(255),
---     last_name VARCHAR(255),
---     patronymic VARCHAR(255),
--- 	gender VARCHAR(20),
---     phone VARCHAR(50),
---     birth_date TIMESTAMP,
---     region VARCHAR(255),
---     created_at TIMESTAMP DEFAULT NOW(),
---     updated_at TIMESTAMP DEFAULT NOW()
--- );
+CREATE TABLE clients (
+    id BIGSERIAL PRIMARY KEY,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    patronymic VARCHAR(255),
+	gender VARCHAR(20),
+    phone VARCHAR(50),
+    birth_date TIMESTAMP,
+    region VARCHAR(255),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
 
 -- INSERT INTO clients (first_name, last_name, patronymic, gender, phone, birth_date, region) VALUES
 -- -- O'zbek ismlar
@@ -181,7 +181,7 @@ CREATE TABLE protocols (
 
 INSERT INTO protocols (doctor_id, title, protocol_form)
 VALUES (
-    1,
+    2,
     'Ультразвуковое исследование органов мошонки',
     '{
         "Топография": ["Обычная", "Нормальная", "В паховом канале", "Не визуализируется", "В кожно-мышечном вместилище мошонки"],
@@ -248,14 +248,14 @@ VALUES (
 
 
 
--- CREATE TABLE protocol_forms (
---     id BIGSERIAL PRIMARY KEY,
---     client_id BIGINT REFERENCES clients(id) ON DELETE SET NULL,
--- 	protocol_id BIGINT REFERENCES protocols(id) ON DELETE SET NULL,
---     protocol_form JSONB,
---     created_at TIMESTAMP DEFAULT NOW(),
---     updated_at TIMESTAMP DEFAULT NOW()
--- );
+CREATE TABLE protocol_forms (
+    id BIGSERIAL PRIMARY KEY,
+    client_id BIGINT REFERENCES clients(id) ON DELETE SET NULL,
+	protocol_id BIGINT REFERENCES protocols(id) ON DELETE SET NULL,
+    protocol_form JSONB,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
 
 
 

@@ -5,6 +5,7 @@ from app.database import get_db
 from app.repositories.client import ClientRepository
 from app.services.client import ClientService
 from app.core.auth import get_current_user
+from datetime import date
 
 router = APIRouter(prefix="/api/clients", tags=["clients"])
 
@@ -14,7 +15,7 @@ class ClientBody(BaseModel):
     last_name: str
     gender: str
     phone: str
-    birth_date: str
+    birth_date: date
     region: str
 
 
@@ -40,10 +41,13 @@ async def create_client(
     _=Depends(get_current_user),
 ):
     service = ClientService(ClientRepository(conn))
-    return await service.create_client(
+    print(body, 1212)
+    entity = await service.create_client(
         body.first_name, body.last_name, body.gender,
         body.phone, body.birth_date, body.region
     )
+    print(entity, 1111111111111111)
+    return entity
 
 
 @router.get("/{client_id}")
