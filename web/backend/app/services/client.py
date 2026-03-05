@@ -10,9 +10,9 @@ class ClientService:
 
     @staticmethod
     def validate_phone(phone: str) -> bool:
-        if not phone or len(phone) > 20:
-            return False
-        return bool(re.match(r"^\+?\d{9,20}$", phone))
+        if not phone:
+            return True  # bo'sh bo'lsa ham o'tadi
+        return bool(re.match(r"^\+?\d{9,20}$", phone)) and len(phone) <= 20
 
     def _validate_fields(self, first_name: str, last_name: str, gender: str,
                           phone: str, birth_date: str, region: str):
@@ -20,14 +20,8 @@ class ClientService:
             raise HTTPException(status_code=400, detail="Ism xato")
         if not last_name or len(last_name) > 50:
             raise HTTPException(status_code=400, detail="Familiya xato")
-        if gender not in ("male", "female"):
-            raise HTTPException(status_code=400, detail="Jins noto'g'ri (male/female)")
-        if not self.validate_phone(phone):
+        if phone and not self.validate_phone(phone):
             raise HTTPException(status_code=400, detail="Telefon raqami noto'g'ri")
-        if not birth_date:
-            raise HTTPException(status_code=400, detail="Tug'ilgan sana kiritilmagan")
-        if not region:
-            raise HTTPException(status_code=400, detail="Viloyat kiritilmagan")
 
     async def create_client(self, first_name: str, last_name: str, gender: str,
                             phone: str, birth_date: str, region: str) -> dict:

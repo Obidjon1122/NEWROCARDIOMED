@@ -8,16 +8,17 @@ class ClientRepository:
 
     async def create(self, first_name: str, last_name: str, gender: str,
                      phone: str, birth_date: str, region: str) -> Optional[dict]:
+        bd = birth_date if birth_date else None
         row = await self.conn.fetchrow(
             """
             INSERT INTO clients (first_name, last_name, gender, phone, birth_date, region)
             VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING id, first_name, last_name, gender, phone,
-                      birth_date, region,
+                      TO_CHAR(birth_date, 'YYYY-MM-DD') AS birth_date, region,
                       TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
                       TO_CHAR(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
             """,
-            first_name, last_name, gender, phone, birth_date, region
+            first_name, last_name, gender, phone, bd, region
         )
         return dict(row) if row else None
 
@@ -25,7 +26,7 @@ class ClientRepository:
         row = await self.conn.fetchrow(
             """
             SELECT id, first_name, last_name, gender, phone,
-                   birth_date, region,
+                   TO_CHAR(birth_date, 'YYYY-MM-DD') AS birth_date, region,
                    TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
                    TO_CHAR(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
             FROM clients WHERE id = $1
@@ -38,7 +39,7 @@ class ClientRepository:
         row = await self.conn.fetchrow(
             """
             SELECT id, first_name, last_name, gender, phone,
-                   birth_date, region,
+                   TO_CHAR(birth_date, 'YYYY-MM-DD') AS birth_date, region,
                    TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
                    TO_CHAR(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
             FROM clients WHERE phone = $1
@@ -53,18 +54,18 @@ class ClientRepository:
         if search:
             search_pattern = f"%{search}%"
             total = await self.conn.fetchval(
-                "SELECT COUNT(*) FROM clients WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR phone ILIKE $1",
+                "SELECT COUNT(*) FROM clients WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR phone ILIKE $1 OR TO_CHAR(birth_date, 'DD.MM.YYYY') ILIKE $1 OR TO_CHAR(birth_date, 'YYYY') ILIKE $1",
                 search_pattern
             )
             rows = await self.conn.fetch(
                 """
                 SELECT id, first_name, last_name, gender, phone,
-                       birth_date, region,
+                       TO_CHAR(birth_date, 'YYYY-MM-DD') AS birth_date, region,
                        TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
                        TO_CHAR(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
                 FROM clients
-                WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR phone ILIKE $1
-                ORDER BY id ASC LIMIT $2 OFFSET $3
+                WHERE first_name ILIKE $1 OR last_name ILIKE $1 OR phone ILIKE $1 OR TO_CHAR(birth_date, 'DD.MM.YYYY') ILIKE $1 OR TO_CHAR(birth_date, 'YYYY') ILIKE $1
+                ORDER BY id DESC LIMIT $2 OFFSET $3
                 """,
                 search_pattern, page_size, offset
             )
@@ -73,10 +74,10 @@ class ClientRepository:
             rows = await self.conn.fetch(
                 """
                 SELECT id, first_name, last_name, gender, phone,
-                       birth_date, region,
+                       TO_CHAR(birth_date, 'YYYY-MM-DD') AS birth_date, region,
                        TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
                        TO_CHAR(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
-                FROM clients ORDER BY id ASC LIMIT $1 OFFSET $2
+                FROM clients ORDER BY id DESC LIMIT $1 OFFSET $2
                 """,
                 page_size, offset
             )
@@ -111,12 +112,12 @@ class ClientRepository:
         rows = await self.conn.fetch(
             f"""
             SELECT DISTINCT c.id, c.first_name, c.last_name, c.gender, c.phone,
-                   c.birth_date, c.region,
+                   TO_CHAR(c.birth_date, 'YYYY-MM-DD') AS birth_date, c.region,
                    TO_CHAR(c.created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
                    TO_CHAR(c.updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
             FROM clients c JOIN protocol_forms pf ON pf.client_id = c.id
             WHERE {base_where}
-            ORDER BY c.id ASC LIMIT ${len(params)-1} OFFSET ${len(params)}
+            ORDER BY c.id DESC LIMIT ${len(params)-1} OFFSET ${len(params)}
             """,
             *params
         )
@@ -133,17 +134,18 @@ class ClientRepository:
 
     async def update(self, client_id: int, first_name: str, last_name: str, gender: str,
                      phone: str, birth_date: str, region: str) -> Optional[dict]:
+        bd = birth_date if birth_date else None
         row = await self.conn.fetchrow(
             """
             UPDATE clients SET first_name=$2, last_name=$3, gender=$4,
                 phone=$5, birth_date=$6, region=$7, updated_at=NOW()
             WHERE id=$1
             RETURNING id, first_name, last_name, gender, phone,
-                      birth_date, region,
+                      TO_CHAR(birth_date, 'YYYY-MM-DD') AS birth_date, region,
                       TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
                       TO_CHAR(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
             """,
-            client_id, first_name, last_name, gender, phone, birth_date, region
+            client_id, first_name, last_name, gender, phone, bd, region
         )
         return dict(row) if row else None
 

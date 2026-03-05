@@ -30,16 +30,6 @@ export const getFormsByClientAndProtocol = async (
   return res.data;
 };
 
-export const getFormData = async (
-  formId: number,
-  clientId: number
-): Promise<Record<string, string>> => {
-  const res = await api.get(`/protocol-forms/${formId}/data`, {
-    params: { client_id: clientId },
-  });
-  return res.data;
-};
-
 export const createProtocolForm = async (
   clientId: number,
   protocolId: number,
@@ -52,24 +42,17 @@ export const createProtocolForm = async (
   });
 };
 
-export const downloadProtocolDocx = async (
+export const getFormData = async (
   formId: number,
   clientId: number,
-  filename?: string
-): Promise<void> => {
-  const res = await api.get(`/protocol-forms/${formId}/download/docx`, {
+): Promise<Record<string, string>> => {
+  const res = await api.get(`/protocol-forms/${formId}/data`, {
     params: { client_id: clientId },
-    responseType: 'blob',
   });
-  const blob = new Blob([res.data], {
-    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename || `protocol_${formId}.docx`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  return res.data;
+};
+
+export const getProtocolFormDownloadUrl = (formId: number, clientId: number): string => {
+  const base = api.defaults.baseURL ?? '/api';
+  return `${base}/protocol-forms/${formId}/download/docx?client_id=${clientId}`;
 };

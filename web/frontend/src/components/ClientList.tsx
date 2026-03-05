@@ -11,11 +11,11 @@ const { Text } = Typography;
 interface Props {
   selectedClientId: number | null;
   onSelectClient: (client: Client) => void;
-  onDetailClient: (client: Client) => void;
+
   onAddClient: () => void;
 }
 
-const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onDetailClient, onAddClient }) => {
+const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onAddClient }) => {
   const [data, setData] = useState<PaginationResponse<Client> | null>(null);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -45,7 +45,7 @@ const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onDetai
       <div style={{ padding: '12px 12px 8px', borderBottom: '1px solid #f0f0f0' }}>
         <Space.Compact style={{ width: '100%', marginBottom: 8 }}>
           <Input
-            placeholder="Qidirish (ism, familiya, telefon)..."
+            placeholder="Qidirish (ism, familiya, telefon, sana)..."
             prefix={<SearchOutlined />}
             allowClear
             onChange={(e) => handleSearch(e.target.value)}
@@ -79,13 +79,7 @@ const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onDetai
                   borderLeft: selectedClientId === client.id ? '3px solid #1890ff' : '3px solid transparent',
                   transition: 'all 0.2s',
                 }}
-                onClick={() => {
-                  if (selectedClientId === client.id) {
-                    onDetailClient(client);
-                  } else {
-                    onSelectClient(client);
-                  }
-                }}
+                onClick={() => onSelectClient(client)}
               >
                 <Space>
                   <Avatar
