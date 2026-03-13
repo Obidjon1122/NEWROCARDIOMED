@@ -1,8 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  List, Input, Button, Space, Typography, Tag, Spin, Pagination, Avatar
+  Input, Button, Space, Typography, Tag, Pagination, Avatar, Empty,
 } from 'antd';
-import { SearchOutlined, UserAddOutlined, UserOutlined, PhoneOutlined } from '@ant-design/icons';
+import {
+  SearchOutlined, UserAddOutlined, UserOutlined, PhoneOutlined,
+  CalendarOutlined, EnvironmentOutlined,
+} from '@ant-design/icons';
 import type { Client, PaginationResponse } from '../types';
 import { getClients } from '../api/clients';
 
@@ -11,15 +14,27 @@ const { Text } = Typography;
 interface Props {
   selectedClientId: number | null;
   onSelectClient: (client: Client) => void;
-
   onAddClient: () => void;
+  onDoubleClickClient?: (client: Client) => void;
 }
 
-const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onAddClient }) => {
+/* ── Skeleton row ────────────────────────────────────────────── */
+const SkeletonRow: React.FC = () => (
+  <div style={{ padding: '12px 14px', display: 'flex', gap: 10, alignItems: 'center' }}>
+    <div className="skeleton skeleton-avatar" />
+    <div style={{ flex: 1 }}>
+      <div className="skeleton skeleton-text" style={{ width: '60%' }} />
+      <div className="skeleton skeleton-text" style={{ width: '40%', height: 11 }} />
+    </div>
+  </div>
+);
+
+const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onAddClient, onDoubleClickClient }) => {
   const [data, setData] = useState<PaginationResponse<Client> | null>(null);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const load = useCallback(async (p: number, s: string) => {
     setLoading(true);
@@ -36,93 +51,182 @@ const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onAddCl
   }, [page, search, load]);
 
   const handleSearch = (val: string) => {
-    setSearch(val);
-    setPage(1);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setSearch(val);
+      setPage(1);
+    }, 300);
   };
+
+  const items = data?.items || [];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div style={{ padding: '12px 12px 8px', borderBottom: '1px solid #f0f0f0' }}>
-        <Space.Compact style={{ width: '100%', marginBottom: 8 }}>
-          <Input
-            placeholder="Qidirish (ism, familiya, telefon, sana)..."
-            prefix={<SearchOutlined />}
-            allowClear
-            onChange={(e) => handleSearch(e.target.value)}
-          />
-        </Space.Compact>
+      {/* ── Search & Add ─────────────────────────────────────────── */}
+      <div style={{ padding: '14px 14px 10px' }}>
+        <Input
+          placeholder="Qidirish..."
+          prefix={<SearchOutlined style={{ color: 'var(--gray-400)' }} />}
+          allowClear
+          onChange={(e) => handleSearch(e.target.value)}
+          style={{
+            marginBottom: 10,
+            borderRadius: 'var(--radius-full)',
+            background: 'var(--gray-50)',
+            border: '1px solid var(--gray-200)',
+          }}
+        />
         <Button
           type="primary"
           icon={<UserAddOutlined />}
           onClick={onAddClient}
-          style={{ width: '100%', background: '#1a5276' }}
+          block
+          style={{
+            background: 'linear-gradient(135deg, #1574b3 0%, #105b8e 100%)',
+            border: 'none',
+            height: 38,
+            fontWeight: 600,
+            borderRadius: 'var(--radius-sm)',
+            boxShadow: '0 2px 8px rgba(21, 116, 179, 0.2)',
+          }}
         >
           Yangi bemor
         </Button>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto' }}>
+      {/* ── Divider line ──────────────────────────────────────────── */}
+      <div style={{ height: 1, background: 'var(--gray-100)', margin: '0 14px' }} />
+
+      {/* ── Client list ──────────────────────────────────────────── */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '6px 8px' }}>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: 40 }}>
-            <Spin />
+          <>
+            {Array.from({ length: 6 }).map((_, i) => (
+              <SkeletonRow key={i} />
+            ))}
+          </>
+        ) : items.length === 0 ? (
+          <div style={{ padding: '40px 20px', textAlign: 'center' }}>
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={
+                <Text type="secondary" style={{ fontSize: 13 }}>
+                  {search ? 'Natija topilmadi' : 'Bemor topilmadi'}
+                </Text>
+              }
+            />
           </div>
         ) : (
-          <List
-            dataSource={data?.items || []}
-            locale={{ emptyText: 'Bemor topilmadi' }}
-            renderItem={(client) => (
-              <List.Item
-                style={{
-                  cursor: 'pointer',
-                  padding: '10px 12px',
-                  background: selectedClientId === client.id ? '#e6f7ff' : 'transparent',
-                  borderLeft: selectedClientId === client.id ? '3px solid #1890ff' : '3px solid transparent',
-                  transition: 'all 0.2s',
-                }}
+          items.map((client, idx) => {
+            const selected = selectedClientId === client.id;
+            return (
+              <div
+                key={client.id}
                 onClick={() => onSelectClient(client)}
+                onDoubleClick={() => onDoubleClickClient?.(client)}
+                className="animate-fade-in"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 11,
+                  padding: '10px 12px',
+                  margin: '2px 0',
+                  cursor: 'pointer',
+                  borderRadius: 'var(--radius-md)',
+                  background: selected
+                    ? 'linear-gradient(135deg, var(--primary-50) 0%, #e3f2fd 100%)'
+                    : 'transparent',
+                  border: selected
+                    ? '1px solid var(--primary-200)'
+                    : '1px solid transparent',
+                  transition: 'all var(--transition-fast)',
+                  animationDelay: `${idx * 30}ms`,
+                  animationFillMode: 'both',
+                }}
+                onMouseEnter={(e) => {
+                  if (!selected) {
+                    e.currentTarget.style.background = 'var(--gray-50)';
+                    e.currentTarget.style.borderColor = 'var(--gray-200)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!selected) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.borderColor = 'transparent';
+                  }
+                }}
               >
-                <Space>
-                  <Avatar
-                    icon={<UserOutlined />}
-                    style={{
-                      background: client.gender === 'male' ? '#1677ff' : '#eb2f96',
-                      flexShrink: 0,
-                    }}
-                    size={36}
-                  />
-                  <div>
-                    <div>
-                      <Text strong style={{ fontSize: 13 }}>
-                        {client.last_name} {client.first_name}
-                      </Text>
-                    </div>
-                    <Space size={4}>
-                      <PhoneOutlined style={{ fontSize: 11, color: '#999' }} />
-                      <Text type="secondary" style={{ fontSize: 11 }}>
-                        {client.phone}
-                      </Text>
-                      <Tag
-                        color={client.gender === 'male' ? 'blue' : 'pink'}
-                        style={{ fontSize: 10, lineHeight: '16px', padding: '0 4px' }}
-                      >
-                        {client.gender === 'male' ? 'Erkak' : 'Ayol'}
-                      </Tag>
-                    </Space>
-                    <div>
-                      <Text type="secondary" style={{ fontSize: 11 }}>
-                        {client.birth_date} · {client.region}
-                      </Text>
-                    </div>
+                <Avatar
+                  icon={<UserOutlined />}
+                  style={{
+                    background: client.gender === 'male'
+                      ? 'linear-gradient(135deg, #3b82f6, #1d4ed8)'
+                      : 'linear-gradient(135deg, #ec4899, #be185d)',
+                    flexShrink: 0,
+                    boxShadow: selected
+                      ? '0 2px 8px rgba(21, 116, 179, 0.25)'
+                      : '0 1px 3px rgba(0,0,0,0.08)',
+                  }}
+                  size={38}
+                />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Text
+                      strong
+                      style={{
+                        fontSize: 13,
+                        color: selected ? 'var(--primary-800)' : 'var(--gray-800)',
+                        lineHeight: 1.3,
+                      }}
+                      ellipsis
+                    >
+                      {client.last_name} {client.first_name}
+                    </Text>
+                    <Tag
+                      color={client.gender === 'male' ? 'blue' : 'magenta'}
+                      style={{
+                        fontSize: 10,
+                        lineHeight: '16px',
+                        padding: '0 6px',
+                        margin: 0,
+                        border: 'none',
+                      }}
+                    >
+                      {client.gender === 'male' ? 'E' : 'A'}
+                    </Tag>
                   </div>
-                </Space>
-              </List.Item>
-            )}
-          />
+                  <Space size={8} style={{ marginTop: 3 }}>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 11, color: 'var(--gray-400)' }}>
+                      <PhoneOutlined style={{ fontSize: 10 }} />
+                      {client.phone}
+                    </span>
+                    {client.birth_date && (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 3, fontSize: 11, color: 'var(--gray-400)' }}>
+                        <CalendarOutlined style={{ fontSize: 10 }} />
+                        {client.birth_date}
+                      </span>
+                    )}
+                  </Space>
+                  {client.region && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 11, color: 'var(--gray-400)', marginTop: 1 }}>
+                      <EnvironmentOutlined style={{ fontSize: 10 }} />
+                      {client.region}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })
         )}
       </div>
 
+      {/* ── Pagination ───────────────────────────────────────────── */}
       {data && data.total_pages > 1 && (
-        <div style={{ padding: '8px 12px', borderTop: '1px solid #f0f0f0', textAlign: 'center' }}>
+        <div style={{
+          padding: '10px 14px',
+          borderTop: '1px solid var(--gray-100)',
+          textAlign: 'center',
+        }}>
           <Pagination
             current={page}
             total={data.total_count}

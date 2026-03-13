@@ -21,6 +21,12 @@ class ProtocolFormCreate(BaseModel):
     protocol_form: Dict[str, Any]
 
 
+class ProtocolPreviewDraft(BaseModel):
+    protocol_id: int
+    client_id: int
+    form_data: Dict[str, Any]
+
+
 @router.get("/protocols/doctor")
 async def get_doctor_protocols(
     conn=Depends(get_db),
@@ -79,6 +85,63 @@ async def get_form_data(
     return await service.get_form_data(form_id, client_id, current_user["id"])
 
 
+@router.post("/protocol-forms/preview-draft")
+async def preview_protocol_draft(
+    body: ProtocolPreviewDraft,
+    conn=Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Saqlamay DOCX preview qaytaradi (form to'ldirilgandan keyin ko'rish uchun)"""
+    import io
+    from docx import Document as DocxDoc
+
+    client_row = await conn.fetchrow(
+        "SELECT id, first_name, last_name, gender, birth_date, phone, region FROM clients WHERE id = $1",
+        body.client_id
+    )
+    if not client_row:
+        raise HTTPException(status_code=404, detail="Bemor topilmadi")
+    client = dict(client_row)
+
+    doctor_row = await conn.fetchrow(
+        "SELECT id, first_name, last_name, patronymic, phone, role FROM users WHERE id = $1",
+        current_user["id"]
+    )
+    doctor = dict(doctor_row) if doctor_row else current_user
+    if "patronymic" in doctor and "patronymic_name" not in doctor:
+        doctor["patronymic_name"] = doctor["patronymic"]
+
+    protocol_row = await conn.fetchrow(
+        "SELECT title FROM protocols WHERE id = $1", body.protocol_id
+    )
+    protocol_title = protocol_row["title"] if protocol_row else ""
+
+    import datetime
+    created_at = datetime.date.today().isoformat()
+
+    try:
+        docx_bytes = generate_protocol_docx(
+            protocol_id=body.protocol_id,
+            protocol_title=protocol_title,
+            form_data=body.form_data,
+            client=client,
+            doctor=doctor,
+            created_at=created_at,
+        )
+        doc = DocxDoc(io.BytesIO(docx_bytes))
+        paragraphs = []
+        for p in doc.paragraphs:
+            if not p.text.strip():
+                continue
+            bold = bool(p.runs) and all(r.bold for r in p.runs if r.text.strip())
+            centered = p.alignment is not None and int(p.alignment) == 1
+            paragraphs.append({"text": p.text, "bold": bold, "centered": centered})
+    except Exception as e:
+        return {"paragraphs": [], "error": str(e)}
+
+    return {"paragraphs": paragraphs}
+
+
 @router.post("/protocol-forms", status_code=201)
 async def create_protocol_form(
     body: ProtocolFormCreate,
@@ -88,6 +151,81 @@ async def create_protocol_form(
     service = ProtocolService(ProtocolRepository(conn))
     await service.create_protocol_form(body.client_id, body.protocol_id, body.protocol_form)
     return {"success": True}
+
+
+@router.get("/protocol-forms/{form_id}/preview")
+async def preview_protocol_form(
+    form_id: int,
+    client_id: int = Query(...),
+    conn=Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    """Protokol hujjatini preview ko'rinishida qaytaradi (paragraflar + form_data)"""
+    import io
+    from docx import Document as DocxDoc
+
+    row = await conn.fetchrow(
+        """
+        SELECT pf.protocol_form, pf.protocol_id, p.title AS protocol_title,
+               TO_CHAR(pf.created_at, 'YYYY-MM-DD') AS created_at
+        FROM protocol_forms pf
+        JOIN protocols p ON pf.protocol_id = p.id
+        WHERE pf.id = $1 AND pf.client_id = $2 AND p.doctor_id = $3
+        """,
+        form_id, client_id, current_user["id"]
+    )
+    if not row:
+        raise HTTPException(status_code=404, detail="Protokol topilmadi")
+
+    protocol_id = row["protocol_id"]
+    protocol_title = row["protocol_title"] or ""
+    created_at = row["created_at"] or ""
+
+    form_data: Dict[str, Any] = {}
+    if row["protocol_form"]:
+        try:
+            parsed = json.loads(row["protocol_form"])
+            form_data = _flatten_json(parsed)
+        except Exception:
+            pass
+
+    client_row = await conn.fetchrow(
+        "SELECT id, first_name, last_name, gender, birth_date, phone, region FROM clients WHERE id = $1",
+        client_id
+    )
+    if not client_row:
+        raise HTTPException(status_code=404, detail="Bemor topilmadi")
+    client = dict(client_row)
+
+    doctor_row = await conn.fetchrow(
+        "SELECT id, first_name, last_name, patronymic, phone, role FROM users WHERE id = $1",
+        current_user["id"]
+    )
+    doctor = dict(doctor_row) if doctor_row else current_user
+    if "patronymic" in doctor and "patronymic_name" not in doctor:
+        doctor["patronymic_name"] = doctor["patronymic"]
+
+    try:
+        docx_bytes = generate_protocol_docx(
+            protocol_id=protocol_id,
+            protocol_title=protocol_title,
+            form_data=form_data,
+            client=client,
+            doctor=doctor,
+            created_at=created_at,
+        )
+        doc = DocxDoc(io.BytesIO(docx_bytes))
+        paragraphs = []
+        for p in doc.paragraphs:
+            if not p.text.strip() and not p.text == "\t":
+                continue
+            bold = bool(p.runs) and all(r.bold for r in p.runs if r.text.strip())
+            centered = p.alignment is not None and int(p.alignment) == 1
+            paragraphs.append({"text": p.text, "bold": bold, "centered": centered})
+    except Exception:
+        paragraphs = []
+
+    return {"paragraphs": paragraphs, "form_data": form_data, "protocol_id": protocol_id}
 
 
 @router.get("/protocol-forms/{form_id}/download/docx")

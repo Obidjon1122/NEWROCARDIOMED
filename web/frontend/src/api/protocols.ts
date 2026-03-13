@@ -52,6 +52,41 @@ export const getFormData = async (
   return res.data;
 };
 
+export interface PreviewParagraph {
+  text: string;
+  bold: boolean;
+  centered: boolean;
+}
+
+export interface PreviewResponse {
+  paragraphs: PreviewParagraph[];
+  form_data: Record<string, string>;
+  protocol_id: number;
+}
+
+export const getProtocolPreview = async (
+  formId: number,
+  clientId: number,
+): Promise<PreviewResponse> => {
+  const res = await api.get(`/protocol-forms/${formId}/preview`, {
+    params: { client_id: clientId },
+  });
+  return res.data;
+};
+
+export const previewProtocolDraft = async (
+  protocolId: number,
+  clientId: number,
+  formData: Record<string, unknown>,
+): Promise<PreviewParagraph[]> => {
+  const res = await api.post('/protocol-forms/preview-draft', {
+    protocol_id: protocolId,
+    client_id: clientId,
+    form_data: formData,
+  });
+  return res.data.paragraphs ?? [];
+};
+
 export const getProtocolFormDownloadUrl = (formId: number, clientId: number): string => {
   const base = api.defaults.baseURL ?? '/api';
   return `${base}/protocol-forms/${formId}/download/docx?client_id=${clientId}`;

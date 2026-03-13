@@ -1,3 +1,77 @@
+/* ══════════════════════════════════════════════════════════════════════════════
+   NEVROCARDIOMED — Design System
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables ────────────────────────────────────────────────────────── */
+:root {
+  /* Primary palette */
+  --primary-50:  #e8f4fd;
+  --primary-100: #c5e3f9;
+  --primary-200: #9dd0f4;
+  --primary-300: #6dbaef;
+  --primary-400: #42a5e8;
+  --primary-500: #1a8dd8;
+  --primary-600: #1574b3;
+  --primary-700: #105b8e;
+  --primary-800: #0b4269;
+  --primary-900: #0a2f4a;
+
+  /* Accent */
+  --accent-teal:   #0d9488;
+  --accent-violet: #7c3aed;
+  --accent-amber:  #f59e0b;
+  --accent-rose:   #e11d48;
+
+  /* Neutrals */
+  --gray-50:  #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+
+  /* Semantic */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error:   #ef4444;
+  --info:    #3b82f6;
+
+  /* Surfaces */
+  --bg-primary:   #f0f4f8;
+  --bg-secondary: #ffffff;
+  --bg-elevated:  #ffffff;
+  --bg-glass:     rgba(255, 255, 255, 0.72);
+  --bg-glass-dark: rgba(10, 47, 74, 0.85);
+
+  /* Shadows */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  --shadow-glow: 0 0 20px rgba(26, 141, 216, 0.15);
+
+  /* Radius */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  20px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ── Base Reset ───────────────────────────────────────────────────────────── */
 * {
   box-sizing: border-box;
 }
@@ -5,10 +79,12 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f5f5f5;
-  color: #333;
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--gray-800);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -19,20 +95,226 @@ body {
   min-height: 100vh;
 }
 
-/* ── Faol ovoz maydoni: qizil chegara + pulsatsiya ── */
-@keyframes voice-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.25), 0 0 8px rgba(255, 77, 79, 0.15);
-  }
-  50% {
-    box-shadow: 0 0 0 5px rgba(255, 77, 79, 0.40), 0 0 18px rgba(255, 77, 79, 0.35);
-  }
+/* ── Scrollbar Styling ────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+/* ── Animations ───────────────────────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.95); opacity: 0.7; }
+  50%  { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes voice-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.25), 0 0 8px rgba(255, 77, 79, 0.15); }
+  50%      { box-shadow: 0 0 0 5px rgba(255, 77, 79, 0.40), 0 0 18px rgba(255, 77, 79, 0.35); }
+}
+
+/* ── Utility Classes ──────────────────────────────────────────────────────── */
+.animate-fade-in     { animation: fadeIn 0.4s ease-out; }
+.animate-fade-in-up  { animation: fadeInUp 0.45s ease-out; }
+.animate-slide-left  { animation: slideInLeft 0.35s ease-out; }
+.animate-scale-in    { animation: scaleIn 0.3s ease-out; }
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--gray-200) 25%,
+    var(--gray-100) 50%,
+    var(--gray-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+  height: 14px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+}
+
+.skeleton-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+}
+
+.skeleton-card {
+  height: 72px;
+  border-radius: var(--radius-md);
+}
+
+/* Glass effect */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass-dark {
+  background: var(--bg-glass-dark);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Premium card */
+.premium-card {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-100);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.premium-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+
+/* Stat card */
+.stat-card {
+  padding: 16px 20px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  border: 1px solid var(--gray-100);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Voice active field */
 .voice-active-field {
   border-radius: 6px;
   outline: 2px solid #ff4d4f;
   outline-offset: 2px;
   animation: voice-pulse 1s ease-in-out infinite;
   background-color: rgba(255, 77, 79, 0.03);
+}
+
+/* ── Ant Design Overrides ─────────────────────────────────────────────────── */
+.ant-modal .ant-modal-content {
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl) !important;
+}
+
+.ant-modal .ant-modal-header {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.ant-btn {
+  border-radius: var(--radius-sm) !important;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.ant-btn-primary:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.ant-input,
+.ant-select-selector,
+.ant-picker {
+  border-radius: var(--radius-sm) !important;
+  transition: all var(--transition-fast) !important;
+}
+
+.ant-input:focus,
+.ant-input-focused,
+.ant-select-focused .ant-select-selector {
+  box-shadow: 0 0 0 3px rgba(26, 141, 216, 0.12) !important;
+}
+
+.ant-card {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.ant-notification-notice {
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.ant-tag {
+  border-radius: var(--radius-full) !important;
+  font-weight: 500;
+}
+
+/* ── Selection ────────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--primary-200);
+  color: var(--primary-900);
 }
