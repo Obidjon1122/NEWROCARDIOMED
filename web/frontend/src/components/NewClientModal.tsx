@@ -46,14 +46,14 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
     }
   }, [open, form]);
 
-  // Clear protocol fields when protocol changes (no pre-selection)
+  // Set default values for protocol fields when protocol changes
   useEffect(() => {
     if (!protocolDef) return;
-    const clear: Record<string, undefined> = {};
+    const defaults: Record<string, unknown> = {};
     for (const section of protocolDef.sections)
       for (const field of section.fields)
-        clear[field.key] = undefined;
-    form.setFieldsValue(clear);
+        defaults[field.key] = field.defaultValue !== undefined ? field.defaultValue : undefined;
+    form.setFieldsValue(defaults);
   }, [protocolDef, form]);
 
   const handleSave = async () => {
@@ -62,6 +62,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
       const clientData = {
         first_name: values.first_name,
         last_name: values.last_name,
+        patronymic: values.patronymic || '',
         gender: values.gender || '',
         phone: values.phone || '',
         birth_date: values.birth_date ? dayjs(values.birth_date).format('YYYY-MM-DD') : '',
@@ -217,24 +218,31 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
               Bemor ma'lumotlari
             </Text>
             <Row gutter={16}>
-              <Col span={5}>
+              <Col span={4}>
                 <Form.Item
                   name="last_name"
-                  label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Familiya *</span>}
-                  rules={[{ required: true, message: 'Familiya kiriting' }]}
+                  label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Familiya</span>}
                   style={{ marginBottom: 0 }}
                 >
                   <Input placeholder="Karimov" />
                 </Form.Item>
               </Col>
-              <Col span={5}>
+              <Col span={3}>
                 <Form.Item
                   name="first_name"
-                  label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Ism *</span>}
-                  rules={[{ required: true, message: 'Ism kiriting' }]}
+                  label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Ism</span>}
                   style={{ marginBottom: 0 }}
                 >
                   <Input placeholder="Alisher" />
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item
+                  name="patronymic"
+                  label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Otasining ismi</span>}
+                  style={{ marginBottom: 0 }}
+                >
+                  <Input placeholder="Nodirovich" />
                 </Form.Item>
               </Col>
               <Col span={3}>
@@ -249,7 +257,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   ]} />
                 </Form.Item>
               </Col>
-              <Col span={4}>
+              <Col span={3}>
                 <Form.Item
                   name="phone"
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Telefon</span>}

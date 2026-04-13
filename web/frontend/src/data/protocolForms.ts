@@ -868,7 +868,7 @@ const follikulometriyaProtocol: ProtocolFormDef = {
     {
       title: 'Прочее',
       fields: [
-        { key: 'fol_svobod_zhid', label: 'Свободная жидкость в заднем угловом пространстве', type: 'combobox', options: ['нет', 'есть'] },
+        { key: 'fol_svobod_zhid', label: 'Свободная жидкость в заднем Дугласовом пространстве', type: 'combobox', options: ['нет', 'есть'] },
       ],
     },
     {

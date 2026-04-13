@@ -38,9 +38,14 @@ const ClientForm: React.FC<Props> = ({ open, client, onClose, onSaved }) => {
 
   const onFinish = async (values: Record<string, unknown>) => {
     const data = {
-      ...(values as Omit<Client, 'id' | 'created_at' | 'updated_at'>),
+      first_name: values.first_name || '',
+      last_name: values.last_name || '',
+      patronymic: values.patronymic || '',
+      gender: values.gender || '',
+      phone: values.phone || '',
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       birth_date: values.birth_date ? (values.birth_date as any).format('YYYY-MM-DD') : '',
+      region: values.region || '',
     };
     try {
       const saved = isEdit
@@ -63,26 +68,29 @@ const ClientForm: React.FC<Props> = ({ open, client, onClose, onSaved }) => {
       width={520}
     >
       <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item name="last_name" label="Familiya" rules={[{ required: true }]}>
+        <Form.Item name="last_name" label="Familiya">
           <Input placeholder="Karimov" />
         </Form.Item>
-        <Form.Item name="first_name" label="Ism" rules={[{ required: true }]}>
+        <Form.Item name="first_name" label="Ism">
           <Input placeholder="Alisher" />
         </Form.Item>
-        <Form.Item name="gender" label="Jins" rules={[{ required: true }]}>
-          <Select placeholder="Tanlang">
+        <Form.Item name="patronymic" label="Otasining ismi">
+          <Input placeholder="Nodirovich" />
+        </Form.Item>
+        <Form.Item name="gender" label="Jins">
+          <Select placeholder="Tanlang" allowClear>
             <Option value="male">Erkak</Option>
             <Option value="female">Ayol</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="phone" label="Telefon" rules={[{ required: true }]}>
+        <Form.Item name="phone" label="Telefon">
           <Input placeholder="+998901234567" />
         </Form.Item>
-        <Form.Item name="birth_date" label="Tug'ilgan sana" rules={[{ required: true }]}>
-          <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" placeholder="YYYY-MM-DD" />
+        <Form.Item name="birth_date" label="Tug'ilgan sana">
+          <DatePicker style={{ width: '100%' }} format={["DD.MM.YYYY", "DD-MM-YYYY", "YYYY-MM-DD"]} placeholder="KK.OO.YYYY" />
         </Form.Item>
-        <Form.Item name="region" label="Viloyat" rules={[{ required: true }]}>
-          <Select placeholder="Tanlang" showSearch>
+        <Form.Item name="region" label="Viloyat">
+          <Select placeholder="Tanlang" showSearch allowClear>
             {REGIONS.map((r) => (
               <Option key={r} value={r}>{r}</Option>
             ))}

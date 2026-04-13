@@ -10,12 +10,13 @@ router = APIRouter(prefix="/api/clients", tags=["clients"])
 
 
 class ClientBody(BaseModel):
-    first_name: str
-    last_name: str
-    gender: str
-    phone: str
-    birth_date: str
-    region: str
+    first_name: str = ""
+    last_name: str = ""
+    patronymic: str = ""
+    gender: str = ""
+    phone: str = ""
+    birth_date: str = ""
+    region: str = ""
 
 
 @router.get("")
@@ -41,7 +42,7 @@ async def create_client(
 ):
     service = ClientService(ClientRepository(conn))
     return await service.create_client(
-        body.first_name, body.last_name, body.gender,
+        body.first_name, body.last_name, body.patronymic, body.gender,
         body.phone, body.birth_date, body.region
     )
 
@@ -65,7 +66,7 @@ async def update_client(
 ):
     service = ClientService(ClientRepository(conn))
     return await service.update_client(
-        client_id, body.first_name, body.last_name, body.gender,
+        client_id, body.first_name, body.last_name, body.patronymic, body.gender,
         body.phone, body.birth_date, body.region
     )
 

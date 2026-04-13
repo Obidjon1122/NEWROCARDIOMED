@@ -14,19 +14,21 @@ class ClientService:
             return True  # bo'sh bo'lsa ham o'tadi
         return bool(re.match(r"^\+?\d{9,20}$", phone)) and len(phone) <= 20
 
-    def _validate_fields(self, first_name: str, last_name: str, gender: str,
-                          phone: str, birth_date: str, region: str):
-        if not first_name or len(first_name) > 50:
-            raise HTTPException(status_code=400, detail="Ism xato")
-        if not last_name or len(last_name) > 50:
-            raise HTTPException(status_code=400, detail="Familiya xato")
+    def _validate_fields(self, first_name: str, last_name: str, patronymic: str,
+                          gender: str, phone: str, birth_date: str, region: str):
+        if first_name and len(first_name) > 50:
+            raise HTTPException(status_code=400, detail="Ism juda uzun (50 belgidan ko'p)")
+        if last_name and len(last_name) > 50:
+            raise HTTPException(status_code=400, detail="Familiya juda uzun (50 belgidan ko'p)")
+        if patronymic and len(patronymic) > 50:
+            raise HTTPException(status_code=400, detail="Otasining ismi juda uzun (50 belgidan ko'p)")
         if phone and not self.validate_phone(phone):
             raise HTTPException(status_code=400, detail="Telefon raqami noto'g'ri")
 
-    async def create_client(self, first_name: str, last_name: str, gender: str,
-                            phone: str, birth_date: str, region: str) -> dict:
-        self._validate_fields(first_name, last_name, gender, phone, birth_date, region)
-        client = await self.repo.create(first_name, last_name, gender, phone, birth_date, region)
+    async def create_client(self, first_name: str, last_name: str, patronymic: str,
+                            gender: str, phone: str, birth_date: str, region: str) -> dict:
+        self._validate_fields(first_name, last_name, patronymic, gender, phone, birth_date, region)
+        client = await self.repo.create(first_name, last_name, patronymic, gender, phone, birth_date, region)
         if not client:
             raise HTTPException(status_code=500, detail="Mijoz yaratishda xato")
         return client
@@ -38,13 +40,14 @@ class ClientService:
         return client
 
     async def update_client(self, client_id: int, first_name: str, last_name: str,
-                            gender: str, phone: str, birth_date: str, region: str) -> dict:
-        self._validate_fields(first_name, last_name, gender, phone, birth_date, region)
+                            patronymic: str, gender: str, phone: str,
+                            birth_date: str, region: str) -> dict:
+        self._validate_fields(first_name, last_name, patronymic, gender, phone, birth_date, region)
 
         if not await self.repo.exists_by_id(client_id):
             raise HTTPException(status_code=404, detail="Mijoz topilmadi")
 
-        client = await self.repo.update(client_id, first_name, last_name, gender, phone, birth_date, region)
+        client = await self.repo.update(client_id, first_name, last_name, patronymic, gender, phone, birth_date, region)
         if not client:
             raise HTTPException(status_code=500, detail="Yangilashda xato")
         return client

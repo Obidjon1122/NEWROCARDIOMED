@@ -49,9 +49,10 @@ const ProtocolFormModal: React.FC<Props> = ({
     const defaults: Record<string, unknown> = {};
     for (const section of protocolDef.sections) {
       for (const field of section.fields) {
-        // Only pre-fill from saved data (editing), never apply defaultValue
         if (initialFormData && initialFormData[field.key] !== undefined) {
           defaults[field.key] = initialFormData[field.key];
+        } else if (!initialFormData && field.defaultValue !== undefined) {
+          defaults[field.key] = field.defaultValue;
         }
       }
     }
@@ -265,7 +266,7 @@ const ProtocolFormModal: React.FC<Props> = ({
           </Text>
           {client && (
             <Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 12 }}>
-              {client.last_name} {client.first_name}
+              {client.last_name} {client.first_name}{client.patronymic ? ` ${client.patronymic}` : ''}
               {client.birth_date ? ` · ${client.birth_date}` : ''}
             </Text>
           )}

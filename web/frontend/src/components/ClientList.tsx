@@ -180,7 +180,7 @@ const ClientList: React.FC<Props> = ({ selectedClientId, onSelectClient, onAddCl
                       }}
                       ellipsis
                     >
-                      {client.last_name} {client.first_name}
+                      {client.last_name} {client.first_name}{client.patronymic ? ` ${client.patronymic}` : ''}
                     </Text>
                     <Tag
                       color={client.gender === 'male' ? 'blue' : 'magenta'}

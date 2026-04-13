@@ -87,6 +87,7 @@ CREATE TABLE IF NOT EXISTS clients (
     id          SERIAL PRIMARY KEY,
     first_name  VARCHAR(100) NOT NULL,
     last_name   VARCHAR(100) NOT NULL,
+    patronymic  VARCHAR(100) DEFAULT '',
     gender      VARCHAR(10)  DEFAULT '',
     phone       VARCHAR(20)  DEFAULT '',
     birth_date  DATE,
@@ -94,6 +95,9 @@ CREATE TABLE IF NOT EXISTS clients (
     created_at  TIMESTAMP    DEFAULT NOW(),
     updated_at  TIMESTAMP    DEFAULT NOW()
 );
+
+-- Agar mavjud bazada patronymic ustuni yo'q bo'lsa:
+-- ALTER TABLE clients ADD COLUMN patronymic VARCHAR(100) DEFAULT '';
 
 -- Protokollar jadvali
 CREATE TABLE IF NOT EXISTS protocols (

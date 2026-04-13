@@ -3,12 +3,13 @@ from typing import Optional
 
 
 class ClientBase(BaseModel):
-    first_name: str
-    last_name: str
-    gender: str
-    phone: str
-    birth_date: str
-    region: str
+    first_name: str = ""
+    last_name: str = ""
+    patronymic: str = ""
+    gender: str = ""
+    phone: str = ""
+    birth_date: str = ""
+    region: str = ""
 
 
 class ClientCreate(ClientBase):

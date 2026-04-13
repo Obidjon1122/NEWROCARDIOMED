@@ -145,7 +145,7 @@ const ProtocolViewModal: React.FC<Props> = ({ open, formItem, client, onClose, o
             {formItem?.protocol_title}
           </div>
           <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 11 }}>
-            {client ? `${client.last_name} ${client.first_name}` : ''}
+            {client ? `${client.last_name} ${client.first_name}${client.patronymic ? ` ${client.patronymic}` : ''}` : ''}
             {client?.birth_date ? ` · ${client.birth_date}` : ''}
             {formItem?.created_at ? ` · ${formItem.created_at}` : ''}
           </div>

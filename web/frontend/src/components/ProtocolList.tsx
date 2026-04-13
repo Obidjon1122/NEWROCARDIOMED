@@ -110,7 +110,7 @@ const ProtocolList: React.FC<Props> = ({ client, onAddProtocol, onViewProtocol }
         {/* Client info */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
           <Title level={5} style={{ margin: 0, fontSize: 16, color: 'var(--gray-900)' }}>
-            {client.last_name} {client.first_name}
+            {client.last_name} {client.first_name}{client.patronymic ? ` ${client.patronymic}` : ''}
           </Title>
           <Tag
             color={client.gender === 'male' ? 'blue' : 'magenta'}
