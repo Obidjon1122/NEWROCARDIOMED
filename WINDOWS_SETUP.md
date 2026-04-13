@@ -46,90 +46,52 @@ NEWROCARDIOMED/
 
 ## 2-qadam: PostgreSQL ma'lumotlar bazasini sozlash
 
-pgAdmin ni oching YOKI **SQL Shell (psql)** dan foydalaning.
+### Eng tez yo'l — `init.sql` fayl bilan (tavsiya etiladi)
 
-### 2.1 Foydalanuvchi va baza yaratish
+`web/backend/init.sql` fayli loyihada mavjud. Bu fayl jadvallarni, birinchi admin foydalanuvchini va 15 ta standart protokolni avtomatik yaratadi.
 
-pgAdmin da yangi Query Tool oching va quyidagini ishga tushiring:
+**CMD da quyidagilarni ketma-ket bajaring:**
 
+```cmd
+:: 1. postgres foydalanuvchisi bilan kiring
+psql -U postgres
+
+:: 2. Baza yaratish (psql ichida)
+CREATE DATABASE "Nevrocardiomed";
+\connect "Nevrocardiomed"
+
+:: 3. psql dan chiqing
+\q
+```
+
+```cmd
+:: 4. init.sql ni ishga tushiring
+psql -U postgres -d Nevrocardiomed -f C:\...\NEWROCARDIOMED\web\backend\init.sql
+```
+
+Bu qadam tugagandan keyin:
+- Barcha jadvallar yaratiladi
+- Birinchi admin qo'shiladi: telefon `+998000000000`, parol `admin123`
+- 15 ta standart protokol qo'shiladi
+
+> Kirish ma'lumotlarini keyinchalik dastur ichidan o'zgartirishingiz mumkin.
+
+---
+
+### Qo'lda sozlash (ixtiyoriy, init.sql ishlamasa)
+
+pgAdmin ni oching → yangi Query Tool → quyidagini bosqichma-bosqich bajaring:
+
+**Qadam 1 — Foydalanuvchi va baza:**
 ```sql
--- Foydalanuvchi yaratish
 CREATE USER turnerko WITH PASSWORD '2002';
-
--- Baza yaratish
 CREATE DATABASE "Nevrocardiomed" OWNER turnerko;
-
--- Ruxsat berish
 GRANT ALL PRIVILEGES ON DATABASE "Nevrocardiomed" TO turnerko;
 ```
 
-### 2.2 Jadvallarni yaratish
+**Qadam 2 — `Nevrocardiomed` bazasiga ulanib jadvallarni yarating:**
 
-`Nevrocardiomed` bazasiga ulanib (pgAdmin da: Databases → Nevrocardiomed → Query Tool), quyidagini ishga tushiring:
-
-```sql
--- Foydalanuvchilar jadvali (shifokorlar)
-CREATE TABLE IF NOT EXISTS users (
-    id          SERIAL PRIMARY KEY,
-    first_name  VARCHAR(100) NOT NULL,
-    last_name   VARCHAR(100) NOT NULL,
-    patronymic  VARCHAR(100) DEFAULT '',
-    gender      VARCHAR(10)  DEFAULT '',
-    password    VARCHAR(255) NOT NULL,
-    phone       VARCHAR(20)  UNIQUE NOT NULL,
-    role        VARCHAR(20)  DEFAULT 'doctor',
-    created_at  TIMESTAMP    DEFAULT NOW(),
-    updated_at  TIMESTAMP    DEFAULT NOW()
-);
-
--- Bemorlar jadvali
-CREATE TABLE IF NOT EXISTS clients (
-    id          SERIAL PRIMARY KEY,
-    first_name  VARCHAR(100) NOT NULL,
-    last_name   VARCHAR(100) NOT NULL,
-    patronymic  VARCHAR(100) DEFAULT '',
-    gender      VARCHAR(10)  DEFAULT '',
-    phone       VARCHAR(20)  DEFAULT '',
-    birth_date  DATE,
-    region      VARCHAR(100) DEFAULT '',
-    created_at  TIMESTAMP    DEFAULT NOW(),
-    updated_at  TIMESTAMP    DEFAULT NOW()
-);
-
--- Agar mavjud bazada patronymic ustuni yo'q bo'lsa:
--- ALTER TABLE clients ADD COLUMN patronymic VARCHAR(100) DEFAULT '';
-
--- Protokollar jadvali
-CREATE TABLE IF NOT EXISTS protocols (
-    id          SERIAL PRIMARY KEY,
-    title       VARCHAR(255) NOT NULL,
-    doctor_id   INTEGER REFERENCES users(id) ON DELETE SET NULL,
-    created_at  TIMESTAMP DEFAULT NOW(),
-    updated_at  TIMESTAMP DEFAULT NOW()
-);
-
--- Protokol shakllari jadvali (bemorga to'ldirilgan ma'lumotlar)
-CREATE TABLE IF NOT EXISTS protocol_forms (
-    id              SERIAL PRIMARY KEY,
-    client_id       INTEGER REFERENCES clients(id) ON DELETE CASCADE,
-    protocol_id     INTEGER REFERENCES protocols(id) ON DELETE CASCADE,
-    protocol_form   JSONB DEFAULT '{}',
-    created_at      TIMESTAMP DEFAULT NOW(),
-    updated_at      TIMESTAMP DEFAULT NOW()
-);
-
--- Jadval ruxsatlarini berish
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO turnerko;
-GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO turnerko;
-```
-
-### 2.3 Birinchi shifokorni (admin) qo'shish
-
-Shifokorni dastur orqali qo'shish mumkin, lekin tezroq yo'li — to'g'ridan SQL:
-
-> **Muhim:** parol `passlib` + bcrypt bilan hash qilinadi.
-> Shuning uchun birinchi foydalanuvchini API orqali yarating (backend ishga tushgandan keyin).
-> Backend docs: http://localhost:8000/docs → `/api/users` POST
+`init.sql` faylining ichidagi SQL ni to'liq ko'chirib ishga tushiring.
 
 ---
 

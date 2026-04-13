@@ -2,8 +2,6 @@ import os
 import io
 from typing import Dict, Any
 from docx import Document
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
 
 # Path to original DOCX template files
 TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'protocoles')
@@ -23,7 +21,6 @@ TEMPLATE_FILES: Dict[int, str] = {
     12: 'Первый ориместр новый.docx',
     13: 'Плод новый.docx',
     14: 'Сердцебиение.docx',
-    15: 'Фолликулометрия.docx',
 }
 
 
@@ -31,29 +28,6 @@ def _set_run(para, run_idx: int, text: str):
     """Set text on a specific run if it exists."""
     if run_idx < len(para.runs):
         para.runs[run_idx].text = text
-
-
-def _prevent_word_breaks(doc: Document):
-    """Prevent words from being split across lines in all paragraphs."""
-    for para in doc.paragraphs:
-        pPr = para._element.get_or_add_pPr()
-        # Set wordWrap to prevent breaking words
-        word_wrap = pPr.find(qn('w:wordWrap'))
-        if word_wrap is None:
-            word_wrap = OxmlElement('w:wordWrap')
-            pPr.append(word_wrap)
-        word_wrap.set(qn('w:val'), '0')
-    # Also handle paragraphs in tables
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for para in cell.paragraphs:
-                    pPr = para._element.get_or_add_pPr()
-                    word_wrap = pPr.find(qn('w:wordWrap'))
-                    if word_wrap is None:
-                        word_wrap = OxmlElement('w:wordWrap')
-                        pPr.append(word_wrap)
-                    word_wrap.set(qn('w:val'), '0')
 
 
 def _fill_header(doc: Document, client: Dict, doctor: Dict, created_at: str):
@@ -385,7 +359,6 @@ def _fill_protocol_6(doc: Document, fd: Dict):
              f'Остаточная моча {fd.get("pr_ostatoch", "")} мл')
 
     # ── Семенные пузырьки ─────────────────────────────────────────────────────
-    # ── Правый ────────────────────────────────────────────────────────────────
     _set_run(paras[26], 0, f'Топография {fd.get("svp_topografia", "")}')
     # [27] Контур: r[0]='Контур', r[1]=' в норме' → replace r[1] to avoid duplicate
     _set_run(paras[27], 1, f' {fd.get("svp_kontur", "")}')
@@ -398,48 +371,7 @@ def _fill_protocol_6(doc: Document, fd: Dict):
     _set_run(paras[29], 7, f'после {fd.get("svp_exostr_posle", "")}')
     _set_run(paras[30], 0, f'Эхогенность {fd.get("svp_exogennost", "")}')
 
-    # ── Левый (if data exists, append to conclusion as note) ─────────────────
-    svl_topografia = fd.get("svl_topografia", "")
-    svl_kontur = fd.get("svl_kontur", "")
-    svl_dlina = fd.get("svl_dlina", "")
-    svl_tolshina = fd.get("svl_tolshina", "")
-    svl_shirina = fd.get("svl_shirina", "")
-    svl_exostr_do = fd.get("svl_exostr_do", "")
-    svl_exostr_posle = fd.get("svl_exostr_posle", "")
-    svl_exogennost = fd.get("svl_exogennost", "")
-
-    # Build left seminal vesicle text if any field is provided
-    left_sv_parts = []
-    if svl_topografia:
-        left_sv_parts.append(f"Топография {svl_topografia}")
-    if svl_kontur:
-        left_sv_parts.append(f"Контур {svl_kontur}")
-    if svl_dlina or svl_tolshina or svl_shirina:
-        size_parts = []
-        if svl_dlina:
-            size_parts.append(f"длина {svl_dlina}")
-        if svl_tolshina:
-            size_parts.append(f"толщина {svl_tolshina}")
-        if svl_shirina:
-            size_parts.append(f"ширина {svl_shirina}")
-        left_sv_parts.append(f"Размеры: {', '.join(size_parts)}")
-    if svl_exostr_do or svl_exostr_posle:
-        exo_parts = []
-        if svl_exostr_do:
-            exo_parts.append(f"до эякуляции {svl_exostr_do}")
-        if svl_exostr_posle:
-            exo_parts.append(f"после {svl_exostr_posle}")
-        left_sv_parts.append(f"Эхоструктура: {', '.join(exo_parts)}")
-    if svl_exogennost:
-        left_sv_parts.append(f"Эхогенность {svl_exogennost}")
-
-    # Append left vesicle info to conclusion
-    conclusion = fd.get("zaklyuchenie", "")
-    if left_sv_parts:
-        left_sv_text = "; Левый пузырёк: " + "; ".join(left_sv_parts)
-        conclusion = conclusion + left_sv_text if conclusion else left_sv_text
-
-    _set_run(paras[32], 0, f'Заключение: {conclusion}')
+    _set_run(paras[32], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
     _set_run(paras[33], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
 
 
@@ -575,8 +507,6 @@ def _fill_protocol_9(doc: Document, fd: Dict):
     _set_run(paras[10], 1, fd.get('mat_poziciya', 'anteversio'))
     _set_run(paras[10], 5, fd.get('mat_polozhenie', 'anteflexio'))
     _set_run(paras[10], 8, f'{fd.get("mat_forma", "грушевидная")} ')
-    # [11] Соотношение тела матки к шейке
-    _set_run(paras[11], 1, f' {fd.get("mat_sootn", "2:1")}.')
     # [12] Размеры: r[1]=' мм ', r[6]='толщина  мм ', r[9]='; ширина  мм '
     _set_run(paras[12], 1, f' {fd.get("mat_dlina", "")} мм ')
     _set_run(paras[12], 6, f'толщина {fd.get("mat_tolshina", "")} мм ')
@@ -811,7 +741,6 @@ def _fill_protocol_12(doc: Document, fd: Dict):
     # ── Хорион ────────────────────────────────────────────────────────────────
     _set_run(paras[32], 1, f'Локализация {fd.get("tri1_hor_lok", "")} ')
     _set_run(paras[33], 1, f' {fd.get("tri1_hor_t", "")} ')
-    _set_run(paras[34], 3, f' {fd.get("tri1_hor_osoben", "")}.')
 
     # ── Яичники ───────────────────────────────────────────────────────────────
     _set_run(paras[36], 2, fd.get('tri1_yachniki', ''))
@@ -886,17 +815,12 @@ def _fill_protocol_13(doc: Document, fd: Dict):
     _set_run(paras[29], 1, f' {fd.get("plac_lok", "")} ')
     _set_run(paras[30], 1, f' {fd.get("plac_tolshina", "")} ')
     _set_run(paras[31], 1, f' {fd.get("plac_zrelost", "")} степени.')
-    _set_run(paras[32], 1, f' {fd.get("plac_exostr", "")}.')
 
     # ── Воды ──────────────────────────────────────────────────────────────────
     _set_run(paras[33], 2, f' ИАЖ {fd.get("vodi_iazh", "")} ')
-    _set_run(paras[34], 1, f' {fd.get("vodi_exogen", "")} ')
 
     # [35] Масса плода
     _set_run(paras[35], 0, f'Масса плода {fd.get("plod_massa", "")} ')
-
-    # [36] Яичники
-    _set_run(paras[36], 2, fd.get('plod_yachniki', ''))
 
     _set_run(paras[37], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
     _set_run(paras[37], 1, '')
@@ -938,35 +862,6 @@ def _fill_protocol_14(doc: Document, fd: Dict):
     _set_run(paras[5], 3, '')
 
 
-# ─── Protocol 15: Фолликулометрия ─────────────────────────────────────────────
-
-def _fill_protocol_15(doc: Document, fd: Dict):
-    paras = doc.paragraphs
-
-    # [8] День менструального цикла (empty para — add text if provided)
-    den_cikla = fd.get('fol_den_cikla', '')
-    if den_cikla:
-        paras[8].text = f'День менструального цикла: {den_cikla}'
-
-    # [9] Толщина эндометрия (М-эхо) — r[1] = value
-    _set_run(paras[9], 1, fd.get('fol_endo_t', ''))
-
-    # [10] соответствует фазе — r[1] = phase
-    _set_run(paras[10], 1, fd.get('fol_endo_faza', ''))
-
-    # [16] Фолликулы диаметром (правый) — r[1] = value
-    _set_run(paras[16], 1, fd.get('fol_pr_follikuli', ''))
-
-    # [19] Фолликулы диаметром (левый) — r[1] = value
-    _set_run(paras[19], 1, fd.get('fol_lev_follikuli', ''))
-
-    # [21] Свободная жидкость — r[1] = value
-    _set_run(paras[21], 1, fd.get('fol_svobod_zhid', ''))
-
-    # [23] Заключение — r[1] = value
-    _set_run(paras[23], 1, fd.get('zaklyuchenie', ''))
-
-
 # ─── Per-protocol fill dispatch ───────────────────────────────────────────────
 
 PROTOCOL_FILLERS = {
@@ -984,7 +879,6 @@ PROTOCOL_FILLERS = {
     12: _fill_protocol_12,
     13: _fill_protocol_13,
     14: _fill_protocol_14,
-    15: _fill_protocol_15,
 }
 
 
@@ -1013,9 +907,6 @@ def generate_protocol_docx(
     filler = PROTOCOL_FILLERS.get(protocol_id)
     if filler:
         filler(doc, form_data)
-
-    # Prevent word breaks in all paragraphs
-    _prevent_word_breaks(doc)
 
     buf = io.BytesIO()
     doc.save(buf)

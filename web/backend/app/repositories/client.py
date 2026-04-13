@@ -1,5 +1,16 @@
 from typing import Optional, List
 import asyncpg
+import datetime
+
+
+def _parse_date(birth_date: str):
+    """String 'YYYY-MM-DD' ni datetime.date ga aylantiradi"""
+    if not birth_date:
+        return None
+    try:
+        return datetime.date.fromisoformat(birth_date)
+    except (ValueError, AttributeError):
+        return None
 
 
 class ClientRepository:
@@ -8,7 +19,7 @@ class ClientRepository:
 
     async def create(self, first_name: str, last_name: str, patronymic: str,
                      gender: str, phone: str, birth_date: str, region: str) -> Optional[dict]:
-        bd = birth_date if birth_date else None
+        bd = _parse_date(birth_date)
         row = await self.conn.fetchrow(
             """
             INSERT INTO clients (first_name, last_name, patronymic, gender, phone, birth_date, region)
@@ -135,7 +146,7 @@ class ClientRepository:
     async def update(self, client_id: int, first_name: str, last_name: str,
                      patronymic: str, gender: str, phone: str,
                      birth_date: str, region: str) -> Optional[dict]:
-        bd = birth_date if birth_date else None
+        bd = _parse_date(birth_date)
         row = await self.conn.fetchrow(
             """
             UPDATE clients SET first_name=$2, last_name=$3, patronymic=$4, gender=$5,
