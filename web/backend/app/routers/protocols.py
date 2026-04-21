@@ -305,15 +305,54 @@ async def download_protocol_docx(
     client_name = f"{client.get('last_name', '')}_{client.get('first_name', '')}"
     filename = f"protocol_{protocol_id}_{client_name}_{created_at}.docx"
     filename = filename.replace(" ", "_")
+    from urllib.parse import quote
+    encoded_filename = quote(filename)
 
     return Response(
         content=docx_bytes,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={
-            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}",
             "Content-Length": str(len(docx_bytes)),
         },
     )
+
+
+# ── Custom field options ─────────────────────────────────────────────────────
+
+@router.get("/custom-options")
+async def get_custom_options(conn=Depends(get_db), _=Depends(get_current_user)):
+    rows = await conn.fetch("SELECT field_key, value FROM custom_field_options ORDER BY field_key, id")
+    result: Dict[str, list] = {}
+    for row in rows:
+        key = row["field_key"]
+        if key not in result:
+            result[key] = []
+        result[key].append(row["value"])
+    return result
+
+
+class CustomOptionInput(BaseModel):
+    field_key: str
+    value: str
+
+
+@router.post("/custom-options")
+async def save_custom_option(data: CustomOptionInput, conn=Depends(get_db), _=Depends(get_current_user)):
+    await conn.execute(
+        "INSERT INTO custom_field_options (field_key, value) VALUES ($1, $2) ON CONFLICT (field_key, value) DO NOTHING",
+        data.field_key, data.value
+    )
+    return {"ok": True}
+
+
+@router.delete("/custom-options")
+async def delete_custom_option(data: CustomOptionInput, conn=Depends(get_db), _=Depends(get_current_user)):
+    await conn.execute(
+        "DELETE FROM custom_field_options WHERE field_key = $1 AND value = $2",
+        data.field_key, data.value
+    )
+    return {"ok": True}
 
 
 def _flatten_json(obj: Any, prefix: str = "") -> dict:

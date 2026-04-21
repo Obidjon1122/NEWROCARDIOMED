@@ -35,7 +35,7 @@ const ProtocolViewModal: React.FC<Props> = ({ open, formItem, client, onClose, o
         p.bold ? 'font-weight:bold;' : '',
         'font-size:12pt;',
         'margin:0;',
-        'line-height:1.6;',
+        'line-height:1.4;',
         'font-family:"Times New Roman",serif;',
       ].join('');
       return `<p style="${style}">${p.text.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>`;
@@ -46,8 +46,8 @@ const ProtocolViewModal: React.FC<Props> = ({ open, formItem, client, onClose, o
     win.document.write(`<!DOCTYPE html>
 <html><head><meta charset="utf-8">
 <style>
-  body { margin: 20mm 25mm; font-family: "Times New Roman", serif; font-size: 12pt; }
-  @media print { body { margin: 15mm 20mm; } }
+  body { margin: 1mm; font-family: "Times New Roman", serif; font-size: 12pt; }
+  @media print { body { margin: 1mm; } }
 </style>
 </head><body>${html}</body></html>`);
     win.document.close();
@@ -165,7 +165,7 @@ const ProtocolViewModal: React.FC<Props> = ({ open, formItem, client, onClose, o
                 key={i}
                 style={{
                   margin: '2px 0',
-                  lineHeight: 1.8,
+                  lineHeight: 1.4,
                   fontWeight: p.bold ? 700 : 400,
                   textAlign: p.centered ? 'center' : 'left',
                   whiteSpace: 'pre-wrap',

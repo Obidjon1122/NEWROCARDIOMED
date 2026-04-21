@@ -1,15 +1,62 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Modal, Form, Input, InputNumber, AutoComplete, Button,
+  Modal, Form, Input, Button,
   Typography, notification, Divider, Select, Tag, Tooltip,
 } from 'antd';
 import { SaveOutlined, CloseOutlined, FileTextOutlined, EyeOutlined, QuestionCircleOutlined, PrinterOutlined } from '@ant-design/icons';
 import type { Client, ProtocolDashboardItem } from '../types';
-import { createProtocolForm, previewProtocolDraft, type PreviewParagraph } from '../api/protocols';
+import { createProtocolForm, previewProtocolDraft, type PreviewParagraph, getCustomOptions as fetchCustomOptions, saveCustomOption as apiSaveCustomOption, deleteCustomOption as apiDeleteCustomOption } from '../api/protocols';
 import { getProtocolForm, type FormField } from '../data/protocolForms';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
 const { TextArea } = Input;
+
+/* Dropdown — yozish ham, tanlash ham, o'chirish ham mumkin */
+const FieldSelect: React.FC<{
+  fieldKey: string;
+  options: string[];
+  defaults: string[];
+  placeholder?: string;
+  value?: string;
+  onChange?: (val: string) => void;
+  onDeleteOption?: (fieldKey: string, value: string) => void;
+}> = ({ fieldKey, options, defaults, placeholder, value, onChange, onDeleteOption }) => {
+  const [search, setSearch] = useState('');
+  const opts = options.map((o) => ({
+    value: o,
+    label: defaults.includes(o) ? o : (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>{o}</span>
+        <CloseCircleOutlined
+          style={{ color: '#ff4d4f', fontSize: 12 }}
+          onClick={(e) => { e.stopPropagation(); onDeleteOption?.(fieldKey, o); }}
+        />
+      </div>
+    ),
+  }));
+  if (search && !options.includes(search)) {
+    opts.push({ value: search, label: search });
+  }
+  return (
+    <Select
+      showSearch
+      allowClear
+      value={value || undefined}
+      placeholder={placeholder}
+      searchValue={search}
+      onSearch={setSearch}
+      onChange={(val) => { onChange?.(val ?? ''); setSearch(''); }}
+      onBlur={() => setSearch('')}
+      options={opts}
+      filterOption={(input, option) =>
+        String(option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+      }
+      notFoundContent={null}
+      style={{ width: '100%' }}
+    />
+  );
+};
 
 interface Props {
   open: boolean;
@@ -31,6 +78,13 @@ const ProtocolFormModal: React.FC<Props> = ({
   const [previewOpen, setPreviewOpen] = React.useState(false);
   const [previewParagraphs, setPreviewParagraphs] = React.useState<PreviewParagraph[]>([]);
   const [previewLoading, setPreviewLoading] = React.useState(false);
+  const [customOptions, setCustomOptions] = React.useState<Record<string, string[]>>({});
+
+  useEffect(() => {
+    if (open) {
+      fetchCustomOptions().then(setCustomOptions).catch(() => {});
+    }
+  }, [open]);
 
   const protocolDef = useMemo(
     () => (selectedProtocolId ? getProtocolForm(selectedProtocolId) : null),
@@ -93,7 +147,7 @@ const ProtocolFormModal: React.FC<Props> = ({
       const style = [
         p.centered ? 'text-align:center;' : '',
         p.bold ? 'font-weight:bold;' : '',
-        'font-size:12pt;', 'margin:0;', 'line-height:1.6;',
+        'font-size:12pt;', 'margin:0;', 'line-height:1.4;',
         'font-family:"Times New Roman",serif;',
       ].join('');
       return `<p style="${style}">${p.text.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>`;
@@ -101,8 +155,8 @@ const ProtocolFormModal: React.FC<Props> = ({
     const win = window.open('', '_blank');
     if (!win) return;
     win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
-<style>body{margin:20mm 25mm;font-family:"Times New Roman",serif;font-size:12pt;}
-@media print{body{margin:15mm 20mm;}}</style>
+<style>body{margin:1mm;font-family:"Times New Roman",serif;font-size:12pt;}
+@media print{body{margin:1mm;}}</style>
 </head><body>${html}</body></html>`);
     win.document.close();
     win.focus();
@@ -123,6 +177,15 @@ const ProtocolFormModal: React.FC<Props> = ({
           }
         }
       }
+      // Yangi variantlarni bazaga saqlash
+      for (const section of protocolDef.sections) {
+        for (const field of section.fields) {
+          if (field.type !== 'textarea' && protocolForm[field.key]) {
+            apiSaveCustomOption(field.key, String(protocolForm[field.key]));
+          }
+        }
+      }
+
       setSaving(true);
       await createProtocolForm(client.id, selectedProtocolId, protocolForm);
       notification.success({ message: 'Protokol muvaffaqiyatli saqlandi!' });
@@ -136,35 +199,36 @@ const ProtocolFormModal: React.FC<Props> = ({
     }
   };
 
+  const handleDeleteOption = async (fieldKey: string, value: string) => {
+    try {
+      await apiDeleteCustomOption(fieldKey, value);
+      setCustomOptions((prev) => {
+        const updated = { ...prev };
+        updated[fieldKey] = (updated[fieldKey] || []).filter((v) => v !== value);
+        return updated;
+      });
+    } catch { /* ignore */ }
+  };
+
   const renderField = (field: FormField) => {
     const fullWidth = field.type === 'textarea';
     let input: React.ReactNode;
 
-    if (field.type === 'number') {
-      input = (
-        <InputNumber
-          style={{ width: '100%' }}
-          placeholder={field.hint ?? ''}
-          addonAfter={field.unit}
-          step={0.1}
-        />
-      );
-    } else if (field.type === 'combobox') {
-      input = (
-        <AutoComplete
-          options={(field.options ?? []).map((o) => ({ value: o }))}
-          placeholder={field.hint ?? field.defaultValue ?? ''}
-          filterOption={(inputValue, option) =>
-            (option?.value as string).toLowerCase().includes(inputValue.toLowerCase())
-          }
-        >
-          <Input />
-        </AutoComplete>
-      );
-    } else if (field.type === 'textarea') {
+    if (field.type === 'textarea') {
       input = <TextArea rows={3} placeholder={field.hint ?? ''} />;
     } else {
-      input = <Input placeholder={field.hint ?? ''} addonAfter={field.unit} />;
+      const defaults = field.options ?? [];
+      const custom = customOptions[field.key] || [];
+      const allOptions = [...defaults, ...custom.filter((c: string) => !defaults.includes(c))];
+      input = (
+        <FieldSelect
+          fieldKey={field.key}
+          options={allOptions}
+          defaults={defaults}
+          placeholder={field.hint ?? field.defaultValue ?? ''}
+          onDeleteOption={handleDeleteOption}
+        />
+      );
     }
 
     const isTextarea = field.type === 'textarea';
@@ -172,7 +236,7 @@ const ProtocolFormModal: React.FC<Props> = ({
     const label = (
       <span style={{ fontSize: 14, whiteSpace: 'normal', lineHeight: '1.4', color: 'var(--gray-600)' }}>
         {field.label}
-        {field.unit && field.type !== 'number' ? ` (${field.unit})` : ''}
+        {field.unit ? ` (${field.unit})` : ''}
         {field.hint && (
           <Tooltip title={field.hint} placement="topLeft">
             <QuestionCircleOutlined style={{ marginLeft: 4, fontSize: 12, color: 'var(--gray-400)' }} />
@@ -415,7 +479,7 @@ const ProtocolFormModal: React.FC<Props> = ({
           ) : previewParagraphs.length > 0 ? (
             previewParagraphs.map((p, i) => (
               <p key={i} style={{
-                margin: '2px 0', lineHeight: 1.8,
+                margin: '2px 0', lineHeight: 1.4,
                 fontWeight: p.bold ? 700 : 400,
                 textAlign: p.centered ? 'center' : 'left',
                 whiteSpace: 'pre-wrap',

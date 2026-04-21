@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Input, Select, DatePicker, Button, Space, Modal } from 'antd';
-import dayjs from 'dayjs';
+import { Form, Input, Select, Button, Space, Modal } from 'antd';
 import type { Client } from '../types';
 import { createClient, updateClient } from '../api/clients';
 
@@ -28,7 +27,7 @@ const ClientForm: React.FC<Props> = ({ open, client, onClose, onSaved }) => {
       if (client) {
         form.setFieldsValue({
           ...client,
-          birth_date: client.birth_date ? dayjs(client.birth_date) : null,
+          birth_date: client.birth_date || '',
         });
       } else {
         form.resetFields();
@@ -38,14 +37,14 @@ const ClientForm: React.FC<Props> = ({ open, client, onClose, onSaved }) => {
 
   const onFinish = async (values: Record<string, unknown>) => {
     const data = {
-      first_name: values.first_name || '',
-      last_name: values.last_name || '',
-      patronymic: values.patronymic || '',
-      gender: values.gender || '',
-      phone: values.phone || '',
+      first_name: String(values.first_name || ''),
+      last_name: String(values.last_name || ''),
+      patronymic: String(values.patronymic || ''),
+      gender: String(values.gender || ''),
+      phone: String(values.phone || ''),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      birth_date: values.birth_date ? (values.birth_date as any).format('YYYY-MM-DD') : '',
-      region: values.region || '',
+      birth_date: values.birth_date ? String(values.birth_date) : '',
+      region: String(values.region || ''),
     };
     try {
       const saved = isEdit
@@ -86,8 +85,8 @@ const ClientForm: React.FC<Props> = ({ open, client, onClose, onSaved }) => {
         <Form.Item name="phone" label="Telefon">
           <Input placeholder="+998901234567" />
         </Form.Item>
-        <Form.Item name="birth_date" label="Tug'ilgan sana">
-          <DatePicker style={{ width: '100%' }} format={["DD.MM.YYYY", "DD-MM-YYYY", "YYYY-MM-DD"]} placeholder="KK.OO.YYYY" />
+        <Form.Item name="birth_date" label="Tug'ilgan yili">
+          <Input placeholder="masalan: 1990" />
         </Form.Item>
         <Form.Item name="region" label="Viloyat">
           <Select placeholder="Tanlang" showSearch allowClear>

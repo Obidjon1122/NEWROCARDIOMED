@@ -2,6 +2,7 @@ import os
 import io
 from typing import Dict, Any
 from docx import Document
+from docx.shared import Mm, Pt
 
 # Path to original DOCX template files
 TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'protocoles')
@@ -21,6 +22,7 @@ TEMPLATE_FILES: Dict[int, str] = {
     12: 'Первый ориместр новый.docx',
     13: 'Плод новый.docx',
     14: 'Сердцебиение.docx',
+    15: 'Фолликулометрия.docx',
 }
 
 
@@ -781,13 +783,13 @@ def _fill_protocol_13(doc: Document, fd: Dict):
     # ── Фетометрия ────────────────────────────────────────────────────────────
     # [21] БПР: r[1]=bpd, r[5]=srok, r[7-8]=clear
     _set_run(paras[21], 1, f'ный размер {fd.get("plod_bpd", "")} ')
-    _set_run(paras[21], 5, fd.get('plod_bpd_srok', ''))
+    _set_run(paras[21], 5, f' {fd.get("plod_bpd_srok", "")} ')
     _set_run(paras[21], 7, '')
     _set_run(paras[21], 8, '')
 
     # [22] ЛЗР: r[1]=lor, r[5]=srok, r[6-7]=clear
     _set_run(paras[22], 1, f'чный размер {fd.get("plod_lor", "")} ')
-    _set_run(paras[22], 5, fd.get('plod_lor_srok', ''))
+    _set_run(paras[22], 5, f' {fd.get("plod_lor_srok", "")} ')
     _set_run(paras[22], 6, '')
     _set_run(paras[22], 7, '')
 
@@ -796,20 +798,24 @@ def _fill_protocol_13(doc: Document, fd: Dict):
 
     # [24] Бедренная кость: r[1]=bedro, r[8]=srok, r[9]=clear
     _set_run(paras[24], 1, f'ой кости {fd.get("plod_bedro", "")} ')
-    _set_run(paras[24], 8, fd.get('plod_bedro_srok', ''))
+    _set_run(paras[24], 8, f' {fd.get("plod_bedro_srok", "")} ')
     _set_run(paras[24], 9, '')
     _set_run(paras[24], 10, '')
 
     # [25] Окружность головки: r[1]=okr, r[8]=srok, r[9]=clear
     _set_run(paras[25], 1, f'ловки плода {fd.get("plod_okr_golova", "")} ')
-    _set_run(paras[25], 8, fd.get('plod_okr_golova_srok', ''))
+    _set_run(paras[25], 8, f' {fd.get("plod_okr_golova_srok", "")} ')
     _set_run(paras[25], 9, '')
 
     # [26] Окружность живота: r[0]=okr, r[7]=srok
     _set_run(paras[26], 0, f'Окружность живота {fd.get("plod_okr_zhivot", "")} ')
-    _set_run(paras[26], 7, fd.get('plod_okr_zhivot_srok', ''))
+    _set_run(paras[26], 7, f' {fd.get("plod_okr_zhivot_srok", "")} ')
 
-    _set_run(paras[27], 1, f' {fd.get("plod_pupovina", "")}.')
+    osobennosti = fd.get('plod_osobennosti', '')
+    pupovina = fd.get('plod_pupovina', '')
+    osb_text = f'Особенности плода {osobennosti}.\n' if osobennosti else ''
+    _set_run(paras[27], 0, f'{osb_text}Пуповина')
+    _set_run(paras[27], 1, f' {pupovina}.')
 
     # ── Плацента ──────────────────────────────────────────────────────────────
     _set_run(paras[29], 1, f' {fd.get("plac_lok", "")} ')
@@ -864,6 +870,30 @@ def _fill_protocol_14(doc: Document, fd: Dict):
 
 # ─── Per-protocol fill dispatch ───────────────────────────────────────────────
 
+# ─── Protocol 15: Фолликулометрия ────────────────────────────────────────────
+
+def _fill_protocol_15(doc: Document, fd: Dict):
+    paras = doc.paragraphs
+
+    # [9] Толщина эндометрия (М-эхо): r[1]=value
+    _set_run(paras[9], 1, f' {fd.get("fol_endo_t", "")} ')
+
+    # [10] Эндометрий соответствует фазе: r[1]=value
+    _set_run(paras[10], 1, f' {fd.get("fol_endo_faza", "")} ')
+
+    # [16] Правый яичник — фолликулы: r[1]=value
+    _set_run(paras[16], 1, f' {fd.get("fol_pr_follikuli", "")} ')
+
+    # [19] Левый яичник — фолликулы: r[1]=value
+    _set_run(paras[19], 1, f' {fd.get("fol_lev_follikuli", "")} ')
+
+    # [21] Свободная жидкость: r[1]=value
+    _set_run(paras[21], 1, f' {fd.get("fol_svobod_zhid", "")} ')
+
+    # [23] Заключение: r[1]=value
+    _set_run(paras[23], 1, f' {fd.get("zaklyuchenie", "")} ')
+
+
 PROTOCOL_FILLERS = {
     1:  _fill_protocol_1,
     2:  _fill_protocol_2,
@@ -879,6 +909,7 @@ PROTOCOL_FILLERS = {
     12: _fill_protocol_12,
     13: _fill_protocol_13,
     14: _fill_protocol_14,
+    15: _fill_protocol_15,
 }
 
 
@@ -900,13 +931,30 @@ def generate_protocol_docx(
 
     doc = Document(template_path)
 
+    for section in doc.sections:
+        section.top_margin = Mm(1)
+        section.bottom_margin = Mm(1)
+        section.left_margin = Mm(1)
+        section.right_margin = Mm(1)
+
+    for para in doc.paragraphs:
+        para.paragraph_format.line_spacing = Pt(16)
+        para.paragraph_format.space_before = Pt(0)
+        para.paragraph_format.space_after = Pt(0)
+
     # Fill common header (patient info, date, doctor)
     _fill_header(doc, client, doctor, created_at)
+
+    # Har bir qiymatning ikki tomoniga 2 ta bo'sh joy qo'shish
+    padded_data = {}
+    for k, v in form_data.items():
+        s = str(v).strip() if v else ''
+        padded_data[k] = f'  {s}  ' if s else ''
 
     # Fill protocol-specific fields
     filler = PROTOCOL_FILLERS.get(protocol_id)
     if filler:
-        filler(doc, form_data)
+        filler(doc, padded_data)
 
     buf = io.BytesIO()
     doc.save(buf)

@@ -87,6 +87,20 @@ export const previewProtocolDraft = async (
   return res.data.paragraphs ?? [];
 };
 
+// Custom field options
+export const getCustomOptions = async (): Promise<Record<string, string[]>> => {
+  const res = await api.get('/custom-options');
+  return res.data;
+};
+
+export const saveCustomOption = async (fieldKey: string, value: string): Promise<void> => {
+  await api.post('/custom-options', { field_key: fieldKey, value });
+};
+
+export const deleteCustomOption = async (fieldKey: string, value: string): Promise<void> => {
+  await api.delete('/custom-options', { data: { field_key: fieldKey, value } });
+};
+
 export const getProtocolFormDownloadUrl = (formId: number, clientId: number): string => {
   const base = api.defaults.baseURL ?? '/api';
   return `${base}/protocol-forms/${formId}/download/docx?client_id=${clientId}`;

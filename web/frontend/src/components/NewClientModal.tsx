@@ -1,19 +1,64 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Modal, Form, Input, Select, DatePicker,
+  Modal, Form, Input, Select,
   Button, Typography, notification, Row, Col,
-  Divider, InputNumber, AutoComplete, Tooltip,
+  Divider, Tooltip,
 } from 'antd';
 import { UserAddOutlined, SaveOutlined, CloseOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
 import type { Client, ProtocolDashboardItem } from '../types';
 import { createClient } from '../api/clients';
-import { createProtocolForm } from '../api/protocols';
+import { createProtocolForm, getCustomOptions as fetchCustomOptions, saveCustomOption as apiSaveCustomOption, deleteCustomOption as apiDeleteCustomOption } from '../api/protocols';
 import { getProtocolForm, type FormField } from '../data/protocolForms';
 import { authStore } from '../store/auth';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 const { TextArea } = Input;
+
+const FieldSelect: React.FC<{
+  fieldKey: string;
+  options: string[];
+  defaults: string[];
+  placeholder?: string;
+  value?: string;
+  onChange?: (val: string) => void;
+  onDeleteOption?: (fieldKey: string, value: string) => void;
+}> = ({ fieldKey, options, defaults, placeholder, value, onChange, onDeleteOption }) => {
+  const [search, setSearch] = useState('');
+  const opts = options.map((o) => ({
+    value: o,
+    label: defaults.includes(o) ? o : (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <span>{o}</span>
+        <CloseCircleOutlined
+          style={{ color: '#ff4d4f', fontSize: 12 }}
+          onClick={(e) => { e.stopPropagation(); onDeleteOption?.(fieldKey, o); }}
+        />
+      </div>
+    ),
+  }));
+  if (search && !options.includes(search)) {
+    opts.push({ value: search, label: search });
+  }
+  return (
+    <Select
+      showSearch
+      allowClear
+      value={value || undefined}
+      placeholder={placeholder}
+      searchValue={search}
+      onSearch={setSearch}
+      onChange={(val) => { onChange?.(val ?? ''); setSearch(''); }}
+      onBlur={() => setSearch('')}
+      options={opts}
+      filterOption={(input, option) =>
+        String(option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+      }
+      notFoundContent={null}
+      style={{ width: '100%' }}
+    />
+  );
+};
 
 const REGIONS = [
   'Toshkent sh.', 'Toshkent vil.', 'Andijon', "Farg'ona", 'Namangan',
@@ -32,6 +77,13 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
   const [selectedProtocolId, setSelectedProtocolId] = useState<number | null>(null);
+  const [customOptions, setCustomOptions] = useState<Record<string, string[]>>({});
+
+  useEffect(() => {
+    if (open) {
+      fetchCustomOptions().then(setCustomOptions).catch(() => {});
+    }
+  }, [open]);
   const user = authStore.getUser();
 
   const protocolDef = useMemo(
@@ -65,7 +117,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
         patronymic: values.patronymic || '',
         gender: values.gender || '',
         phone: values.phone || '',
-        birth_date: values.birth_date ? dayjs(values.birth_date).format('YYYY-MM-DD') : '',
+        birth_date: values.birth_date ? String(values.birth_date) : '',
         region: values.region || '',
       };
       setSaving(true);
@@ -79,6 +131,14 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
             const val = values[field.key];
             if (val !== undefined && val !== null && val !== '') {
               protocolForm[field.key] = val;
+            }
+          }
+        }
+        // Yangi variantlarni bazaga saqlash
+        for (const section of protocolDef.sections) {
+          for (const field of section.fields) {
+            if (field.type !== 'textarea' && protocolForm[field.key]) {
+              apiSaveCustomOption(field.key, String(protocolForm[field.key]));
             }
           }
         }
@@ -102,36 +162,42 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
     ? `${user.last_name} ${user.first_name} ${user.patronymic_name || ''}`.trim()
     : '';
 
+  const handleDeleteOption = async (fieldKey: string, value: string) => {
+    try {
+      await apiDeleteCustomOption(fieldKey, value);
+      setCustomOptions((prev) => {
+        const updated = { ...prev };
+        updated[fieldKey] = (updated[fieldKey] || []).filter((v) => v !== value);
+        return updated;
+      });
+    } catch { /* ignore */ }
+  };
+
   const renderProtocolField = (field: FormField) => {
     const isTextarea = field.type === 'textarea';
     let input: React.ReactNode;
 
-    if (field.type === 'number') {
-      input = (
-        <InputNumber style={{ width: '100%' }} placeholder={field.hint ?? ''} addonAfter={field.unit} step={0.1} />
-      );
-    } else if (field.type === 'combobox') {
-      input = (
-        <AutoComplete
-          options={(field.options ?? []).map((o) => ({ value: o }))}
-          placeholder={field.hint ?? field.defaultValue ?? ''}
-          filterOption={(inputValue, option) =>
-            (option?.value as string).toLowerCase().includes(inputValue.toLowerCase())
-          }
-        >
-          <Input />
-        </AutoComplete>
-      );
-    } else if (field.type === 'textarea') {
+    if (field.type === 'textarea') {
       input = <TextArea rows={3} placeholder={field.hint ?? ''} />;
     } else {
-      input = <Input placeholder={field.hint ?? ''} addonAfter={field.unit} />;
+      const defaults = field.options ?? [];
+      const custom = customOptions[field.key] || [];
+      const allOptions = [...defaults, ...custom.filter((c: string) => !defaults.includes(c))];
+      input = (
+        <FieldSelect
+          fieldKey={field.key}
+          options={allOptions}
+          defaults={defaults}
+          placeholder={field.hint ?? field.defaultValue ?? ''}
+          onDeleteOption={handleDeleteOption}
+        />
+      );
     }
 
     const label = (
       <span style={{ fontSize: 14, whiteSpace: 'normal', lineHeight: '1.4', color: 'var(--gray-600)' }}>
         {field.label}
-        {field.unit && field.type !== 'number' ? ` (${field.unit})` : ''}
+        {field.unit ? ` (${field.unit})` : ''}
         {field.hint && (
           <Tooltip title={field.hint} placement="topLeft">
             <QuestionCircleOutlined style={{ marginLeft: 4, fontSize: 12, color: 'var(--gray-400)' }} />
@@ -272,11 +338,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Tug'ilgan sana</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <DatePicker
-                    style={{ width: '100%' }}
-                    format={["DD.MM.YYYY", "DD-MM-YYYY", "D.M.YYYY", "D-M-YYYY"]}
-                    placeholder="KK.OO.YYYY"
-                  />
+                  <Input placeholder="masalan: 1990" />
                 </Form.Item>
               </Col>
               <Col span={3}>
