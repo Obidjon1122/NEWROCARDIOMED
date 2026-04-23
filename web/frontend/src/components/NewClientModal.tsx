@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Modal, Form, Input, Select,
+  Modal, Form, Input, Select, AutoComplete,
   Button, Typography, notification, Row, Col,
   Divider, Tooltip,
 } from 'antd';
-import { UserAddOutlined, SaveOutlined, CloseOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { UserAddOutlined, SaveOutlined, CloseOutlined, QuestionCircleOutlined, DownOutlined } from '@ant-design/icons';
 import type { Client, ProtocolDashboardItem } from '../types';
 import { createClient } from '../api/clients';
 import { createProtocolForm, getCustomOptions as fetchCustomOptions, saveCustomOption as apiSaveCustomOption, deleteCustomOption as apiDeleteCustomOption } from '../api/protocols';
@@ -13,7 +13,47 @@ import { authStore } from '../store/auth';
 import { CloseCircleOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
-const { TextArea } = Input;
+
+const FieldTextSelect: React.FC<{
+  fieldKey: string;
+  options: string[];
+  defaults: string[];
+  placeholder?: string;
+  rows?: number;
+  value?: string;
+  onChange?: (val: string) => void;
+  onDeleteOption?: (fieldKey: string, value: string) => void;
+}> = ({ fieldKey, options, defaults, placeholder, rows = 3, value, onChange, onDeleteOption }) => {
+  const opts = options.map((o) => ({
+    value: o,
+    label: defaults.includes(o) ? (
+      <span style={{ whiteSpace: 'pre-wrap' }}>{o}</span>
+    ) : (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+        <span style={{ whiteSpace: 'pre-wrap', flex: 1 }}>{o}</span>
+        <CloseCircleOutlined
+          style={{ color: '#ff4d4f', fontSize: 12, marginTop: 4 }}
+          onClick={(e) => { e.stopPropagation(); onDeleteOption?.(fieldKey, o); }}
+        />
+      </div>
+    ),
+  }));
+  return (
+    <AutoComplete
+      value={value ?? ''}
+      onChange={(val) => onChange?.(val ?? '')}
+      placeholder={placeholder}
+      options={opts}
+      filterOption={(input, option) =>
+        String(option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+      }
+      style={{ width: '100%' }}
+      popupMatchSelectWidth={false}
+    >
+      <Input.TextArea rows={rows} autoSize={{ minRows: rows, maxRows: 8 }} />
+    </AutoComplete>
+  );
+};
 
 const FieldSelect: React.FC<{
   fieldKey: string;
@@ -24,7 +64,6 @@ const FieldSelect: React.FC<{
   onChange?: (val: string) => void;
   onDeleteOption?: (fieldKey: string, value: string) => void;
 }> = ({ fieldKey, options, defaults, placeholder, value, onChange, onDeleteOption }) => {
-  const [search, setSearch] = useState('');
   const opts = options.map((o) => ({
     value: o,
     label: defaults.includes(o) ? o : (
@@ -37,25 +76,19 @@ const FieldSelect: React.FC<{
       </div>
     ),
   }));
-  if (search && !options.includes(search)) {
-    opts.push({ value: search, label: search });
-  }
   return (
-    <Select
-      showSearch
-      allowClear
-      value={value || undefined}
+    <AutoComplete
+      value={value ?? ''}
+      onChange={(val) => onChange?.(val ?? '')}
       placeholder={placeholder}
-      searchValue={search}
-      onSearch={setSearch}
-      onChange={(val) => { onChange?.(val ?? ''); setSearch(''); }}
-      onBlur={() => setSearch('')}
       options={opts}
       filterOption={(input, option) =>
         String(option?.value ?? '').toLowerCase().includes(input.toLowerCase())
       }
-      notFoundContent={null}
+      allowClear
+      suffixIcon={<DownOutlined style={{ color: '#bfbfbf', fontSize: 11 }} />}
       style={{ width: '100%' }}
+      popupMatchSelectWidth={false}
     />
   );
 };
@@ -98,14 +131,14 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
     }
   }, [open, form]);
 
-  // Set default values for protocol fields when protocol changes
+  // Protocol change — just clear previously filled protocol fields
   useEffect(() => {
     if (!protocolDef) return;
-    const defaults: Record<string, unknown> = {};
+    const cleared: Record<string, unknown> = {};
     for (const section of protocolDef.sections)
       for (const field of section.fields)
-        defaults[field.key] = field.defaultValue !== undefined ? field.defaultValue : undefined;
-    form.setFieldsValue(defaults);
+        cleared[field.key] = undefined;
+    form.setFieldsValue(cleared);
   }, [protocolDef, form]);
 
   const handleSave = async () => {
@@ -137,7 +170,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
         // Yangi variantlarni bazaga saqlash
         for (const section of protocolDef.sections) {
           for (const field of section.fields) {
-            if (field.type !== 'textarea' && protocolForm[field.key]) {
+            if (protocolForm[field.key]) {
               apiSaveCustomOption(field.key, String(protocolForm[field.key]));
             }
           }
@@ -177,18 +210,28 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
     const isTextarea = field.type === 'textarea';
     let input: React.ReactNode;
 
+    const defaults = field.options ?? [];
+    const custom = customOptions[field.key] || [];
+    const allOptions = [...defaults, ...custom.filter((c: string) => !defaults.includes(c))];
+
     if (field.type === 'textarea') {
-      input = <TextArea rows={3} placeholder={field.hint ?? ''} />;
+      input = (
+        <FieldTextSelect
+          fieldKey={field.key}
+          options={allOptions}
+          defaults={defaults}
+          placeholder={field.hint ?? ''}
+          rows={3}
+          onDeleteOption={handleDeleteOption}
+        />
+      );
     } else {
-      const defaults = field.options ?? [];
-      const custom = customOptions[field.key] || [];
-      const allOptions = [...defaults, ...custom.filter((c: string) => !defaults.includes(c))];
       input = (
         <FieldSelect
           fieldKey={field.key}
           options={allOptions}
           defaults={defaults}
-          placeholder={field.hint ?? field.defaultValue ?? ''}
+          placeholder={field.hint ?? ''}
           onDeleteOption={handleDeleteOption}
         />
       );

@@ -131,11 +131,11 @@ async def preview_protocol_draft(
         doc = DocxDoc(io.BytesIO(docx_bytes))
         paragraphs = []
         for p in doc.paragraphs:
-            if not p.text.strip():
-                continue
             bold = bool(p.runs) and all(r.bold for r in p.runs if r.text.strip())
-            centered = p.alignment is not None and int(p.alignment) == 1
-            paragraphs.append({"text": p.text, "bold": bold, "centered": centered})
+            align_val = int(p.alignment) if p.alignment is not None else 0
+            centered = align_val == 1
+            right = align_val == 2
+            paragraphs.append({"text": p.text, "bold": bold, "centered": centered, "right": right})
     except Exception as e:
         return {"paragraphs": [], "error": str(e)}
 
@@ -217,11 +217,11 @@ async def preview_protocol_form(
         doc = DocxDoc(io.BytesIO(docx_bytes))
         paragraphs = []
         for p in doc.paragraphs:
-            if not p.text.strip() and not p.text == "\t":
-                continue
             bold = bool(p.runs) and all(r.bold for r in p.runs if r.text.strip())
-            centered = p.alignment is not None and int(p.alignment) == 1
-            paragraphs.append({"text": p.text, "bold": bold, "centered": centered})
+            align_val = int(p.alignment) if p.alignment is not None else 0
+            centered = align_val == 1
+            right = align_val == 2
+            paragraphs.append({"text": p.text, "bold": bold, "centered": centered, "right": right})
     except Exception:
         paragraphs = []
 

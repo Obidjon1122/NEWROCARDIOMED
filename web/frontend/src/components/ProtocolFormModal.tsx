@@ -1,18 +1,59 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
-  Modal, Form, Input, Button,
+  Modal, Form, Input, AutoComplete, Button,
   Typography, notification, Divider, Select, Tag, Tooltip,
 } from 'antd';
 import { SaveOutlined, CloseOutlined, FileTextOutlined, EyeOutlined, QuestionCircleOutlined, PrinterOutlined } from '@ant-design/icons';
 import type { Client, ProtocolDashboardItem } from '../types';
 import { createProtocolForm, previewProtocolDraft, type PreviewParagraph, getCustomOptions as fetchCustomOptions, saveCustomOption as apiSaveCustomOption, deleteCustomOption as apiDeleteCustomOption } from '../api/protocols';
 import { getProtocolForm, type FormField } from '../data/protocolForms';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, DownOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
-const { TextArea } = Input;
 
-/* Dropdown — yozish ham, tanlash ham, o'chirish ham mumkin */
+/* Multiline dropdown — textarea uchun, saqlangan variantlardan tanlash ham mumkin */
+const FieldTextSelect: React.FC<{
+  fieldKey: string;
+  options: string[];
+  defaults: string[];
+  placeholder?: string;
+  rows?: number;
+  value?: string;
+  onChange?: (val: string) => void;
+  onDeleteOption?: (fieldKey: string, value: string) => void;
+}> = ({ fieldKey, options, defaults, placeholder, rows = 3, value, onChange, onDeleteOption }) => {
+  const opts = options.map((o) => ({
+    value: o,
+    label: defaults.includes(o) ? (
+      <span style={{ whiteSpace: 'pre-wrap' }}>{o}</span>
+    ) : (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+        <span style={{ whiteSpace: 'pre-wrap', flex: 1 }}>{o}</span>
+        <CloseCircleOutlined
+          style={{ color: '#ff4d4f', fontSize: 12, marginTop: 4 }}
+          onClick={(e) => { e.stopPropagation(); onDeleteOption?.(fieldKey, o); }}
+        />
+      </div>
+    ),
+  }));
+  return (
+    <AutoComplete
+      value={value ?? ''}
+      onChange={(val) => onChange?.(val ?? '')}
+      placeholder={placeholder}
+      options={opts}
+      filterOption={(input, option) =>
+        String(option?.value ?? '').toLowerCase().includes(input.toLowerCase())
+      }
+      style={{ width: '100%' }}
+      popupMatchSelectWidth={false}
+    >
+      <Input.TextArea rows={rows} autoSize={{ minRows: rows, maxRows: 8 }} />
+    </AutoComplete>
+  );
+};
+
+/* Dropdown — tanlash ham, yozish ham, tanlangandan keyin edit qilish ham mumkin */
 const FieldSelect: React.FC<{
   fieldKey: string;
   options: string[];
@@ -22,7 +63,6 @@ const FieldSelect: React.FC<{
   onChange?: (val: string) => void;
   onDeleteOption?: (fieldKey: string, value: string) => void;
 }> = ({ fieldKey, options, defaults, placeholder, value, onChange, onDeleteOption }) => {
-  const [search, setSearch] = useState('');
   const opts = options.map((o) => ({
     value: o,
     label: defaults.includes(o) ? o : (
@@ -35,25 +75,19 @@ const FieldSelect: React.FC<{
       </div>
     ),
   }));
-  if (search && !options.includes(search)) {
-    opts.push({ value: search, label: search });
-  }
   return (
-    <Select
-      showSearch
-      allowClear
-      value={value || undefined}
+    <AutoComplete
+      value={value ?? ''}
+      onChange={(val) => onChange?.(val ?? '')}
       placeholder={placeholder}
-      searchValue={search}
-      onSearch={setSearch}
-      onChange={(val) => { onChange?.(val ?? ''); setSearch(''); }}
-      onBlur={() => setSearch('')}
       options={opts}
       filterOption={(input, option) =>
         String(option?.value ?? '').toLowerCase().includes(input.toLowerCase())
       }
-      notFoundContent={null}
+      allowClear
+      suffixIcon={<DownOutlined style={{ color: '#bfbfbf', fontSize: 11 }} />}
       style={{ width: '100%' }}
+      popupMatchSelectWidth={false}
     />
   );
 };
@@ -145,12 +179,13 @@ const ProtocolFormModal: React.FC<Props> = ({
     if (!previewParagraphs.length) return;
     const html = previewParagraphs.map((p) => {
       const style = [
-        p.centered ? 'text-align:center;' : '',
+        p.centered ? 'text-align:center;' : (p.right ? 'text-align:right;' : ''),
         p.bold ? 'font-weight:bold;' : '',
-        'font-size:12pt;', 'margin:0;', 'line-height:1.4;',
+        'font-size:12pt;', 'margin:0;', 'line-height:1.4;', 'min-height:1.4em;',
         'font-family:"Times New Roman",serif;',
       ].join('');
-      return `<p style="${style}">${p.text.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>`;
+      const content = p.text.trim() ? p.text.replace(/&/g, '&amp;').replace(/</g, '&lt;') : '&nbsp;';
+      return `<p style="${style}">${content}</p>`;
     }).join('');
     const win = window.open('', '_blank');
     if (!win) return;
@@ -177,10 +212,10 @@ const ProtocolFormModal: React.FC<Props> = ({
           }
         }
       }
-      // Yangi variantlarni bazaga saqlash
+      // Yangi variantlarni bazaga saqlash (textarea ham)
       for (const section of protocolDef.sections) {
         for (const field of section.fields) {
-          if (field.type !== 'textarea' && protocolForm[field.key]) {
+          if (protocolForm[field.key]) {
             apiSaveCustomOption(field.key, String(protocolForm[field.key]));
           }
         }
@@ -214,18 +249,28 @@ const ProtocolFormModal: React.FC<Props> = ({
     const fullWidth = field.type === 'textarea';
     let input: React.ReactNode;
 
+    const defaults = field.options ?? [];
+    const custom = customOptions[field.key] || [];
+    const allOptions = [...defaults, ...custom.filter((c: string) => !defaults.includes(c))];
+
     if (field.type === 'textarea') {
-      input = <TextArea rows={3} placeholder={field.hint ?? ''} />;
+      input = (
+        <FieldTextSelect
+          fieldKey={field.key}
+          options={allOptions}
+          defaults={defaults}
+          placeholder={field.hint ?? ''}
+          rows={3}
+          onDeleteOption={handleDeleteOption}
+        />
+      );
     } else {
-      const defaults = field.options ?? [];
-      const custom = customOptions[field.key] || [];
-      const allOptions = [...defaults, ...custom.filter((c: string) => !defaults.includes(c))];
       input = (
         <FieldSelect
           fieldKey={field.key}
           options={allOptions}
           defaults={defaults}
-          placeholder={field.hint ?? field.defaultValue ?? ''}
+          placeholder={field.hint ?? ''}
           onDeleteOption={handleDeleteOption}
         />
       );
@@ -479,12 +524,12 @@ const ProtocolFormModal: React.FC<Props> = ({
           ) : previewParagraphs.length > 0 ? (
             previewParagraphs.map((p, i) => (
               <p key={i} style={{
-                margin: '2px 0', lineHeight: 1.4,
+                margin: '2px 0', lineHeight: 1.4, minHeight: '1.4em',
                 fontWeight: p.bold ? 700 : 400,
-                textAlign: p.centered ? 'center' : 'left',
+                textAlign: p.centered ? 'center' : (p.right ? 'right' : 'left'),
                 whiteSpace: 'pre-wrap',
               }}>
-                {p.text}
+                {p.text || ' '}
               </p>
             ))
           ) : (

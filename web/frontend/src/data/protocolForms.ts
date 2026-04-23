@@ -231,8 +231,6 @@ const shchitovidProtocol: ProtocolFormDef = {
       fields: [
         { key: 'zaklyuchenie_sh', label: 'Заключение', type: 'textarea' },
         { key: 'rekomendatsi_sh', label: 'Рекомендации', type: 'textarea' },
-        { key: 'vrach', label: 'Врач', type: 'text' },
-        { key: 'telefon', label: 'Телефон', type: 'text' },
       ],
     },
   ],
@@ -373,7 +371,6 @@ const molochProtocol: ProtocolFormDef = {
         { key: 'prm_kozha_exostr', label: 'Кожа — эхоструктура', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'однородная', 'неоднородная'] },
         { key: 'prm_sosok', label: 'Сосок', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
         { key: 'prm_podkozh_t', label: 'Подкожная жировая ткань — толщина', type: 'text', unit: 'мм' },
-        { key: 'prm_intramam', label: 'Интрамаммарная жировая ткань', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
         { key: 'prm_retromam_t', label: 'Ретромаммарная жировая ткань — толщина', type: 'text', unit: 'мм' },
         { key: 'prm_parenhima_kontur', label: 'Паренхима — контур', type: 'combobox', defaultValue: 'в норме', options: KONTUR },
         { key: 'prm_parenhima_t', label: 'Паренхима — толщина', type: 'text', unit: 'мм' },
@@ -393,7 +390,6 @@ const molochProtocol: ProtocolFormDef = {
         { key: 'levm_kozha_exostr', label: 'Кожа — эхоструктура', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'однородная', 'неоднородная'] },
         { key: 'levm_sosok', label: 'Сосок', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
         { key: 'levm_podkozh_t', label: 'Подкожная жировая ткань — толщина', type: 'text', unit: 'мм' },
-        { key: 'levm_intramam', label: 'Интрамаммарная жировая ткань', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
         { key: 'levm_retromam_t', label: 'Ретромаммарная жировая ткань — толщина', type: 'text', unit: 'мм' },
         { key: 'levm_parenhima_kontur', label: 'Паренхима — контур', type: 'combobox', defaultValue: 'в норме', options: KONTUR },
         { key: 'levm_parenhima_t', label: 'Паренхима — толщина', type: 'text', unit: 'мм' },
@@ -458,6 +454,8 @@ const maliyTazProtocol: ProtocolFormDef = {
         { key: 'mat_dlina', label: 'Длина', type: 'text', unit: 'мм', hint: 'в норме 42–70' },
         { key: 'mat_tolshina', label: 'Толщина', type: 'text', unit: 'мм', hint: 'в норме 33–46' },
         { key: 'mat_shirina', label: 'Ширина', type: 'text', unit: 'мм', hint: 'в норме 42–60' },
+        { key: 'mat_peredney', label: 'Толщина передней стенки миометрия', type: 'text', unit: 'мм' },
+        { key: 'mat_zadney', label: 'Толщина задней стенки миометрия', type: 'text', unit: 'мм' },
         { key: 'mat_obem', label: 'Объём матки', type: 'text', unit: 'см³', hint: 'в норме 30–100' },
         { key: 'mat_kontur', label: 'Контур матки', type: 'combobox', defaultValue: 'без изменений', options: ['без изменений', 'неровный', 'нечёткий'] },
         { key: 'mat_mio_exostr', label: 'Эхоструктура миометрия', type: 'combobox', defaultValue: 'однородная', options: EHOGSTR },
@@ -722,7 +720,6 @@ const tri1Protocol: ProtocolFormDef = {
       fields: [
         { key: 'tri1_hor_lok', label: 'Локализация хориона', type: 'text' },
         { key: 'tri1_hor_t', label: 'Толщина хориона', type: 'text', unit: 'мм', hint: 'в норме соответствует сроку в неделях' },
-        { key: 'tri1_hor_osoben', label: 'Особенности хориона', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
       ],
     },
     {
@@ -759,6 +756,7 @@ const plodProtocol: ProtocolFormDef = {
       fields: [
         { key: 'plod_mat_kontur', label: 'Контур матки', type: 'combobox', defaultValue: 'в норме', options: KONTUR },
         { key: 'plod_mat_exostr', label: 'Эхоструктура миометрия', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'однородная', 'неоднородная'] },
+        { key: 'plod_mat_osob', label: 'Особенности матки', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
       ],
     },
     {
@@ -766,7 +764,10 @@ const plodProtocol: ProtocolFormDef = {
       fields: [
         { key: 'plod_kol', label: 'Количество плодов', type: 'combobox', defaultValue: '1', options: ['1', '2', '3'] },
         { key: 'plod_polozhenie', label: 'Положение, предлежание', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'продольное, головное', 'поперечное', 'тазовое', 'косое'], hint: 'в норме продольное, головное' },
-        { key: 'plod_dvizh', label: 'Движения', type: 'combobox', defaultValue: 'определяются', options: ['определяются', 'не определяются'] },
+        { key: 'plod_dvizh_tul', label: 'Движения туловища', type: 'combobox', defaultValue: 'определяются', options: ['определяются', 'не определяются'], hint: 'в норме с 7 недель' },
+        { key: 'plod_dvizh_konech', label: 'Движения конечностями', type: 'combobox', defaultValue: 'определяются', options: ['определяются', 'не определяются'], hint: 'в норме с 8 недель' },
+        { key: 'plod_dvizh_glotat', label: 'Глотательные движения', type: 'combobox', defaultValue: 'определяются', options: ['определяются', 'не определяются'], hint: 'в норме с 11 недель' },
+        { key: 'plod_dvizh_sosat', label: 'Сосательные движения', type: 'combobox', defaultValue: 'определяются', options: ['определяются', 'не определяются'], hint: 'в норме с 18 недель' },
         { key: 'plod_serd', label: 'Сердцебиение', type: 'combobox', defaultValue: 'визуализируется, ритмичное', options: ['визуализируется, ритмичное', 'не визуализируется', 'аритмичное'] },
         { key: 'plod_chss', label: 'ЧСС', type: 'text', unit: 'уд/мин', hint: 'в норме 115–160, до 22 нед. — до 180' },
       ],
@@ -801,7 +802,8 @@ const plodProtocol: ProtocolFormDef = {
     {
       title: 'Околоплодные воды',
       fields: [
-        { key: 'vodi_iazh', label: 'ИАЖ', type: 'text', hint: 'нормоводие' },
+        { key: 'vodi_water', label: 'Околоплодные воды', type: 'text', hint: 'число (мм)' },
+        { key: 'vodi_iazh', label: 'ИАЖ', type: 'combobox', defaultValue: 'нормоводие', options: ['нормоводие', 'многоводие', 'маловодие; умеренное', 'маловодие; среднее', 'маловодие; выраженное'] },
         { key: 'vodi_exogen', label: 'Эхогенность вод', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'анэхогенная', 'с мелкодисперсной взвесью'] },
         { key: 'plod_massa', label: 'Масса плода', type: 'text', unit: 'г' },
         { key: 'plod_yachniki', label: 'Яичники', type: 'combobox', defaultValue: 'не визуализируются', options: NE_VIZIR },
@@ -849,7 +851,6 @@ const follikulometriyaProtocol: ProtocolFormDef = {
     {
       title: 'Параметры',
       fields: [
-        { key: 'fol_den_cikla', label: 'День менструального цикла', type: 'text' },
         { key: 'fol_endo_t', label: 'Толщина эндометрия (М-эхо)', type: 'text', unit: 'мм', hint: 'зависит от дня цикла, не более 18' },
         { key: 'fol_endo_faza', label: 'Эндометрий соответствует фазе', type: 'combobox', options: ['десквамации', 'регенерации', 'пролиферации', 'овуляции', 'секреции', 'не соответствует фазе'] },
       ],

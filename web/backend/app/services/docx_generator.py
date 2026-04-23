@@ -3,6 +3,7 @@ import io
 from typing import Dict, Any
 from docx import Document
 from docx.shared import Mm, Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 # Path to original DOCX template files
 TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'protocoles')
@@ -67,7 +68,22 @@ def _fill_header(doc: Document, client: Dict, doctor: Dict, created_at: str):
         elif 'Дата обследования:' in text:
             _set_run(p, 0, f' Дата обследования: {date_str}')
         elif 'Врач_________________' in text:
-            _set_run(p, 0, f'         Врач_________________ {doctor_name}.          ')
+            # Birinchi run ga matnni yozib, qolganlarini tozalaymiz (takrorlanishning oldini olish uchun)
+            if p.runs:
+                p.runs[0].text = f'Врач_________________ {doctor_name}.'
+                for r in p.runs[1:]:
+                    r.text = ''
+            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+            p.paragraph_format.space_before = Pt(40)
+        elif 'Тел.:' in text or 'тел.:' in text.lower():
+            # Leading bo'sh joylarni olib tashlab, faqat matn qoldiramiz
+            if p.runs:
+                for r in p.runs:
+                    r.text = r.text.lstrip()
+                    if r.text:
+                        break
+                # Qolgan runlarni tozalamaymiz, lekin trim qilamiz
+            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
 
 
 # ─── Protocol 1: Печень и желчный пузырь ──────────────────────────────────────
@@ -373,6 +389,38 @@ def _fill_protocol_6(doc: Document, fd: Dict):
     _set_run(paras[29], 7, f'после {fd.get("svp_exostr_posle", "")}')
     _set_run(paras[30], 0, f'Эхогенность {fd.get("svp_exogennost", "")}')
 
+    # Левый семенной пузырёк — paragraf 30 dan keyin yangi paragraflar qo'shiladi
+    has_lev = any(fd.get(k, '').strip() for k in ['svl_topografia', 'svl_kontur', 'svl_dlina', 'svl_tolshina', 'svl_shirina', 'svl_exostr_do', 'svl_exostr_posle', 'svl_exogennost'])
+    if has_lev:
+        from copy import deepcopy
+        from docx.text.paragraph import Paragraph
+        # Sarlavha paragrafi (Левый)
+        title_el = deepcopy(paras[25]._element)
+        paras[30]._element.addnext(title_el)
+        title_p = Paragraph(title_el, paras[30]._parent)
+        for r in title_p.runs:
+            r.text = ''
+        if title_p.runs:
+            title_p.runs[0].text = '            Левый'
+        # Qator-qator ma'lumotlar
+        lines = [
+            f'Топография {fd.get("svl_topografia", "")} (в норме латеральнее над простатой).',
+            f'Контур {fd.get("svl_kontur", "")} (в норме дольчатый, четкий).',
+            f'Размеры: длина {fd.get("svl_dlina", "")} мм (в норме до 50), толщина {fd.get("svl_tolshina", "")} мм (в норме до 15), ширина {fd.get("svl_shirina", "")} мм (в норме до 20).',
+            f'Эхоструктура до эякуляции {fd.get("svl_exostr_do", "")} (в норме однородная, ячеистая), после эякуляции {fd.get("svl_exostr_posle", "")} (в норме однородная, гомогенная).',
+            f'Эхогенность {fd.get("svl_exogennost", "")} (в норме гипоэхогенная).',
+        ]
+        prev_el = title_el
+        for line in lines:
+            new_el = deepcopy(paras[26]._element)
+            prev_el.addnext(new_el)
+            new_p = Paragraph(new_el, paras[30]._parent)
+            for r in new_p.runs:
+                r.text = ''
+            if new_p.runs:
+                new_p.runs[0].text = line
+            prev_el = new_el
+
     _set_run(paras[32], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
     _set_run(paras[33], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
 
@@ -429,8 +477,10 @@ def _fill_protocol_7(doc: Document, fd: Dict):
     _set_run(paras[14], 0, f'Сосок: {fd.get("prm_sosok", "")}.')
     # [15]='Жировая ткань.' HEADER — skip
     _set_run(paras[16], 0, f'          Подкожная, толщина {fd.get("prm_podkozh_t", "")} ')
+    _set_run(paras[16], 2, '')  # clear ", без особенностей."
     # [17]=Интрамаммарная HEADER — skip
     _set_run(paras[18], 2, f', толщиной {fd.get("prm_retromam_t", "")} ')
+    _set_run(paras[18], 4, '')  # clear ", без особенностей."
     _set_run(paras[19], 3, f'  контур {fd.get("prm_parenhima_kontur", "")}')
     _set_run(paras[20], 1, f'       Толщина {fd.get("prm_parenhima_t", "")} ')
     _set_run(paras[21], 1, f'      Эхогенность {fd.get("prm_parenhima_exogen", "")} ')
@@ -455,8 +505,10 @@ def _fill_protocol_7(doc: Document, fd: Dict):
     _set_run(paras[32], 0, f'Сосок: {fd.get("levm_sosok", "")}.')
     # [33]='Жировая ткань.' HEADER — skip
     _set_run(paras[34], 0, f'          Подкожная, толщина {fd.get("levm_podkozh_t", "")} ')
+    _set_run(paras[34], 2, '')  # clear ", без особенностей."
     # [35]=Интрамаммарная HEADER — skip
     _set_run(paras[36], 2, f', толщиной {fd.get("levm_retromam_t", "")} ')
+    _set_run(paras[36], 4, '')  # clear ", без особенностей."
     _set_run(paras[37], 1, f' Железистая ткань:  контур {fd.get("levm_parenhima_kontur", "")} ')
     _set_run(paras[38], 0, f'             Толщина {fd.get("levm_parenhima_t", "")} ')
     _set_run(paras[39], 0, f'             Эхогенность {fd.get("levm_parenhima_exogen", "")} ')
@@ -506,13 +558,22 @@ def _fill_protocol_9(doc: Document, fd: Dict):
     _set_run(paras[9], 1, f' {fd.get("mat_data_mens", "")},')
     _set_run(paras[9], 3, f'{fd.get("mat_den_cikla", "")} день менструального цикла')
     # [10] Позиция/Положение/Форма
-    _set_run(paras[10], 1, fd.get('mat_poziciya', 'anteversio'))
-    _set_run(paras[10], 5, fd.get('mat_polozhenie', 'anteflexio'))
-    _set_run(paras[10], 8, f'{fd.get("mat_forma", "грушевидная")} ')
+    _set_run(paras[10], 1, fd.get('mat_poziciya', ''))
+    _set_run(paras[10], 5, fd.get('mat_polozhenie', ''))
+    _set_run(paras[10], 8, f'{fd.get("mat_forma", "")} ')
+    # [11] Соотношение тела матки к шейке
+    _set_run(paras[11], 1, f' {fd.get("mat_sootn", "")}.')
     # [12] Размеры: r[1]=' мм ', r[6]='толщина  мм ', r[9]='; ширина  мм '
     _set_run(paras[12], 1, f' {fd.get("mat_dlina", "")} мм ')
     _set_run(paras[12], 6, f'толщина {fd.get("mat_tolshina", "")} мм ')
-    _set_run(paras[12], 9, f'; ширина {fd.get("mat_shirina", "")} мм ')
+    peredney = str(fd.get('mat_peredney', '')).strip()
+    zadney = str(fd.get('mat_zadney', '')).strip()
+    extra = ''
+    if peredney:
+        extra += f'; толщина передней стенки миометрия {fd.get("mat_peredney", "")} мм'
+    if zadney:
+        extra += f'; толщина задней стенки миометрия {fd.get("mat_zadney", "")} мм'
+    _set_run(paras[12], 9, f'; ширина {fd.get("mat_shirina", "")} мм{extra} ')
     # [13] Объём: r[1]='          Объем матки   см'
     _set_run(paras[13], 1, f'          Объем матки {fd.get("mat_obem", "")} см')
     # [14] Контур: r[0]='Контур без изменений '
@@ -650,7 +711,9 @@ def _fill_protocol_11(doc: Document, fd: Dict):
     _set_run(paras[26], 0, f'  Эхогенность {fd.get("kol_hyalin_exogen", "")}')
 
     # ── Медиальный мениск — Передний+Задний рог (side-by-side) ───────────────
+    _set_run(paras[30], 0, ' Форма')
     _set_run(paras[30], 1, f' {fd.get("kol_med_per_forma", "")}')
+    _set_run(paras[30], 6, ' Форма')
     _set_run(paras[30], 7, f' {fd.get("kol_med_zad_forma", "")}')
     _set_run(paras[31], 1, f' Контур {fd.get("kol_med_per_kontur", "")}')
     _set_run(paras[31], 5, f'                    Контур {fd.get("kol_med_zad_kontur", "")}')
@@ -660,7 +723,9 @@ def _fill_protocol_11(doc: Document, fd: Dict):
     _set_run(paras[33], 8, f' Эхогенность {fd.get("kol_med_zad_exogen", "")}')
 
     # ── Латеральный мениск — Передний+Задний рог (side-by-side) ──────────────
+    _set_run(paras[36], 0, ' Форма')
     _set_run(paras[36], 1, f' {fd.get("kol_lat_per_forma", "")}')
+    _set_run(paras[36], 5, ' Форма')
     _set_run(paras[36], 6, f' {fd.get("kol_lat_zad_forma", "")}')
     _set_run(paras[37], 0, f'  Контур {fd.get("kol_lat_per_kontur", "")}')
     _set_run(paras[37], 8, f'Контур {fd.get("kol_lat_zad_kontur", "")}')
@@ -744,6 +809,8 @@ def _fill_protocol_12(doc: Document, fd: Dict):
     _set_run(paras[32], 1, f'Локализация {fd.get("tri1_hor_lok", "")} ')
     _set_run(paras[33], 1, f' {fd.get("tri1_hor_t", "")} ')
 
+    # [34] Особенности — clear default
+    _set_run(paras[34], 0, f'Особенности: {fd.get("tri1_osobennosti", "")}')
     # ── Яичники ───────────────────────────────────────────────────────────────
     _set_run(paras[36], 2, fd.get('tri1_yachniki', ''))
 
@@ -769,12 +836,19 @@ def _fill_protocol_13(doc: Document, fd: Dict):
 
     # ── Матка ─────────────────────────────────────────────────────────────────
     _set_run(paras[12], 1, f'тур {fd.get("plod_mat_kontur", "")} ')
-    _set_run(paras[13], 2, f' {fd.get("plod_mat_exostr", "")} ')
+    mat_exostr = fd.get('plod_mat_exostr', '')
+    mat_osob = fd.get('plod_mat_osob', '').strip() if fd.get('plod_mat_osob') else ''
+    osob_suffix = f' Особенности {mat_osob}.' if mat_osob else ''
+    _set_run(paras[13], 2, f' {mat_exostr}{osob_suffix} ')
 
     # ── Плод ──────────────────────────────────────────────────────────────────
-    _set_run(paras[16], 1, f'ичество {fd.get("plod_kol", "1")}.')
+    _set_run(paras[16], 1, f'ичество {fd.get("plod_kol", "")}.')
     _set_run(paras[17], 1, f' {fd.get("plod_polozhenie", "")}')
-    _set_run(paras[18], 1, f' {fd.get("plod_dvizh", "")} ')
+    # [18] Движения: r[1]=туловища, r[5]=конечностями, r[8]=глотательные, r[13]=сосательные
+    _set_run(paras[18], 1, f' {fd.get("plod_dvizh_tul", "")} ')
+    _set_run(paras[18], 5, f' {fd.get("plod_dvizh_konech", "")} ')
+    _set_run(paras[18], 8, f' {fd.get("plod_dvizh_glotat", "")} ')
+    _set_run(paras[18], 13, f' {fd.get("plod_dvizh_sosat", "")} ')
 
     # [19] Сердцебиение/ЧСС: r[0]=label+serd, r[1]=chss+'ударов...'
     _set_run(paras[19], 0, f'Сердцебиение {fd.get("plod_serd", "")}, ')
@@ -821,12 +895,26 @@ def _fill_protocol_13(doc: Document, fd: Dict):
     _set_run(paras[29], 1, f' {fd.get("plac_lok", "")} ')
     _set_run(paras[30], 1, f' {fd.get("plac_tolshina", "")} ')
     _set_run(paras[31], 1, f' {fd.get("plac_zrelost", "")} степени.')
+    # [32] Эхоструктура плаценты: r[0]="Эхоструктура", r[1]=" {val}."
+    _set_run(paras[32], 0, 'Эхоструктура')
+    _set_run(paras[32], 1, f' {fd.get("plac_exostr", "")}.')
 
     # ── Воды ──────────────────────────────────────────────────────────────────
+    # [33] Околоплодные воды: r[1]=water value+comma, r[2]=ИАЖ+value, r[3-4]=clear
+    _set_run(paras[33], 1, f' {fd.get("vodi_water", "")} , ')
     _set_run(paras[33], 2, f' ИАЖ {fd.get("vodi_iazh", "")} ')
+    _set_run(paras[33], 3, '')
+    _set_run(paras[33], 4, '')
+
+    # [34] Эхогенность: r[0]="Эхогенность {val}"
+    _set_run(paras[34], 0, f'Эхогенность {fd.get("vodi_exogen", "")} ')
 
     # [35] Масса плода
     _set_run(paras[35], 0, f'Масса плода {fd.get("plod_massa", "")} ')
+
+    # [36] Яичники: r[0]="Яичники", r[1]=" value."
+    _set_run(paras[36], 0, f'Яичники')
+    _set_run(paras[36], 1, f' {fd.get("plod_yachniki", "")}.')
 
     _set_run(paras[37], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
     _set_run(paras[37], 1, '')
@@ -938,9 +1026,20 @@ def generate_protocol_docx(
         section.right_margin = Mm(1)
 
     for para in doc.paragraphs:
-        para.paragraph_format.line_spacing = Pt(16)
-        para.paragraph_format.space_before = Pt(0)
-        para.paragraph_format.space_after = Pt(0)
+        text = para.text.strip()
+        if text:
+            # Matnli paragraf — ixcham
+            para.paragraph_format.line_spacing = Pt(16)
+            para.paragraph_format.space_before = Pt(0)
+            para.paragraph_format.space_after = Pt(0)
+            # Klinika nomidan keyin ko'rinadigan bo'sh joy (2 satr)
+            if 'NEVROCARDIOMED' in text:
+                para.paragraph_format.space_after = Pt(32)
+        else:
+            # Bo'sh paragraf — ko'rinadigan ajratuvchi
+            para.paragraph_format.line_spacing = Pt(18)
+            para.paragraph_format.space_before = Pt(0)
+            para.paragraph_format.space_after = Pt(0)
 
     # Fill common header (patient info, date, doctor)
     _fill_header(doc, client, doctor, created_at)

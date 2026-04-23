@@ -56,6 +56,7 @@ export interface PreviewParagraph {
   text: string;
   bold: boolean;
   centered: boolean;
+  right?: boolean;
 }
 
 export interface PreviewResponse {

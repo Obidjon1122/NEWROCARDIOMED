@@ -31,14 +31,16 @@ const ProtocolViewModal: React.FC<Props> = ({ open, formItem, client, onClose, o
     const paragraphs = preview.paragraphs;
     const html = paragraphs.map((p) => {
       const style = [
-        p.centered ? 'text-align:center;' : '',
+        p.centered ? 'text-align:center;' : (p.right ? 'text-align:right;' : ''),
         p.bold ? 'font-weight:bold;' : '',
         'font-size:12pt;',
         'margin:0;',
         'line-height:1.4;',
+        'min-height:1.4em;',
         'font-family:"Times New Roman",serif;',
       ].join('');
-      return `<p style="${style}">${p.text.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</p>`;
+      const content = p.text.trim() ? p.text.replace(/&/g, '&amp;').replace(/</g, '&lt;') : '&nbsp;';
+      return `<p style="${style}">${content}</p>`;
     }).join('');
 
     const win = window.open('', '_blank');
@@ -166,12 +168,13 @@ const ProtocolViewModal: React.FC<Props> = ({ open, formItem, client, onClose, o
                 style={{
                   margin: '2px 0',
                   lineHeight: 1.4,
+                  minHeight: '1.4em',
                   fontWeight: p.bold ? 700 : 400,
-                  textAlign: p.centered ? 'center' : 'left',
+                  textAlign: p.centered ? 'center' : (p.right ? 'right' : 'left'),
                   whiteSpace: 'pre-wrap',
                 }}
               >
-                {p.text}
+                {p.text || ' '}
               </p>
             ))}
           </div>
