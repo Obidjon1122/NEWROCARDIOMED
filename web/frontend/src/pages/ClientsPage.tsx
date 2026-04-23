@@ -15,7 +15,6 @@ import { authStore } from '../store/auth';
 import ClientList from '../components/ClientList';
 import NewClientModal from '../components/NewClientModal';
 import ProtocolList from '../components/ProtocolList';
-import ProtocolFormModal from '../components/ProtocolFormModal';
 import ProtocolViewModal from '../components/ProtocolViewModal';
 import { getDoctorProtocols } from '../api/protocols';
 
@@ -52,7 +51,7 @@ const ClientsPage: React.FC = () => {
     setListRefreshKey((k) => k + 1);
   };
 
-  const handleProtocolSaved = () => {
+  const handleProtocolSaved = (_client: Client) => {
     setProtocolFormOpen(false);
     setEditProtocolId(null);
     setEditFormData(null);
@@ -243,14 +242,14 @@ const ClientsPage: React.FC = () => {
         onSaved={handleNewClientSaved}
       />
 
-      <ProtocolFormModal
+      <NewClientModal
         open={protocolFormOpen}
-        client={selectedClient}
         protocols={protocols}
-        onClose={() => { setProtocolFormOpen(false); setEditProtocolId(null); setEditFormData(null); }}
-        onSaved={handleProtocolSaved}
+        existingClient={selectedClient}
         initialProtocolId={editProtocolId}
         initialFormData={editFormData}
+        onClose={() => { setProtocolFormOpen(false); setEditProtocolId(null); setEditFormData(null); }}
+        onSaved={handleProtocolSaved}
       />
 
       <ProtocolViewModal

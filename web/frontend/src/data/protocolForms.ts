@@ -377,6 +377,7 @@ const molochProtocol: ProtocolFormDef = {
         { key: 'prm_parenhima_exogen', label: 'Паренхима — эхогенность', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'гипоэхогенная', 'повышена'] },
         { key: 'prm_parenhima_exostr', label: 'Паренхима — эхоструктура', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
         { key: 'prm_galaktofori', label: 'Галактофоры', type: 'combobox', defaultValue: 'не визуализируются', options: NE_VIZIR },
+        { key: 'prm_osobennosti', label: 'Особенности правой железы', type: 'textarea' },
         { key: 'prm_limfuzli', label: 'Лимфатические узлы', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
       ],
     },
@@ -396,6 +397,7 @@ const molochProtocol: ProtocolFormDef = {
         { key: 'levm_parenhima_exogen', label: 'Паренхима — эхогенность', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'гипоэхогенная', 'повышена'] },
         { key: 'levm_parenhima_exostr', label: 'Паренхима — эхоструктура', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
         { key: 'levm_galaktofori', label: 'Галактофоры', type: 'combobox', defaultValue: 'не визуализируются', options: NE_VIZIR },
+        { key: 'levm_osobennosti', label: 'Особенности левой железы', type: 'textarea' },
         { key: 'levm_limfuzli', label: 'Лимфатические узлы', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
       ],
     },
@@ -447,6 +449,7 @@ const maliyTazProtocol: ProtocolFormDef = {
       fields: [
         { key: 'mat_data_mens', label: 'Дата 1-го дня последней менструации', type: 'text' },
         { key: 'mat_den_cikla', label: 'День менструального цикла', type: 'text' },
+        { key: 'mat_menopauza', label: 'Менопауза', type: 'text', unit: 'лет' },
         { key: 'mat_poziciya', label: 'Позиция', type: 'combobox', defaultValue: 'anteversio', options: ['anteversio', 'retroversio'] },
         { key: 'mat_polozhenie', label: 'Положение', type: 'combobox', defaultValue: 'anteflexio', options: ['anteflexio', 'retroflexio'] },
         { key: 'mat_forma', label: 'Форма', type: 'combobox', defaultValue: 'грушевидная', options: ['грушевидная', 'изменена'], hint: 'в норме грушевидная' },
@@ -461,6 +464,7 @@ const maliyTazProtocol: ProtocolFormDef = {
         { key: 'mat_mio_exostr', label: 'Эхоструктура миометрия', type: 'combobox', defaultValue: 'однородная', options: EHOGSTR },
         { key: 'mat_mio_exogen', label: 'Эхогенность миометрия', type: 'combobox', defaultValue: 'средняя', options: EHOGEN_SR },
         { key: 'mat_endo_t', label: 'Толщина эндометрия (М-эхо)', type: 'text', unit: 'мм', hint: 'зависит от дня цикла, не более 18' },
+        { key: 'mat_endo_faza', label: 'Соответствует фазе', type: 'combobox', options: ['десквамации', 'регенерации', 'пролиферации', 'овуляции', 'секреции', 'не соответствует фазе менструального цикла', 'при менопаузе более 5 лет – не более 5 мм'] },
         { key: 'mat_endo_exostr', label: 'Эхоструктура эндометрия', type: 'combobox', defaultValue: 'однородная', options: EHOGSTR },
         { key: 'mat_polost', label: 'Полость матки', type: 'combobox', defaultValue: 'в норме', options: ['в норме', 'расширена', 'с включениями'] },
       ],
@@ -882,6 +886,78 @@ const follikulometriyaProtocol: ProtocolFormDef = {
   ],
 };
 
+// ─── 16. УЗИ органов мошонки ─────────────────────────────────────────────────
+const mashonkaProtocol: ProtocolFormDef = {
+  protocolId: 16,
+  sections: [
+    {
+      title: 'Правое яичко',
+      fields: [
+        { key: 'yai_pr_topografiya', label: 'Топография', type: 'combobox', defaultValue: 'в норме', options: TOPOGR },
+        { key: 'yai_pr_forma', label: 'Форма', type: 'combobox', defaultValue: 'в норме', options: FORMA_VN },
+        { key: 'yai_pr_kontur', label: 'Контур', type: 'combobox', defaultValue: 'в норме', options: KONTUR, hint: 'в норме ровный, четкий' },
+        { key: 'yai_pr_kapsula', label: 'Капсула (белочная оболочка)', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
+        { key: 'yai_pr_dlina', label: 'Длина', type: 'text', unit: 'мм', hint: 'в норме 35–60' },
+        { key: 'yai_pr_tolshina', label: 'Толщина', type: 'text', unit: 'мм', hint: 'в норме 15–30' },
+        { key: 'yai_pr_shirina', label: 'Ширина', type: 'text', unit: 'мм', hint: 'в норме 15–30' },
+        { key: 'yai_pr_obyom', label: 'Объём', type: 'text', unit: 'см³', hint: 'в норме 15' },
+        { key: 'yai_pr_exostruktura', label: 'Эхоструктура', type: 'combobox', defaultValue: 'однородная', options: EHOGSTR },
+        { key: 'yai_pr_exogennost', label: 'Эхогенность', type: 'combobox', defaultValue: 'средняя', options: EHOGEN_SR },
+        { key: 'yai_pr_vlagalishe', label: 'Влагалище, толщина жидкости', type: 'text', unit: 'мм' },
+        { key: 'yai_pr_obolochki', label: 'Оболочки, толщина', type: 'text', unit: 'мм', hint: 'в норме 2–7' },
+        { key: 'yai_pr_rasshireniya', label: 'Расширение вен семенного канатика', type: 'text', unit: 'мм' },
+      ],
+    },
+    {
+      title: 'Левое яичко',
+      fields: [
+        { key: 'yai_le_topografiya', label: 'Топография', type: 'combobox', defaultValue: 'в норме', options: TOPOGR },
+        { key: 'yai_le_forma', label: 'Форма', type: 'combobox', defaultValue: 'в норме', options: FORMA_VN },
+        { key: 'yai_le_kontur', label: 'Контур', type: 'combobox', defaultValue: 'в норме', options: KONTUR, hint: 'в норме ровный, четкий' },
+        { key: 'yai_le_kapsula', label: 'Капсула (белочная оболочка)', type: 'combobox', defaultValue: 'без особенностей', options: BEZ_OSB },
+        { key: 'yai_le_dlina', label: 'Длина', type: 'text', unit: 'мм', hint: 'в норме 35–60' },
+        { key: 'yai_le_tolshina', label: 'Толщина', type: 'text', unit: 'мм', hint: 'в норме 15–30' },
+        { key: 'yai_le_shirina', label: 'Ширина', type: 'text', unit: 'мм', hint: 'в норме 15–30' },
+        { key: 'yai_le_obyom', label: 'Объём', type: 'text', unit: 'см³', hint: 'в норме 15' },
+        { key: 'yai_le_exostruktura', label: 'Эхоструктура', type: 'combobox', defaultValue: 'однородная', options: EHOGSTR },
+        { key: 'yai_le_exogennost', label: 'Эхогенность', type: 'combobox', defaultValue: 'средняя', options: EHOGEN_SR },
+        { key: 'yai_le_vlagalishe', label: 'Влагалище, толщина жидкости', type: 'text', unit: 'мм' },
+        { key: 'yai_le_obolochki', label: 'Оболочки, толщина', type: 'text', unit: 'мм', hint: 'в норме 2–7' },
+        { key: 'yai_le_rasshireniya', label: 'Расширение вен семенного канатика', type: 'text', unit: 'мм' },
+      ],
+    },
+    {
+      title: 'Правый придаток',
+      fields: [
+        { key: 'pri_pr_topografiya', label: 'Топография', type: 'combobox', defaultValue: 'в норме', options: TOPOGR },
+        { key: 'pri_pr_kontur', label: 'Контур', type: 'combobox', defaultValue: 'в норме', options: KONTUR, hint: 'в норме ровный, четкий' },
+        { key: 'pri_pr_golovki', label: 'Толщина в области головки', type: 'text', unit: 'мм' },
+        { key: 'pri_pr_tela', label: 'Толщина в области тела', type: 'text', unit: 'мм' },
+        { key: 'pri_pr_exostruktura', label: 'Эхоструктура', type: 'combobox', defaultValue: 'однородная', options: EHOGSTR },
+        { key: 'pri_pr_exogennost', label: 'Эхогенность', type: 'combobox', defaultValue: 'средняя', options: EHOGEN_SR },
+      ],
+    },
+    {
+      title: 'Левый придаток',
+      fields: [
+        { key: 'pri_le_topografiya', label: 'Топография', type: 'combobox', defaultValue: 'в норме', options: TOPOGR },
+        { key: 'pri_le_kontur', label: 'Контур', type: 'combobox', defaultValue: 'в норме', options: KONTUR, hint: 'в норме ровный, четкий' },
+        { key: 'pri_le_golovki', label: 'Толщина в области головки', type: 'text', unit: 'мм' },
+        { key: 'pri_le_tela', label: 'Толщина в области тела', type: 'text', unit: 'мм' },
+        { key: 'pri_le_exostruktura', label: 'Эхоструктура', type: 'combobox', defaultValue: 'однородная', options: EHOGSTR },
+        { key: 'pri_le_exogennost', label: 'Эхогенность', type: 'combobox', defaultValue: 'средняя', options: EHOGEN_SR },
+      ],
+    },
+    {
+      title: 'Заключение',
+      fields: [
+        { key: 'zaklyuchenie', label: 'Заключение', type: 'textarea' },
+        { key: 'rekomendacii', label: 'Рекомендации', type: 'textarea' },
+      ],
+    },
+  ],
+};
+
 export const PROTOCOL_FORMS: ProtocolFormDef[] = [
   pechenProtocol,
   pochkiProtocol,
@@ -898,6 +974,7 @@ export const PROTOCOL_FORMS: ProtocolFormDef[] = [
   plodProtocol,
   serdcebienieProtocol,
   follikulometriyaProtocol,
+  mashonkaProtocol,
 ];
 
 export const getProtocolForm = (protocolId: number): ProtocolFormDef | undefined =>

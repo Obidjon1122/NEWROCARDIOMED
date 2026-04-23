@@ -33,6 +33,19 @@ def _set_run(para, run_idx: int, text: str):
         para.runs[run_idx].text = text
 
 
+def _set_recom(para, value: str):
+    """Recomendatsiya satri — agar bo'sh bo'lsa, butun paragrafni tozalaydi."""
+    val = (value or '').strip()
+    if not val:
+        for r in para.runs:
+            r.text = ''
+    else:
+        if para.runs:
+            para.runs[0].text = f'Рекомендации: {val}'
+            for r in para.runs[1:]:
+                r.text = ''
+
+
 def _fill_header(doc: Document, client: Dict, doctor: Dict, created_at: str):
     """Fill patient info, date, and doctor name paragraphs (common to all templates)."""
     last = client.get('last_name', '') or ''
@@ -134,7 +147,7 @@ def _fill_protocol_1(doc: Document, fd: Dict):
 
     # ── Заключение / Рекомендации ─────────────────────────────────────────────
     _set_run(paras[39], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[40], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[40], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 2: Почки, мочеточники и мочевой пузырь ─────────────────────────
@@ -294,7 +307,7 @@ def _fill_protocol_3(doc: Document, fd: Dict):
 
     _set_run(paras[41], 0, f'Заключение: {fd.get("zaklyuchenie_sh", "")}')
     _set_run(paras[41], 1, '')
-    _set_run(paras[42], 0, f'Рекомендации: {fd.get("rekomendatsi_sh", "")}')
+    _set_recom(paras[42], fd.get('rekomendatsi_sh', ''))
     _set_run(paras[42], 1, '')
 
 
@@ -318,7 +331,7 @@ def _fill_protocol_4(doc: Document, fd: Dict):
     _set_run(paras[18], 3, '')
     _set_run(paras[19], 1, f'ти тела {fd.get("pdj_virsungov_t", "")} ')
     _set_run(paras[20], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[21], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[21], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 5: Селезёнка ────────────────────────────────────────────────────
@@ -339,7 +352,7 @@ def _fill_protocol_5(doc: Document, fd: Dict):
     _set_run(paras[18], 2, f'{fd.get("sel_zvukoprov", "")} ')
     _set_run(paras[19], 3, f' {fd.get("sel_lienalis", "")} ')
     _set_run(paras[21], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[22], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[22], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 6: Простата и семенные пузырьки ────────────────────────────────
@@ -422,7 +435,7 @@ def _fill_protocol_6(doc: Document, fd: Dict):
             prev_el = new_el
 
     _set_run(paras[32], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[33], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[33], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 7: Молочные железы ─────────────────────────────────────────────
@@ -486,6 +499,18 @@ def _fill_protocol_7(doc: Document, fd: Dict):
     _set_run(paras[21], 1, f'      Эхогенность {fd.get("prm_parenhima_exogen", "")} ')
     _set_run(paras[22], 1, f' {fd.get("prm_parenhima_exostr", "")} ')
     _set_run(paras[23], 2, f' {fd.get("prm_galaktofori", "")}.')
+    # Особенности правой железы — Лимфатические узлы dan oldin
+    prm_osob = (fd.get('prm_osobennosti', '') or '').strip()
+    if prm_osob:
+        from copy import deepcopy
+        from docx.text.paragraph import Paragraph
+        new_el = deepcopy(paras[24]._element)
+        paras[24]._element.addprevious(new_el)
+        osb_p = Paragraph(new_el, paras[24]._parent)
+        for r in osb_p.runs:
+            r.text = ''
+        if osb_p.runs:
+            osb_p.runs[0].text = f'Особенности: {prm_osob}'
     _set_run(paras[24], 1, f'{fd.get("prm_limfuzli", "")}.')
 
     # ── Левая молочная железа ─────────────────────────────────────────────────
@@ -514,10 +539,22 @@ def _fill_protocol_7(doc: Document, fd: Dict):
     _set_run(paras[39], 0, f'             Эхогенность {fd.get("levm_parenhima_exogen", "")} ')
     _set_run(paras[40], 0, f'             Эхоструктура {fd.get("levm_parenhima_exostr", "")} ')
     _set_run(paras[41], 2, f' {fd.get("levm_galaktofori", "")}.')
+    # Особенности левой железы — Лимфатические узлы dan oldin
+    levm_osob = (fd.get('levm_osobennosti', '') or '').strip()
+    if levm_osob:
+        from copy import deepcopy
+        from docx.text.paragraph import Paragraph
+        new_el = deepcopy(paras[42]._element)
+        paras[42]._element.addprevious(new_el)
+        osb_p = Paragraph(new_el, paras[42]._parent)
+        for r in osb_p.runs:
+            r.text = ''
+        if osb_p.runs:
+            osb_p.runs[0].text = f'Особенности: {levm_osob}'
     _set_run(paras[42], 1, f' {fd.get("levm_limfuzli", "")}.')
 
     _set_run(paras[44], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[45], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[45], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 8: Мочевой пузырь ──────────────────────────────────────────────
@@ -537,7 +574,7 @@ def _fill_protocol_8(doc: Document, fd: Dict):
     _set_run(paras[16], 1, f'аточной мочи {fd.get("mp_ostatoch", "")} ')
     _set_run(paras[16], 2, ' мл ')
     _set_run(paras[18], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[19], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[19], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 9: Органы малого таза ──────────────────────────────────────────
@@ -557,6 +594,18 @@ def _fill_protocol_9(doc: Document, fd: Dict):
     # [9] Дата менструации: r[1]='  ,', r[3]='день менструального цикла'
     _set_run(paras[9], 1, f' {fd.get("mat_data_mens", "")},')
     _set_run(paras[9], 3, f'{fd.get("mat_den_cikla", "")} день менструального цикла')
+    # Менопауза — agar yozilgan bo'lsa, paragraph 9 dan keyin qo'shiladi
+    menopauza = (fd.get('mat_menopauza', '') or '').strip()
+    if menopauza:
+        from copy import deepcopy
+        from docx.text.paragraph import Paragraph
+        new_el = deepcopy(paras[9]._element)
+        paras[9]._element.addnext(new_el)
+        mp_p = Paragraph(new_el, paras[9]._parent)
+        for r in mp_p.runs:
+            r.text = ''
+        if mp_p.runs:
+            mp_p.runs[0].text = f'Менопауза {menopauza} лет'
     # [10] Позиция/Положение/Форма
     _set_run(paras[10], 1, fd.get('mat_poziciya', ''))
     _set_run(paras[10], 5, fd.get('mat_polozhenie', ''))
@@ -566,14 +615,21 @@ def _fill_protocol_9(doc: Document, fd: Dict):
     # [12] Размеры: r[1]=' мм ', r[6]='толщина  мм ', r[9]='; ширина  мм '
     _set_run(paras[12], 1, f' {fd.get("mat_dlina", "")} мм ')
     _set_run(paras[12], 6, f'толщина {fd.get("mat_tolshina", "")} мм ')
-    peredney = str(fd.get('mat_peredney', '')).strip()
-    zadney = str(fd.get('mat_zadney', '')).strip()
-    extra = ''
-    if peredney:
-        extra += f'; толщина передней стенки миометрия {fd.get("mat_peredney", "")} мм'
-    if zadney:
-        extra += f'; толщина задней стенки миометрия {fd.get("mat_zadney", "")} мм'
-    _set_run(paras[12], 9, f'; ширина {fd.get("mat_shirina", "")} мм{extra} ')
+    _set_run(paras[12], 9, f'; ширина {fd.get("mat_shirina", "")} мм ')
+
+    # толщина передней/задней стенки миометрия — [12] dan keyin yangi paragraf
+    peredney = str(fd.get('mat_peredney', '') or '').strip()
+    zadney = str(fd.get('mat_zadney', '') or '').strip()
+    from copy import deepcopy
+    from docx.text.paragraph import Paragraph
+    stenki_el = deepcopy(paras[12]._element)
+    paras[12]._element.addnext(stenki_el)
+    stenki_p = Paragraph(stenki_el, paras[12]._parent)
+    for r in stenki_p.runs:
+        r.text = ''
+    if stenki_p.runs:
+        stenki_p.runs[0].text = f'Толщина передней стенки миометрия {peredney} мм, задней стенки миометрия {zadney} мм.'
+
     # [13] Объём: r[1]='          Объем матки   см'
     _set_run(paras[13], 1, f'          Объем матки {fd.get("mat_obem", "")} см')
     # [14] Контур: r[0]='Контур без изменений '
@@ -582,8 +638,9 @@ def _fill_protocol_9(doc: Document, fd: Dict):
     _set_run(paras[15], 3, fd.get('mat_mio_exostr', ''))
     # [16] Эхогенность миометрия: r[4]='средняя'
     _set_run(paras[16], 4, fd.get('mat_mio_exogen', ''))
-    # [17] М-эхо: r[0]='Толщина эндометрия (М-эхо)  '
+    # [17] М-эхо: r[0]='Толщина эндометрия (М-эхо)  ', r[4]=' faza '
     _set_run(paras[17], 0, f'Толщина эндометрия (М-эхо) {fd.get("mat_endo_t", "")} ')
+    _set_run(paras[17], 4, f' {fd.get("mat_endo_faza", "")} ')
     # [18] Эхоструктура эндометрия: r[2]='однородная'
     _set_run(paras[18], 2, fd.get('mat_endo_exostr', ''))
     # [19] Полость матки: r[0]='Полость матки в норме '
@@ -635,7 +692,7 @@ def _fill_protocol_9(doc: Document, fd: Dict):
     _set_run(paras[52], 2, fd.get('duglas', ''))
 
     _set_run(paras[54], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[55], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[55], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 10: Надпочечники ────────────────────────────────────────────────
@@ -666,7 +723,7 @@ def _fill_protocol_10(doc: Document, fd: Dict):
     _set_run(paras[31], 0, f'Эхогенность {fd.get("nlev_exogennost", "")}')
 
     _set_run(paras[33], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[34], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[34], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 11: Коленный сустав ────────────────────────────────────────────
@@ -742,7 +799,7 @@ def _fill_protocol_11(doc: Document, fd: Dict):
     # [47] Заключение: r[0]='З', r[1]='аключение.' — must clear r[1]
     _set_run(paras[47], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
     _set_run(paras[47], 1, '')
-    _set_run(paras[48], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[48], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 12: I триместр беременности ────────────────────────────────────
@@ -815,7 +872,7 @@ def _fill_protocol_12(doc: Document, fd: Dict):
     _set_run(paras[36], 2, fd.get('tri1_yachniki', ''))
 
     _set_run(paras[37], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
-    _set_run(paras[38], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[38], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 13: Плод ────────────────────────────────────────────────────────
@@ -918,7 +975,7 @@ def _fill_protocol_13(doc: Document, fd: Dict):
 
     _set_run(paras[37], 0, f'Заключение: {fd.get("zaklyuchenie", "")}')
     _set_run(paras[37], 1, '')
-    _set_run(paras[38], 0, f'Рекомендации: {fd.get("rekomendacii", "")}')
+    _set_recom(paras[38], fd.get('rekomendacii', ''))
 
 
 # ─── Protocol 14: Сердцебиение ────────────────────────────────────────────────
@@ -982,6 +1039,125 @@ def _fill_protocol_15(doc: Document, fd: Dict):
     _set_run(paras[23], 1, f' {fd.get("zaklyuchenie", "")} ')
 
 
+# ─── Protocol 16: Мошонка (shablonsiz, to'liq yaratiladi) ────────────────────
+
+def _build_protocol_16(form_data: Dict, client: Dict, doctor: Dict, created_at: str) -> 'Document':
+    from docx import Document as DocxDoc
+    doc = DocxDoc()
+
+    # Marginlar
+    for section in doc.sections:
+        section.top_margin = Mm(1)
+        section.bottom_margin = Mm(1)
+        section.left_margin = Mm(1)
+        section.right_margin = Mm(1)
+
+    fd = form_data
+
+    def _p(text='', bold=False, center=False, right=False, space_after=0):
+        p = doc.add_paragraph()
+        p.paragraph_format.line_spacing = Pt(16)
+        p.paragraph_format.space_before = Pt(0)
+        p.paragraph_format.space_after = Pt(space_after)
+        if center:
+            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        elif right:
+            p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+        if text:
+            r = p.add_run(text)
+            r.font.size = Pt(12)
+            r.bold = bold
+        return p
+
+    def _val(key):
+        v = str(fd.get(key, '') or '').strip()
+        return f'  {v}  ' if v else '   '
+
+    # Sarlavha
+    _p('Медицинский центр «NEVROCARDIOMED»', bold=True, center=True, space_after=10)
+
+    # Bemor va sana
+    last = client.get('last_name', '') or ''
+    first = client.get('first_name', '') or ''
+    patronymic = client.get('patronymic', '') or ''
+    full_name = ' '.join(p for p in [last, first, patronymic] if p)
+    birth_year = str(client.get('birth_date', '') or '')[:4]
+    _p(f'Ф.И.О. пациента {full_name}, {birth_year} г.р.')
+    _p(f'Дата проведения исследования: {(created_at or "")[:10]}')
+    _p('Ультразвуковой аппарат SonoScape S50. Тип датчика – линейный, 7,5-12,0 МГц.', space_after=10)
+
+    # Protokol sarlavhasi
+    _p('ПРОТОКОЛ', bold=True, center=True)
+    _p('ультразвукового исследования органов мошонки.', center=True, space_after=6)
+
+    # Yaichki — Pravoe
+    _p('ЯИЧКИ', bold=True)
+    _p('Правое', bold=True)
+    _p(f'Топография{_val("yai_pr_topografiya")}.')
+    _p(f'Форма{_val("yai_pr_forma")}.')
+    _p(f'Контур{_val("yai_pr_kontur")}(в норме ровный, четкий).')
+    _p(f'Капсула (белочная оболочка){_val("yai_pr_kapsula")}.')
+    _p('Размеры линейные:')
+    _p(f'длина{_val("yai_pr_dlina")}мм (в норме 35-60 мм), толщина{_val("yai_pr_tolshina")}мм (в норме 15-30 мм), ширина{_val("yai_pr_shirina")}мм (в норме 15-30 мм).')
+    _p(f'Объём{_val("yai_pr_obyom")}см³ (в норме 15 см³).')
+    _p(f'Эхоструктура{_val("yai_pr_exostruktura")}(в норме однородная).')
+    _p(f'Эхогенность{_val("yai_pr_exogennost")}(в норме средняя).')
+    _p(f'Влагалище, толщина жидкости в нём{_val("yai_pr_vlagalishe")}мм.')
+    _p(f'Оболочки, толщина{_val("yai_pr_obolochki")}мм (в норме 2-7 мм).')
+    _p(f'Наличие расширения вен семенного канатика{_val("yai_pr_rasshireniya")}мм.')
+
+    # Yaichki — Levoe
+    _p('Левое', bold=True, space_after=2)
+    _p(f'Топография{_val("yai_le_topografiya")}.')
+    _p(f'Форма{_val("yai_le_forma")}.')
+    _p(f'Контур{_val("yai_le_kontur")}(в норме ровный, четкий).')
+    _p(f'Капсула (белочная оболочка){_val("yai_le_kapsula")}.')
+    _p('Размеры линейные:')
+    _p(f'длина{_val("yai_le_dlina")}мм (в норме 35-60 мм), толщина{_val("yai_le_tolshina")}мм (в норме 15-30 мм), ширина{_val("yai_le_shirina")}мм (в норме 15-30 мм).')
+    _p(f'Объём{_val("yai_le_obyom")}см³ (в норме 15 см³).')
+    _p(f'Эхоструктура{_val("yai_le_exostruktura")}(в норме однородная).')
+    _p(f'Эхогенность{_val("yai_le_exogennost")}(в норме средняя).')
+    _p(f'Влагалище, толщина жидкости в нём{_val("yai_le_vlagalishe")}мм.')
+    _p(f'Оболочки, толщина{_val("yai_le_obolochki")}мм (в норме 2-7 мм).')
+    _p(f'Наличие расширения вен семенного канатика{_val("yai_le_rasshireniya")}мм.')
+
+    # Pridatki
+    _p('ПРИДАТКИ', bold=True, space_after=2)
+    _p('Правый', bold=True)
+    _p(f'Топография{_val("pri_pr_topografiya")}.')
+    _p(f'Контур{_val("pri_pr_kontur")}(в норме ровный, четкий).')
+    _p('Размер, толщина:')
+    _p(f'в области головки{_val("pri_pr_golovki")}мм, в области тела{_val("pri_pr_tela")}мм.')
+    _p(f'Эхоструктура{_val("pri_pr_exostruktura")}(в норме однородная).')
+    _p(f'Эхогенность{_val("pri_pr_exogennost")}(в норме средняя).')
+
+    _p('Левый', bold=True, space_after=2)
+    _p(f'Топография{_val("pri_le_topografiya")}.')
+    _p(f'Контур{_val("pri_le_kontur")}(в норме ровный, четкий).')
+    _p('Размер, толщина:')
+    _p(f'в области головки{_val("pri_le_golovki")}мм, в области тела{_val("pri_le_tela")}мм.')
+    _p(f'Эхоструктура{_val("pri_le_exostruktura")}(в норме однородная).')
+    _p(f'Эхогенность{_val("pri_le_exogennost")}(в норме средняя).')
+
+    # Xulosa
+    zakl = (fd.get('zaklyuchenie', '') or '').strip()
+    rekom = (fd.get('rekomendacii', '') or '').strip()
+    _p(f'Заключение: {zakl}', space_after=0)
+    if rekom:
+        _p(f'Рекомендации: {rekom}')
+
+    # Shifokor
+    d_last = doctor.get('last_name', '') or ''
+    d_first = doctor.get('first_name', '') or ''
+    d_pat = doctor.get('patronymic_name', doctor.get('patronymic', '')) or ''
+    doctor_name = ' '.join(p for p in [d_last, d_first, d_pat] if p)
+    vp = _p(f'Врач_________________ {doctor_name}.', right=True, space_after=0)
+    vp.paragraph_format.space_before = Pt(20)
+    _p('Тел.: (+99893)7240070', right=True)
+
+    return doc
+
+
 PROTOCOL_FILLERS = {
     1:  _fill_protocol_1,
     2:  _fill_protocol_2,
@@ -1009,6 +1185,13 @@ def generate_protocol_docx(
     doctor: Dict[str, Any],
     created_at: str = "",
 ) -> bytes:
+    # Protocol 16 (Мошонка) — shablonsiz dinamik yaratiladi
+    if protocol_id == 16:
+        doc = _build_protocol_16(form_data, client, doctor, created_at)
+        buf = io.BytesIO()
+        doc.save(buf)
+        return buf.getvalue()
+
     template_file = TEMPLATE_FILES.get(protocol_id)
     if not template_file:
         raise ValueError(f"No template for protocol_id={protocol_id}")

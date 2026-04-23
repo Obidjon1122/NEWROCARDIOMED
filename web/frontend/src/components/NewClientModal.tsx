@@ -104,9 +104,17 @@ interface Props {
   protocols: ProtocolDashboardItem[];
   onClose: () => void;
   onSaved: (client: Client) => void;
+  existingClient?: Client | null;
+  initialProtocolId?: number | null;
+  initialFormData?: Record<string, string> | null;
 }
 
-const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) => {
+const NewClientModal: React.FC<Props> = ({
+  open, protocols, onClose, onSaved,
+  existingClient = null,
+  initialProtocolId = null,
+  initialFormData = null,
+}) => {
   const [form] = Form.useForm();
   const [saving, setSaving] = useState(false);
   const [selectedProtocolId, setSelectedProtocolId] = useState<number | null>(null);
@@ -127,34 +135,52 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
   useEffect(() => {
     if (open) {
       form.resetFields();
-      setSelectedProtocolId(null);
+      setSelectedProtocolId(initialProtocolId ?? null);
+      // Mavjud mijoz ma'lumotlarini to'ldirish
+      if (existingClient) {
+        form.setFieldsValue({
+          first_name: existingClient.first_name || '',
+          last_name: existingClient.last_name || '',
+          patronymic: existingClient.patronymic || '',
+          gender: existingClient.gender || '',
+          phone: existingClient.phone || '',
+          birth_date: existingClient.birth_date || '',
+          region: existingClient.region || '',
+        });
+      }
     }
-  }, [open, form]);
+  }, [open, form, existingClient, initialProtocolId]);
 
-  // Protocol change — just clear previously filled protocol fields
+  // Protocol change — clear or pre-fill from initialFormData
   useEffect(() => {
     if (!protocolDef) return;
-    const cleared: Record<string, unknown> = {};
+    const next: Record<string, unknown> = {};
     for (const section of protocolDef.sections)
       for (const field of section.fields)
-        cleared[field.key] = undefined;
-    form.setFieldsValue(cleared);
-  }, [protocolDef, form]);
+        next[field.key] = initialFormData?.[field.key] ?? undefined;
+    form.setFieldsValue(next);
+  }, [protocolDef, form, initialFormData]);
 
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
-      const clientData = {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        patronymic: values.patronymic || '',
-        gender: values.gender || '',
-        phone: values.phone || '',
-        birth_date: values.birth_date ? String(values.birth_date) : '',
-        region: values.region || '',
-      };
       setSaving(true);
-      const savedClient = await createClient(clientData);
+      let savedClient: Client;
+      if (existingClient) {
+        // Mavjud mijoz — yangi yaratilmaydi, mavjud qaytariladi
+        savedClient = existingClient;
+      } else {
+        const clientData = {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          patronymic: values.patronymic || '',
+          gender: values.gender || '',
+          phone: values.phone || '',
+          birth_date: values.birth_date ? String(values.birth_date) : '',
+          region: values.region || '',
+        };
+        savedClient = await createClient(clientData);
+      }
 
       // If protocol selected, also save protocol form
       if (selectedProtocolId && protocolDef) {
@@ -176,7 +202,11 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
           }
         }
         await createProtocolForm(savedClient.id, selectedProtocolId, protocolForm);
-        notification.success({ message: "Bemor va protokol muvaffaqiyatli saqlandi!" });
+        notification.success({
+          message: existingClient
+            ? "Protokol muvaffaqiyatli saqlandi!"
+            : "Bemor va protokol muvaffaqiyatli saqlandi!"
+        });
       } else {
         notification.success({ message: "Bemor muvaffaqiyatli qo'shildi!" });
       }
@@ -303,7 +333,9 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
         </div>
         <div>
           <Text style={{ color: '#fff', fontWeight: 700, fontSize: 16, display: 'block', letterSpacing: '-0.01em' }}>
-            Yangi bemor qo'shish
+            {existingClient
+              ? (initialFormData ? 'Protokol asosida yangi' : 'Yangi protokol qo\'shish')
+              : 'Yangi bemor qo\'shish'}
           </Text>
           {doctorName && (
             <Text style={{ color: 'rgba(255,255,255,0.55)', fontSize: 12 }}>
@@ -333,7 +365,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Familiya</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <Input placeholder="Karimov" />
+                  <Input placeholder="Karimov" disabled={!!existingClient} />
                 </Form.Item>
               </Col>
               <Col span={3}>
@@ -342,7 +374,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Ism</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <Input placeholder="Alisher" />
+                  <Input placeholder="Alisher" disabled={!!existingClient} />
                 </Form.Item>
               </Col>
               <Col span={4}>
@@ -351,7 +383,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Otasining ismi</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <Input placeholder="Nodirovich" />
+                  <Input placeholder="Nodirovich" disabled={!!existingClient} />
                 </Form.Item>
               </Col>
               <Col span={3}>
@@ -360,7 +392,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Jins</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <Select placeholder="Tanlang" allowClear options={[
+                  <Select placeholder="Tanlang" allowClear disabled={!!existingClient} options={[
                     { value: 'male', label: 'Erkak' },
                     { value: 'female', label: 'Ayol' },
                   ]} />
@@ -372,7 +404,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Telefon</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <Input placeholder="+998..." />
+                  <Input placeholder="+998..." disabled={!!existingClient} />
                 </Form.Item>
               </Col>
               <Col span={4}>
@@ -381,7 +413,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Tug'ilgan sana</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <Input placeholder="masalan: 1990" />
+                  <Input placeholder="masalan: 1990" disabled={!!existingClient} />
                 </Form.Item>
               </Col>
               <Col span={3}>
@@ -390,7 +422,7 @@ const NewClientModal: React.FC<Props> = ({ open, protocols, onClose, onSaved }) 
                   label={<span style={{ fontWeight: 500, fontSize: 12, color: 'var(--gray-600)' }}>Viloyat</span>}
                   style={{ marginBottom: 0 }}
                 >
-                  <Select placeholder="Tanlang" showSearch allowClear
+                  <Select placeholder="Tanlang" showSearch allowClear disabled={!!existingClient}
                     options={REGIONS.map((r) => ({ value: r, label: r }))} />
                 </Form.Item>
               </Col>
